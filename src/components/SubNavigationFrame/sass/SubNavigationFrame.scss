@@ -1,0 +1,19 @@
+@charset 'utf-8';
+@import '../../../common/sass/base';
+
+.ivu-breadcrumb > span:last-child{
+    font-weight: normal;
+}
+.sub-navigation-container{
+    background-color: $web_background;
+    box-shadow: 0 .05rem .05rem .05rem $color_shadow;
+    padding: $page_padding;
+    position: relative;
+}
+.sub-navigation-title{
+    font-size: 1rem;
+    padding: .5rem 0;
+}
+.sub-navigation-content{
+    padding: $page_padding;
+}

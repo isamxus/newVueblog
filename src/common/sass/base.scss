@@ -1,0 +1,48 @@
+@charset 'utf-8';
+
+/* iview主题色彩 */
+$color_primary:       #2d8cf0;
+$color_light_primary: #5cadff;
+$color_dar_primary:   #2b85e4;
+$color_info:          #2d8cf0;
+$color_success:       #19be6b;
+$color_warning:       #ff9900;
+$color_error:         #ed3f14;
+$color_title:         #1c2438;
+$color_content:       #495060;
+$color_sub:           #80848f;
+$color_icon:          #80848f;
+$color_disabled:      #bbbec4;
+$color_border:        #dddee1;
+$color_divider:       #e9eaec;
+$color_background:    #f8f8f9;
+$color_shadow:        rgba(100,100,100,.1);
+
+/* 网页背景色 */
+$web_background:      #FFF;
+
+/* 分割线样式 */
+$sub_page_line:       #EAEAEA;
+
+/* 导航标准高度 */
+$page_navigation_height:              3rem;
+
+/* 页脚标准高度 */
+$page_footer_height:                  3rem;
+
+/* 子页圆角标准值 */
+$sub_page_radius:                     .2rem;
+
+/* 子页默认填充尺寸 */
+$page_padding:                        1rem;
+
+/* 一级层级元素深度 */
+$web_depth:                           1;
+
+/* 二级层级元素深度 */
+$sub_page_depth:                      4;
+
+@mixin prefix($key,$value){
+    -webkit-#{$key}: $value;
+            #{$key}: $value;
+}
