@@ -7,6 +7,7 @@ import App from './App';
 import axios from 'axios';
 import router from './router';
 import VueAxios from 'vue-axios';
+import { Urls } from './common/script/config';
 
 //引用iview库
 import ViewUI from 'view-design';
@@ -16,8 +17,11 @@ Vue.use(ViewUI);
 //使用vuex管理状态
 Vue.use(vuex);
 
+//
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-fromurlencodeed';
 //全局引用script
 global.axios = axios;
+global.REQUEST_URL = Urls;
 
 Vue.config.productionTip = false;
 
