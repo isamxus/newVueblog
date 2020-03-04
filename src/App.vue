@@ -41,7 +41,7 @@ import './common/sass/frame.scss';
 import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SidebarMenuShrink from './components/SidebarMenu/SidebarMenuShrink';
 
-//左侧菜单
+//左侧菜单(博客前端页面)
 const pageArray = [
     {title: '首页',icon:'ios-navigate',name:'Index',path:'/'},
     {
@@ -62,11 +62,15 @@ const pageArray = [
     }
 ]
 
+//左侧菜单(博客管理页面)
+const adminPageArray = [
+    {title: '首页视图管理',icon:'ios-navigate',name:'adminDetailPage',path:'/adminDetailPage'}
+]
+
 export default {
     name: 'App',
     data () {
         return {
-            pages: [],
             openNames:['sys_settiger']
         }
     },
@@ -75,7 +79,6 @@ export default {
         SidebarMenuShrink
     },
     mounted () {
-        this.pages = pageArray;
     },
     computed: {
         pageNavShrink(){
@@ -83,6 +86,9 @@ export default {
         },
         showMenu(){
             return this.$store.state.showMenu;
+        },
+        pages () {
+            return this.$store.state.showAdminMenu ? adminPageArray : pageArray;
         }
     },
     methods: {

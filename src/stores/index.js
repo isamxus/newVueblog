@@ -11,12 +11,14 @@ export default new Vuex.Store({
         //是否显示左侧菜单
         showMenu: true,
         //全局缓存视图
-        keepAliveViews: []
+        keepAliveViews: [],
+        //是否显示后台管理菜单
+        showAdminMenu: false
 	},
 	mutations: {
         pageNavShrink(state, value){state.pageNavShrink = value},
         showMenu(state, value){state.showMenu = value},
-        keepAliveViews(state, value){state.keepAliveViews = value}
-
+        keepAliveViews(state, value){state.keepAliveViews = value},
+        showAdminMenu(state, value){state.showAdminMenu = value}
 	}
 })

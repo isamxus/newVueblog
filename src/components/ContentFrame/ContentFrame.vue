@@ -18,8 +18,8 @@
         <template v-if="!hiddenFooter">
             <slot name="footer">
                 <div class="frame-container-footer">
-                    <p class="label">Copyright © 2014-2018 天联数创网络科技有限公司技术支持</p>
-                    <p class="label">粤ICP备16018901号</p>
+                    <p class="label">copyright © 2019 amxus </p>
+                    <p class="label">粤ICP备19036117号</p>
                 </div>
             </slot>
         </template>

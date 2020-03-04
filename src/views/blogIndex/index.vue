@@ -17,7 +17,7 @@
   					<Tabs value="name1">
         				<TabPane label="最新文章" name="name1">标签一的内容</TabPane>
         				<TabPane label="归档" name="name2">标签二的内容</TabPane>
-        				<TabPane label="标签" name="name3">标签三的内容</TabPane>
+        				<TabPane label="公告" name="name3">标签三的内容</TabPane>
     				</Tabs>
   				</Col>
   			</Row>
@@ -32,7 +32,7 @@
   				</Col>
   				<Col span="8" offset="1">
   					<Card>
-  						<p slot="title">访客量</p>
+  						<p slot="title">网站信息</p>
                 		<p>Content of card</p>
                 		<p>Content of card</p>
                 		<p>Content of card</p>
@@ -67,6 +67,9 @@ export default {
 	},
 	components: {
 		SubNavigationFrame
+	},
+	mounted () {
+        this.$store.commit('showMenu', true);
 	},
 	methods: {
 		test () {
