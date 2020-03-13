@@ -31,7 +31,7 @@
   					</Card>
   				</Col>
   				<Col span="8" offset="1">
-  					<Card>
+  					<Card :style="{height: '300px'}">
   						<p slot="title">网站信息</p>
                 		<p>Content of card</p>
                 		<p>Content of card</p>
@@ -73,7 +73,9 @@ export default {
 	},
 	methods: {
 		test () {
-			Action.testAxios()
+			Action.testAxios({
+				info: 'success'
+			})
 			.then(res => {
 				console.log(res);
 			})

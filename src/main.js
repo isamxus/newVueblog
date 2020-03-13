@@ -8,6 +8,9 @@ import axios from 'axios';
 import router from './router';
 import VueAxios from 'vue-axios';
 import { Urls } from './common/script/config';
+import QS from 'qs';
+import './common/sass/app.scss';
+
 
 //引用iview库
 import ViewUI from 'view-design';
@@ -18,19 +21,40 @@ Vue.use(ViewUI);
 Vue.use(vuex);
 
 //
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-fromurlencodeed';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 //全局引用script
 global.axios = axios;
 global.REQUEST_URL = Urls;
+
+//Qs处理axios Post请求
+REQUEST_URL.handleParams = (params) => {
+	return QS.stringify(params);
+}
+
 
 Vue.config.productionTip = false;
 
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+let vm = {};
+ready();
+function ready(){
+    vm = new Vue({
+        el: '#app'
+        ,router
+        ,store
+        ,template: '<App/>'
+        ,components:{App}
+        ,data: {}
+    });
+
+    //设置REM
+    document.body.onresize = function(){
+        /**
+            支持自适应式设置
+            document.getElementsByTagName('html')[0].style.fontSize = (document.body.clientWidth / 100) * 6.25 + 'px';
+        */
+        document.getElementsByTagName('html')[0].style.fontSize = '20px';
+    }
+    document.body.onresize();
+}

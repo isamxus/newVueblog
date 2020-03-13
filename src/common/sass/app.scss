@@ -1,0 +1,520 @@
+@charset 'utf-8';
+@import 'base';
+* {
+    tap-highlight-color: transparent;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: #F0F1F5;
+    //user-select: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    border: 0;
+}
+
+input {
+    outline: none;
+}
+
+ul,
+li,
+ol {
+    list-style: none;
+}
+
+button,
+input[type=text],
+input[type=password],
+input[type=number] {
+    outline: none;
+    appearance: none;
+}
+
+textarea {
+    outline: none;
+    resize: none;
+    border: 0;
+    padding: .2rem;
+    user-select: auto;
+}
+
+input[type="search"] {
+    -webkit-appearance: none;
+}
+
+input::-webkit-search-cancel-button {
+    display: none;
+}
+
+select {
+    outline: none;
+}
+
+
+/* 文本换行 */
+
+.text-wrap {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+
+/* 不换行 */
+
+.nowrap {
+    white-space: nowrap;
+}
+
+
+/* 不换行并缩略溢出内容 */
+
+.nowrap-ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+/* 换行两行后缩略溢出内容 */
+
+.wrap-two {
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-break: break-all;
+    word-wrap: break-word;
+    display: -webkit-box;
+    overflow: hidden;
+}
+
+
+/* 自动清除浮动影响 */
+
+.clear-both {
+    clear: both;
+    &:after {
+        content: '';
+        clear: both;
+        display: block;
+    }
+}
+
+
+/* banner专用样式  */
+
+.banner-img {
+    width: 100%;
+    display: block;
+}
+
+
+/* 图像显示方式 */
+
+.background-full-clip {
+    background: {
+        size: cover;
+        position: center;
+        repeat: no-repeat;
+    }
+    ;
+}
+
+.full-clip-img {
+    object-fit: cover;
+    object-position: center;
+}
+
+
+/* 自定义浏览器滚动条样式 */
+
+::-webkit-scrollbar,
+::-webkit-scrollbar-corner {
+    width: 10px;
+    height: 10px;
+    background-color: $color_content;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $color_sub;
+    cursor: pointer;
+}
+
+
+/* 子页面板样式 */
+
+.sub-page-container {
+    background-color: $web_background;
+    border-radius: $sub_page_radius;
+    padding: $page_padding;
+    padding-top: 3rem;
+    position: relative;
+    overflow: hidden;
+    .sub-page-container-title {
+        width: 100%;
+        height: 3rem;
+        font: {
+            size: .85rem;
+            weight: normal;
+        }
+        line-height: 1rem;
+        padding: 1rem $page_padding;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    .sub-page-container-title-group{
+        padding: 0 1rem;
+        line-height: 3rem;
+        .title-text{
+            float: left;
+            min-width: 15rem;
+            margin-right: 1rem;
+            font-size:0.85rem;
+        }
+        .title-content{
+            float: left;
+            font-size:14px;
+            cursor: pointer;
+        }
+        .title-button{
+            float: right;
+            margin-top:.7rem;
+        }
+    }
+    .borderline {
+        border-bottom: .05rem solid $sub_page_line;
+    }
+    &.not-padding {
+        padding: 0;
+        padding-top: 3rem;
+    }
+    .font-bold{
+        font-weight: bold;
+    }
+}
+
+
+/* 扩展表格样式，强制控制子表 */
+.ivu-table {
+    td.ivu-table-expanded-cell {
+        background-color: $web_background;
+        padding: 0;
+        .ivu-table-wrapper {
+            border: 0;
+        }
+        td {
+            height: auto;
+        }
+        .ivu-table:before,
+        .ivu-table:after {
+            display: none;
+        }
+    }
+    tr:last-child>td {
+        border-bottom: 0;
+    }
+}
+
+
+/* 子页面输入框最大宽度 */
+
+.sub-page-input-container {
+    min-height: 80px;
+    max-width: 15rem;
+    padding: {
+        left: .2rem;
+        top: .2rem;
+        right: .2rem;
+        bottom: .4rem;
+    }
+    
+    margin: 0;
+    
+    .label-box {
+        line-height: 1em;
+        padding: .5rem 0;
+        display: block;
+    }
+}
+
+.g-tree-node {
+    line-height: 1em;
+    border-radius: .2rem;
+    padding: .2rem;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.g-tree-node-select {
+    background-color: $color_background;
+}
+
+.nav-logo {
+    height: 100%;
+    margin: auto;
+    display: block;
+}
+
+
+/* 图片上传缩略图标准样式 */
+
+.upload-thumb {
+    width: 5rem;
+    height: 5rem;
+    background: {
+        size: contain;
+        position: center;
+        repeat: no-repeat;
+    }
+}
+
+.upload-btn {
+    position: relative;
+    .upload-remove:before {
+        content: '';
+        background-color: rgba(50, 50, 50, .5);
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        transition: opacity .2s;
+        opacity: 0;
+        z-index: 1;
+    }
+    .upload-remove:after {
+        content: '\F252';
+        color: #FFF;
+        font: {
+            family: 'Ionicons';
+            size: 2rem;
+        }
+        transform: translate(-50%, -50%);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transition: opacity .2s;
+        opacity: 0;
+        z-index: 1;
+    }
+    .upload-process {
+        transform: translate(-50%, -50%);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+    }
+    &:hover .upload-remove:before,
+    &:hover .upload-remove:after {
+        opacity: 1;
+    }
+    .upload-hover-box {
+        background-color: rgba(50, 50, 50, .5);
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        transition: opacity .2s;
+        opacity: 0;
+        z-index: 1;
+        >div {
+            position: absolute;
+            color: #FFF;
+            font-size: 2rem;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+    }
+    &:hover .upload-hover-box {
+        opacity: 1;
+    }
+    .example-thumb{
+        width: 5rem;
+        height: 4rem;
+    }
+    .example-text{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 1rem;
+        line-height: 1rem;
+        text-align: center;
+        font-size: .7rem;
+        .iconfont{
+            margin-left: .3rem;
+            font-size: .7rem;
+        }
+    }
+}
+
+
+/* div图片框样式 */
+
+.image-box {
+    background: {
+        size: contain;
+        position: center;
+        repeat: no-repeat;
+    }
+}
+
+
+/*  禁用单选按钮动画 */
+
+.ivu-radio-checked .ivu-radio-inner,
+.ivu-radio-checked .ivu-radio-inner:after {
+    transition: none;
+}
+
+
+/* 列表状态色 */
+
+.status-keep {
+    color: #D9D9D9;
+}
+
+.status-invalid {
+    color: #919191;
+}
+
+.status-release {
+    color: #00A854;
+}
+
+.status-check-success {
+    color: #108EE9;
+}
+
+.status-checking {
+    color: #FFBF00;
+}
+
+.status-error {
+    color: #ed3f14;
+}
+
+.status-success-green {
+    color: #19be6b;
+}
+
+
+/* 表格列表鼠标手势 */
+
+.cursor-pointer-table {
+    .ivu-table-row {
+        cursor: pointer;
+    }
+}
+
+/* Modal框隐藏footer */
+.ivu-modal-hidden-footer{
+    .ivu-modal-footer{
+        border-top: 0;
+        padding: 0;
+    }
+}
+
+/* 默认头像底色 */
+.icon-icon-user-img{
+    color: #D9D9D9;
+}
+
+.auto-wrap-modal{
+    .ivu-modal-wrap{
+        align-items: stretch;
+        display: flex;
+        
+        .ivu-modal{
+            top: 0;
+            align-items: center;
+            display: flex;
+        }
+        .ivu-modal-content{
+            width: 100%;
+            max-height: 100%;
+            flex-direction: column;
+            overflow: hidden;
+            display: flex;
+        }
+        .ivu-modal-body{
+            width: 100%;
+            overflow: auto;
+            position: relative;
+        } 
+    }
+}
+
+.filter-input-container{
+    min-height: 48px;
+}
+
+//富文本内容显示容器
+.rich-text-container,
+.ql-editor{
+    @extend .text-wrap;
+    
+    position: relative;
+    
+    img{
+        max-width: 100%;
+    }
+}
+
+.quill-editor{
+    span{
+        line-height: normal;
+    }
+}
+
+.sub-page-container-footer{
+    width: 100%;
+    height: 3.5rem;
+    text-align: right;
+    background-color: $web_background;
+    padding: $page_padding;
+    box-shadow: 0 -.05rem 0 .05rem $color_shadow;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 3;
+    button{
+        margin: 0 .5rem;
+    }
+}
+
+.ql-container{
+    height: 4rem;
+}
+
+.min-input-container{
+    min-height: auto;
+}
+
+.ivu-dropdown-transfer{
+    z-index: 1060;
+}
+
+.list-page-container{
+    padding: $page_padding;
+    
+    &:before{
+        content: '';
+        border-radius: $sub_page_radius;
+        background-color: $web_background;
+        position: absolute;
+        left: .5rem;
+        top: $page_navigation_height + 6.5rem;
+        right: .5rem;
+        bottom: $page_footer_height;
+        z-index: -1;
+    }
+}

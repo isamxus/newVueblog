@@ -49,7 +49,7 @@ const pageArray = [
         ,icon:'ios-navigate'
         ,name:'article_category'
         ,children:[
-            {title: '技术文章',icon:'ios-navigate',name:'technology',path:'/'},
+            {title: '技术文章',icon:'ios-navigate',name:'technology',path:'/article/technology'},
         ]
     },
     {
