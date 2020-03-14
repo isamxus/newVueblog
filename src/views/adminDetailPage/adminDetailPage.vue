@@ -39,8 +39,8 @@ export default {
         SubNavigationFrame
     },
     mounted () {
-        this.$store.state.showAdminMenu = true;
-        this.$store.commit('showMenu', true);
+        //this.$store.state.showAdminMenu = true;
+        //this.$store.commit('showMenu', false);
     }
 }
 </script>

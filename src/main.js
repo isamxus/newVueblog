@@ -47,7 +47,14 @@ REQUEST_URL.handleParams = (params) => {
 
 
 Vue.config.productionTip = false;
-
+router.beforeEach((to, from, next) => {
+	if (to.path.search('adminDetailPage') != -1) {
+ 		store.commit('showAdminMenu', true);
+	} else {
+		store.commit('showAdminMenu', false);
+	}
+	next();
+})
 
 /* eslint-disable no-new */
 let vm = {};
