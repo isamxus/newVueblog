@@ -5,10 +5,35 @@
 <template>
     <SubNavigationFrame :title="$route.meta.title" :breadcrumb="breadcrumbs">
         <div class="article-category-page-container" slot="content">
-            <Table
-                :columns="columns" 
-                :data="data"/>
+            <Row type="flex" justify="space-around">
+                <Col span="11">
+                    <Card :style="{height: '180px', cursor: 'pointer'}">
+                        <p >Content of card</p>
+                        <p>Content of card</p>
+                        <p>Content of card</p>
+                    </Card>
+                </Col>
+                <Col span="11">
+                    <Card :style="{height: '180px', cursor: 'pointer'}">
+                        <p>Content of card</p>
+                        <p>Content of card</p>
+                        <p>Content of card</p>
+                    </Card>
+                </Col>
+            </Row>
+            <!-- 分页 -->
+            <Page
+                :style="{paddingTop: '1rem',textAlign: 'center'}"
+                :total="100"
+                :current="1"
+                :page-size="10"
+                placement="top"
+                show-elevator
+                show-total
+                show-sizer />
+            </Page>
         </div>
+        
     </SubNavigationFrame>
 </template>
 
@@ -22,20 +47,12 @@ export default {
                 {title: '文章分类'},
                 {title: this.$route.meta.title}
             ],
-            columns: [
-                {title: '序号', type: 'index'},
-                {title: '标题',  key: 'articleTitle'},
-                {title: '作者', key: 'articleAuthor'},
-                {title: '文章摘要', key: 'articleAbstract'},
-                {title: '创建时间', key: 'articleCreateTime'},
-                {title: '操作',align: 'center',width: 180, render: this.toolColumnHandler}
-            ],
             data: [
                 {
                     articleTitle: '模拟数据1',
                     articleAuthor: '模拟数据1',
                     articleAbstract: '模拟数据1',
-                    articleCreateTime: '模拟数据1',
+                    articleCreateTime: '2019-08-11',
                 }
             ]
         }

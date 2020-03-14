@@ -26,9 +26,23 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 global.axios = axios;
 global.REQUEST_URL = Urls;
 
+
+const objectCopy = obj => {
+   return JSON.parse(JSON.stringify(obj));
+};
+
 //Qs处理axios Post请求
 REQUEST_URL.handleParams = (params) => {
-	return QS.stringify(params);
+	if (params) params.PostContent = params.PostContent ? JSON.stringify(params.PostContent) : {};
+	let now = new Date().getTime();
+	let result = {
+        RequestStamp: now
+        ,PostTime: now
+        ,Platform: 'PC Admin(Web)'
+        ,CustomApp: 'PC Admin(Web)'
+        ,Mac: 'unknown'
+    };
+    return params ? QS.stringify(Object.assign(result, objectCopy(params))) : QS.stringify(result);
 }
 
 

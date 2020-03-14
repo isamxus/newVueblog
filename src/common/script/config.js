@@ -4,6 +4,9 @@ const Host = {
 
 module.exports = {
     Urls: {
-        testAxios: `${Host.host}`
+        testAxios: `${Host.host}`,
+        //参数设置api
+        paramsCreate: `${Host.host}ParamsSettings/Create/`,
+        paramsGetList: `${Host.host}ParamsSettings/GetList/`,
     }
 }

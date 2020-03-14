@@ -70,6 +70,7 @@ export default {
 	},
 	mounted () {
         this.$store.commit('showMenu', true);
+        this.$store.commit('showAdminMenu', false);
 	},
 	methods: {
 		test () {
