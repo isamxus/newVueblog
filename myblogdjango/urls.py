@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'', include('blogIndex.urls')),
     url(r'', include('Users.urls')),
     url(r'', include('articleDetail.urls')),
+    url(r'', include('blogAdmin.urls')),
 ]

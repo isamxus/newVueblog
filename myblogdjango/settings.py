@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Users',
     'articleDetail',
     'corsheaders',
+    'blogAdmin',
 ]
 
 MIDDLEWARE = [
