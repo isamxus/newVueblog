@@ -7,6 +7,8 @@ module.exports = {
         testAxios: `${Host.host}`,
         //参数设置api
         paramsCreate: `${Host.host}ParamsSettings/Create/`,
+        paramsUpdate: `${Host.host}ParamsSettings/Update/`,
+        paramsDelete: `${Host.host}ParamsSettings/Delete/`,
         paramsGetList: `${Host.host}ParamsSettings/GetList/`,
     }
 }

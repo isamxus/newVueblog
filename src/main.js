@@ -50,6 +50,7 @@ Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
 	if (to.path.search('adminDetailPage') != -1) {
  		store.commit('showAdminMenu', true);
+ 		store.commit('showMenu', true);
 	} else {
 		store.commit('showAdminMenu', false);
 	}
