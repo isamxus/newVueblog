@@ -25,7 +25,14 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 //全局引用script
 global.axios = axios;
 global.REQUEST_URL = Urls;
+//配置axios
+axios.interceptors.response.use(response=>{
 
+    if(response.data.status) return response;
+    return Promise.reject(response.data.Msg);
+},error=>{
+    return Promise.reject(error);
+});
 
 const objectCopy = obj => {
    return JSON.parse(JSON.stringify(obj));

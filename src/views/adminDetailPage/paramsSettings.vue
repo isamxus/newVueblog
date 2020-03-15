@@ -4,9 +4,6 @@
 
 <template>
   	<SubNavigationFrame :title="$route.meta.title" :breadcrumb="breadcrumbs">
-  		<div  slot="navigation" :style="{textAlign:'right',marginTop:'-2.5rem'}">
-            <Button @click="$router.go(-1)">返回</Button>
-        </div>
         <div class="sub-page-container" :style="{'margin-top': '.5rem','padding-top':'1rem'}" slot="content">
         	<Row>
     			<Col span="8">
@@ -92,6 +89,21 @@ export default {
     	//操作列渲染
         toolColumnRender(h, params) {
             return h('div', [
+            	   h('Button',{
+                        props:{type:'text'},
+                        domProps:{innerText: '设置'},
+                        on:{click: e => {
+                        	this.$router.push({
+                        		name: 'paramsDetailPage',
+                        		query: {
+                        			paramsName: params.row.paramsName,
+                        			Code: params.row.paramsCode,
+                        			id: params.row.id
+                        		}
+                        	})
+                        }
+                    }
+                }),
                    h('Button',{
                         props:{type:'text'},
                         domProps:{innerText: '编辑'},
