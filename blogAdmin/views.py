@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -39,6 +39,30 @@ def createParamsHandler(request):
 	except:
 		return JsonResponse(FailedMsg)
 
+#更新参数
+@csrf_exempt
+def updateParamsHandler(request):
+	try:
+		requestData = json.loads(RequestHandler(request)['PostContent'])
+		updateParam = get_object_or_404(ParamsSettings, pk=requestData['id'])
+		updateParam.paramsName = requestData['paramsName']
+		updateParam.paramsCode = requestData['paramsCode']
+		updateParam.save()
+		return JsonResponse(dict({'PostContent':'success'}, **SuccessMsg))
+	except:
+		return JsonResponse(FailedMsg)
+
+#删除参数
+@csrf_exempt
+def deleteParamsHandler(request):
+	try:
+		requestData = json.loads(RequestHandler(request)['PostContent'])
+		updateParam = get_object_or_404(ParamsSettings, pk=requestData['id'])
+		updateParam.delete()
+		return JsonResponse(dict({'PostContent':'success'}, **SuccessMsg))
+	except:
+		return JsonResponse(FailedMsg)
+
 #获取参数列表
 @csrf_exempt
 def getParamsListHandler(request):
@@ -48,6 +72,7 @@ def getParamsListHandler(request):
 		def fn(obj):
 			dict = {}
 			dict['paramsName'] = obj['fields']['paramsName']
+			dict['paramsCode'] = obj['fields']['paramsCode']
 			dict['id'] = obj['pk']
 			return dict
 		PostContent = list(map(fn, json.loads(serializers.serialize('json',PostContent))))
