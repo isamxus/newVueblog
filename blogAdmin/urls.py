@@ -1,10 +1,10 @@
 from django.conf.urls import url
  
-from . import views
+from .blogAdminViews import paramsSettingsViews
  
 urlpatterns = [
-	url(r'^ParamsSettings/Create/$', views.createParamsHandler, name='createParamsHandler'),
-	url(r'^ParamsSettings/Update/$', views.updateParamsHandler, name='updateParamsHandler'),
-	url(r'^ParamsSettings/Delete/$', views.deleteParamsHandler, name='deleteParamsHandler'),
-	url(r'^ParamsSettings/GetList/$', views.getParamsListHandler, name='getParamsListHandler'),
+	url(r'^ParamsSettings/Create/$', paramsSettingsViews.createParamsHandler, name='createParamsHandler'),
+	url(r'^ParamsSettings/Update/$', paramsSettingsViews.updateParamsHandler, name='updateParamsHandler'),
+	url(r'^ParamsSettings/Delete/$', paramsSettingsViews.deleteParamsHandler, name='deleteParamsHandler'),
+	url(r'^ParamsSettings/GetList/$', paramsSettingsViews.getParamsListHandler, name='getParamsListHandler'),
 ]
