@@ -73,7 +73,7 @@ class DataSqlHandler(object):
 			UpdataData = get_object_or_404(ModelClass, pk=requestData['id'])
 			Updata_Data = ModelClass()
 			for field in requestData:
-				setattr(Create_Data, field, requestData[field])
+				setattr(Updata_Data, field, requestData[field])
 			UpdataData.save()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
