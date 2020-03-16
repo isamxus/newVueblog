@@ -4,6 +4,9 @@
 
 <template>
   	<SubNavigationFrame :title="$route.meta.title" :breadcrumb="breadcrumbs">
+        <div  slot="navigation" :style="{textAlign:'right',marginTop:'-2.5rem'}">
+            <Button @click="$router.push({name: 'Index'})">返回主站</Button>
+        </div>
         <div class="sub-page-container" :style="{'margin-top': '.5rem','padding-top':'1rem'}" slot="content">
         	<Row>
     			<Col span="8">

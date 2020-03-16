@@ -96,7 +96,6 @@ export default {
                     path: `/article/technology?id=${item.id}`
                 })
             })
-            console.log(this.pageArray)
         })
         .catch(err => {
             this.$Message.error(err);
