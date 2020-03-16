@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.core import serializers
 from django.forms import model_to_dict
+from django.db.models import Q
+from django.db.models import F
 class DataSqlHandler(object):
 	#请求成功返回
 	SuccessMsg = {
@@ -18,11 +20,14 @@ class DataSqlHandler(object):
 
 	#对请求数据进行处理
 	def RequestHandler(self, request):
-		return json.loads(json.loads(json.dumps(request.POST))['PostContent'])
+		requestData = json.loads(json.dumps(request.POST))
+		if 'PostContent' not in requestData.keys():
+			return {}
+		return json.loads(requestData['PostContent'])
 
 	#对请求进行响应
 	def ResponseHandler(self, status, obj={}):
-		obj = obj if(obj) else 'success'
+		obj = obj if(obj) else []
 		return JsonResponse(dict({'PostContent':obj}, **(DataSqlHandler.SuccessMsg if(status) else DataSqlHandler.FailedMsg)))
 
 
@@ -54,12 +59,8 @@ class DataSqlHandler(object):
 		try:
 			requestData = self.RequestHandler(self, requestData)
 			Create_Data = ModelClass()
-			need_Fields = Create_Data.mustNeedFields()
-			for field in need_Fields:
-				if not requestData[field]:
-					return self.ResponseHandler(self, False, '缺少%d字段'%field)
-				else:
-					setattr(Create_Data, field, requestData[field])
+			for field in requestData:
+				setattr(Create_Data, field, requestData[field])
 			Create_Data.save()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
@@ -71,12 +72,8 @@ class DataSqlHandler(object):
 			requestData = self.RequestHandler(self, requestData)
 			UpdataData = get_object_or_404(ModelClass, pk=requestData['id'])
 			Updata_Data = ModelClass()
-			need_Fields = Updata_Data.mustNeedFields()
-			for field in need_Fields:
-				if not requestData[field]:
-					return self.ResponseHandler(self, False, '缺少%d字段'%field)
-				else:
-					setattr(UpdataData, field, requestData[field])
+			for field in requestData:
+				setattr(Create_Data, field, requestData[field])
 			UpdataData.save()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
@@ -95,8 +92,7 @@ class DataSqlHandler(object):
 	def Delete_Data_Handler(self, ModelClass, requestData, extra):
 		try:
 			requestData = self.RequestHandler(self, requestData)
-			DeleteData = get_object_or_404(ModelClass, pk=requestData['id'])
-			DeleteData.delete()
+			get_object_or_404(ModelClass, pk=requestData['id']).delete()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)
@@ -104,7 +100,15 @@ class DataSqlHandler(object):
 	#获取数据
 	def GetList_Data_Handler(self, ModelClass, requestData, extra):
 		try:
-			PostContent = ModelClass.objects.all().order_by(extra['order_by'])
+			requestData = self.RequestHandler(self, requestData)
+			_filter = {}
+			_OrderBy = {}
+			if 'filter' in requestData.keys():
+				_filter = requestData['filter']
+			if 'Order_By' in requestData.keys():
+				_OrderBy = requestData['Order_By']
+
+			PostContent = ModelClass.objects.filter(**_filter).order_by(**_OrderBy)
 			PostContent = self.SerializeData(self, PostContent, ModelClass)
 			return self.ResponseHandler(self, True, PostContent)
 		except Exception as e:

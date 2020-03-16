@@ -26,6 +26,4 @@ def deleteDetailHandler(request):
 #获取参数列表
 @csrf_exempt
 def getDetailListHandler(request):
-	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsContent, request, 'getlist', extra={
-			'order_by': 'paramsCreateTime'
-		})
+	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsContent, request, 'getlist')

@@ -13,9 +13,7 @@ from myblogdjango.base import DataSqlHandler
 	#update 更新数据
 	#delete 删除数据
 	#getlist 获取列表
-#extra 额外操作集合，可选传，包含以下几种额外操作:
-
-
+#extra 额外操作集合，可选传
 
 #添加参数
 @csrf_exempt
@@ -41,8 +39,6 @@ def deleteParamsHandler(request):
 #获取参数列表
 @csrf_exempt
 def getParamsListHandler(request):
-	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsSettings, request, 'getlist', extra={
-			'order_by': 'paramsCreateTime'
-		})
+	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsSettings, request, 'getlist')
 
 		

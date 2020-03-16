@@ -5,8 +5,8 @@ from django.db import models
 class ParamsSettings(models.Model):
 	paramsName = models.CharField(max_length=100)
 	paramsCode = models.CharField(max_length=50)
-	paramsCreateTime = models.DateTimeField(auto_now_add=True)
-	paramsUpdateTime = models.DateTimeField(auto_now=True)
+	CreateTime = models.DateTimeField(auto_now_add=True)
+	UpdateTime = models.DateTimeField(auto_now=True)
 
 	def mustNeedFields(self):
 		return ['paramsName', 'paramsCode']
@@ -17,12 +17,13 @@ class ParamsSettings(models.Model):
 class ParamsContent(models.Model):
 	detailName = models.CharField(max_length=100)
 	detailCode = models.CharField(max_length=50, blank=True)
+	detailParentParamCode = models.CharField(max_length=50)
 	detailParentParamID = models.CharField(max_length=100)
-	detailParentParam = models.ForeignKey(ParamsSettings, on_delete=models.CASCADE)
-	paramsCreateTime = models.DateTimeField(auto_now_add=True)
-	paramsUpdateTime = models.DateTimeField(auto_now=True)
+	detailParentParam = models.CharField(max_length=100)
+	CreateTime = models.DateTimeField(auto_now_add=True)
+	UpdateTime = models.DateTimeField(auto_now=True)
 
 	def mustNeedFields(self):
-		return ['detailName', 'detailCode', 'detailParentParamID', 'detailParentParam']
+		return ['detailName', 'detailCode', 'detailParentParamID', 'detailParentParam', 'detailParentParamCode']
 	def mustReturnFields(self):
-		return ['paramsName', 'paramsCode', 'detailParentParamID', 'detailParentParam', 'id']
+		return ['detailName', 'detailCode', 'detailParentParamID', 'detailParentParamCode', 'detailParentParam', 'id']
