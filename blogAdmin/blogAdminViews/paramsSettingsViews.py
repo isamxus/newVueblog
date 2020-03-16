@@ -1,32 +1,48 @@
-from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 from ..models import ParamsSettings,ParamsContent
-import json
-import simplejson
-from django.core import serializers
-from ..base import DataSqlHandler
+from myblogdjango.base import DataSqlHandler
+
+#DataSqlHandler类封装了对请求的处理和响应的返回逻辑
+#类方法Data_Handler对数据进行处理, 该方法可接收五个参数
+#Data_Handler(DataSqlHandler, ModelClass, request, type, extra)
+#DataSqlHandler 固定参数,不可更改，必传
+#ModelClass 需要操作的Model类，必传
+#request 固定参数，包含request请求数据，必传
+#type 操作类型，有以下几种类型, 必传:
+	#add 添加数据
+	#update 更新数据
+	#delete 删除数据
+	#getlist 获取列表
+#extra 额外操作集合，可选传，包含以下几种额外操作:
+
 
 
 #添加参数
 @csrf_exempt
 def createParamsHandler(request):
-	return DataSqlHandler.Create_Data_Handler(DataSqlHandler,ParamsSettings, request)
+	return DataSqlHandler.Data_Handler(DataSqlHandler,ParamsSettings, request, 'add')
 
 #更新参数
 @csrf_exempt
 def updateParamsHandler(request):
-	return DataSqlHandler.Updata_Data_Handler(DataSqlHandler,ParamsSettings, request)
+	return DataSqlHandler.Data_Handler(DataSqlHandler,ParamsSettings, request, 'update')
+
+#更新参数
+@csrf_exempt
+def getSingleParamsHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler,ParamsSettings, request, 'getsingle')
 
 #删除参数
 @csrf_exempt
 def deleteParamsHandler(request):
-	return DataSqlHandler.Delete_Data_Handler(DataSqlHandler, ParamsSettings, request)
+	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsSettings, request, 'delete')
+
 
 #获取参数列表
 @csrf_exempt
 def getParamsListHandler(request):
-	return DataSqlHandler.GetList_Data_Handler(DataSqlHandler, ParamsSettings, request,'paramsCreateTime')
+	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsSettings, request, 'getlist', extra={
+			'order_by': 'paramsCreateTime'
+		})
 
 		

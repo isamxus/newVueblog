@@ -2,6 +2,7 @@ import json
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.core import serializers
+from django.forms import model_to_dict
 class DataSqlHandler(object):
 	#请求成功返回
 	SuccessMsg = {
@@ -24,6 +25,7 @@ class DataSqlHandler(object):
 		obj = obj if(obj) else 'success'
 		return JsonResponse(dict({'PostContent':obj}, **(DataSqlHandler.SuccessMsg if(status) else DataSqlHandler.FailedMsg)))
 
+
 	#取得Model类中所有字段并生成字典
 	def Put_Fields_to_Dict(self, ModelClass):
 		att_dict = {}
@@ -31,8 +33,10 @@ class DataSqlHandler(object):
 			name = field.attname
 			att_dict[name] = ''
 		return att_dict
+
 	#序列化数据库查询数据
 	def SerializeData(self, Data, ModelClass):
+		Data = json.loads(serializers.serialize('json',Data))
 		ret_list = []
 		ret_Fields = ModelClass()
 		for batch in Data:
@@ -46,7 +50,7 @@ class DataSqlHandler(object):
 		return ret_list
 
 	#添加数据
-	def Create_Data_Handler(self, ModelClass, requestData, judgeMent=None):
+	def Create_Data_Handler(self, ModelClass, requestData, extra):
 		try:
 			requestData = self.RequestHandler(self, requestData)
 			Create_Data = ModelClass()
@@ -62,7 +66,7 @@ class DataSqlHandler(object):
 			return self.ResponseHandler(self, False, e)
 
 	#更新数据
-	def Updata_Data_Handler(self, ModelClass, requestData, judgeMent=None):
+	def Updata_Data_Handler(self, ModelClass, requestData, extra):
 		try:
 			requestData = self.RequestHandler(self, requestData)
 			UpdataData = get_object_or_404(ModelClass, pk=requestData['id'])
@@ -78,8 +82,17 @@ class DataSqlHandler(object):
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)
 
+	#获取单个数据
+	def Getsingle_Data_Handler(self, ModelClass, requestData, extra):
+		try:
+			requestData = self.RequestHandler(self, requestData)
+			SingleData = model_to_dict(ModelClass.objects.get(pk=requestData['id']))
+			return self.ResponseHandler(self, True, SingleData)
+		except Exception as e:
+			return self.ResponseHandler(self, False, e)
+
 	#删除数据
-	def Delete_Data_Handler(self, ModelClass, requestData, judgeMent=None):
+	def Delete_Data_Handler(self, ModelClass, requestData, extra):
 		try:
 			requestData = self.RequestHandler(self, requestData)
 			DeleteData = get_object_or_404(ModelClass, pk=requestData['id'])
@@ -89,11 +102,22 @@ class DataSqlHandler(object):
 			return self.ResponseHandler(self, False, e)
 
 	#获取数据
-	def GetList_Data_Handler(self, ModelClass, requestData, judgeMent=None):
+	def GetList_Data_Handler(self, ModelClass, requestData, extra):
 		try:
-			PostContent = ModelClass.objects.all().order_by(judgeMent)
-			PostContent = json.loads(serializers.serialize('json',PostContent))
+			PostContent = ModelClass.objects.all().order_by(extra['order_by'])
 			PostContent = self.SerializeData(self, PostContent, ModelClass)
 			return self.ResponseHandler(self, True, PostContent)
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)
+
+	def Data_Handler(self, ModelClass, requestData, type, extra=None):
+		if type=='add':
+			return self.Create_Data_Handler(self, ModelClass, requestData, extra)
+		elif type=='update':
+			return self.Updata_Data_Handler(self, ModelClass, requestData, extra)
+		elif type=='getsingle':
+			return self.Getsingle_Data_Handler(self, ModelClass, requestData, extra)
+		elif type=='delete':
+			return self.Delete_Data_Handler(self, ModelClass, requestData, extra)
+		else:
+			return self.GetList_Data_Handler(self, ModelClass, requestData, extra)

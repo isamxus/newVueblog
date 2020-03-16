@@ -21,3 +21,8 @@ class ParamsContent(models.Model):
 	detailParentParam = models.ForeignKey(ParamsSettings, on_delete=models.CASCADE)
 	paramsCreateTime = models.DateTimeField(auto_now_add=True)
 	paramsUpdateTime = models.DateTimeField(auto_now=True)
+
+	def mustNeedFields(self):
+		return ['detailName', 'detailCode', 'detailParentParamID', 'detailParentParam']
+	def mustReturnFields(self):
+		return ['paramsName', 'paramsCode', 'detailParentParamID', 'detailParentParam', 'id']
