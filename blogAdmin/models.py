@@ -8,8 +8,6 @@ class ParamsSettings(models.Model):
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 
-	def mustNeedFields(self):
-		return ['paramsName', 'paramsCode']
 	def mustReturnFields(self):
 		return ['paramsName', 'paramsCode', 'id']
 
@@ -23,7 +21,5 @@ class ParamsContent(models.Model):
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 
-	def mustNeedFields(self):
-		return ['detailName', 'detailCode', 'detailParentParamID', 'detailParentParam', 'detailParentParamCode']
 	def mustReturnFields(self):
 		return ['detailName', 'detailCode', 'detailParentParamID', 'detailParentParamCode', 'detailParentParam', 'id']

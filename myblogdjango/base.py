@@ -31,13 +31,13 @@ class DataSqlHandler(object):
 		return JsonResponse(dict({'PostContent':obj}, **(DataSqlHandler.SuccessMsg if(status) else DataSqlHandler.FailedMsg)))
 
 
-	#取得Model类中所有字段并生成字典
-	def Put_Fields_to_Dict(self, ModelClass):
-		att_dict = {}
+	#取得Model类中所有字段并生成列表
+	def Put_Fields_to_List(self, ModelClass):
+		att_list = []
 		for field in ModelClass._meta.fields:
 			name = field.attname
-			att_dict[name] = ''
-		return att_dict
+			att_list.append(name)
+		return att_list
 
 	#序列化数据库查询数据
 	def SerializeData(self, Data, ModelClass):
@@ -46,7 +46,7 @@ class DataSqlHandler(object):
 		ret_Fields = ModelClass()
 		for batch in Data:
 			obj = {}
-			for key in ret_Fields.mustReturnFields():
+			for key in self.Put_Fields_to_List(self, ModelClass):
 				if key=='id':
 					obj[key] = batch['pk']
 				else:
@@ -73,7 +73,7 @@ class DataSqlHandler(object):
 			UpdataData = get_object_or_404(ModelClass, pk=requestData['id'])
 			Updata_Data = ModelClass()
 			for field in requestData:
-				setattr(Updata_Data, field, requestData[field])
+				setattr(UpdataData, field, requestData[field])
 			UpdataData.save()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
