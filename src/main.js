@@ -37,7 +37,7 @@ axios.interceptors.response.use(response=>{
 const objectCopy = obj => {
    return JSON.parse(JSON.stringify(obj));
 };
-
+global.objectCopy = objectCopy;
 //Qs处理axios Post请求
 REQUEST_URL.handleParams = (params) => {
 	if (params) params.PostContent = params.PostContent ? JSON.stringify(params.PostContent) : {};

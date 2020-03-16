@@ -2,13 +2,13 @@
     <div :style="{width:width, textAlign: 'center',margin:'auto'}" :active-name="activeName">
         <template v-for="(item,index) in items">
             <Tooltip :style="{display:'block'}" v-if="!item.children || item.children.length < 1" placement="right" :content="item.title">
-                <Button :key="item.name" :style="{width:width,padding:'.5rem',fontSize:'1rem'}"  type="text"  @click="itemClickHandler(item, index)" long>
+                <Button :key="item.name" :style="{width:width,fontSize:'1rem'}"  type="text"  @click="itemClickHandler(item, index)" long>
                     <Icon :type="item.icon" :color="iconColor" />
                 </Button>
             </Tooltip>
             <!-- 渲染带二级菜单的item -->
             <Dropdown transfer placement="right-start" :style="{display:'block'}" @on-click="itemItemClickHandler" v-else>
-                <Button :style="{width:width,padding:'.5rem',fontSize:'1rem'}" type="text" long>
+                <Button :style="{width:width,fontSize:'1rem'}" type="text" long>
                     <Icon :type="item.icon" :color="iconColor" />
                 </Button>
                 <DropdownMenu slot="list">

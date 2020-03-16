@@ -28,20 +28,20 @@
                         :rules="createDetailRules">
                         <Row>
                             <Col span="24">
-                                <FormItem class="item-box" label="名称：" prop="paramsName">
-                                    <Input v-model="createDetailForm.paramsName" placeholder="请输入名称" />
+                                <FormItem class="item-box" label="名称：" prop="detailName">
+                                    <Input v-model="createDetailForm.detailName" placeholder="请输入名称" />
                                 </FormItem>
                             </Col>
                             <Col span="24">
-                                <FormItem class="item-box" label="权限码：" prop="paramsCode">
-                                    <Input v-model="createDetailForm.paramsCode" placeholder="请输入权限码" />
+                                <FormItem class="item-box" label="权限码：" prop="detailCode">
+                                    <Input v-model="createDetailForm.detailCode" placeholder="请输入权限码" />
                                 </FormItem>
                             </Col>
                         </Row>
                     </Form>
                 </div>
                 <div slot="footer">
-                    <Button type="primary" @click="">确定</Button>
+                    <Button type="primary" @click="createDetailForm.edit ? updateDetailHandler() : addDetailHandler()">确定</Button>
                     <Button @click="paramsModal=false">取消</Button>
                 </div>
             </Modal>
@@ -50,8 +50,10 @@
 </template>
 
 <script>
-import Action from './action/paramsSettings';
+import Action from './action/paramsDetailPage';
 import SubNavigationFrame from '../../components/SubNavigationFrame/SubNavigationFrame';
+
+
 const dataFactory = (params) => {
     return params ? params : {
         detailName: '',
@@ -77,9 +79,13 @@ export default {
             tableData:[],
             createDetailForm: dataFactory(),
             createDetailRules: {
-                paramsName: [{required: true, message: '请输入名称'}],
-                paramsCode: [{required: true, message: '请输入权限码'}]
+                detailName: [{required: true, message: '请输入名称'}],
+                detailCode: [{required: true, message: '请输入权限码'}]
             },
+            filter: {
+                detailParentParamID: this.$route.query.id,
+                detailParentParamCode: this.$route.query.Code
+            }
         }
     },
     components: {
@@ -99,6 +105,9 @@ export default {
                             this.createDetailForm = dataFactory({
                                 detailName: params.row.detailName,
                                 detailCode: params.row.detailCode,
+                                detailParentParam: params.row.detailParentParam,
+                                detailParentParamID: this.$route.query.id,
+                                detailParentParamCode: this.$route.query.Code,
                                 edit: true,
                                 id: params.row.id
                             })
@@ -112,6 +121,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
+                            this.deleteDetailHandler(params.row.id)
                             e.stopPropagation();
                        }
                     }
@@ -120,11 +130,79 @@ export default {
         },
     	//根据参数权限码显示页面
         paramsShowHandler(){
-            let Code = this.$route.query.Code;
-            //博客文章分类设置
-            if (Code === '0001') {
-
+            let _filter = objectCopy(this.filter);
+            for (let i in _filter) {
+                if (!_filter[i]) delete _filter[i]
             }
+            Action.paramsDetailGetList({
+                PostContent: {
+                    filter: _filter
+                }
+            })
+            .then(res => {
+                this.tableData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        //添加参数详情
+        addDetailHandler(){
+            this.createDetailForm.detailParentParamID = this.$route.query.id;
+            this.createDetailForm.detailParentParamCode = this.$route.query.Code;
+            this.createDetailForm.detailParentParam = this.$route.query.paramsName;
+
+            Action.paramsDetailCreate({
+                PostContent: this.createDetailForm
+            })
+            .then(res => {
+                this.paramsModal = false;
+                this.paramsShowHandler();
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        //更新参数详情
+        updateDetailHandler(){
+            Action.paramsDetailUpdate({
+                PostContent: this.createDetailForm
+            })
+            .then(res => {
+                this.paramsModal = false;
+                this.paramsShowHandler();
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        //删除参数详情
+        deleteDetailHandler(ID){
+            if (!ID) return this.$Message.warning('参数ID为空，无法删除！！！');
+            const modal = this.$Modal.confirm({
+                title: '操作确认'
+                ,icon: 'warning'
+                ,content: '是否删除此参数'
+                ,okText: '确定'
+                ,showCancel: true
+                ,loading: true
+                ,onOk: () => {
+                    //发起删除参数请求
+                    Action.paramsDetailDelete({
+                        PostContent: {
+                            id: ID
+                        }
+                    }).then(result => {
+                        this.$Message.success('成功删除参数！！！');
+                        this.$Modal.remove()
+                        this.paramsShowHandler();
+                    })
+                    .catch(err => {
+                        this.$Modal.remove()
+                        this.$Message.error(err);
+                    });
+                }
+            });
         }
     }
 }
