@@ -13,6 +13,10 @@ const Action = {
 		if(!PostContent.paramsCode) return Promise.reject({Msg: '请输入参数权限码', type: 'local'});
         return axios.post(REQUEST_URL.paramsUpdate, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
 	},
+	//获取单个参数
+	paramsGetSingle (params) {
+        return axios.post(REQUEST_URL.paramsGetSingle, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
+	},
 	//删除参数
 	paramsDelete (params) {
         return axios.post(REQUEST_URL.paramsDelete, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));

@@ -8,6 +8,7 @@ module.exports = {
         //参数设置api
         paramsCreate: `${Host.host}ParamsSettings/Create/`,
         paramsUpdate: `${Host.host}ParamsSettings/Update/`,
+        paramsGetSingle: `${Host.host}ParamsSettings/GetSingle/`,
         paramsDelete: `${Host.host}ParamsSettings/Delete/`,
         paramsGetList: `${Host.host}ParamsSettings/GetList/`,
     }
