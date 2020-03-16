@@ -82,7 +82,6 @@ export default {
         Action.paramsDetailGetList({
             PostContent: {
                 filter: {
-                    detailParentParamID: 4,
                     detailParentParamCode: '0001'
                 }
             }

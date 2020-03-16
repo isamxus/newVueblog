@@ -45,6 +45,7 @@
                     <Button @click="paramsModal=false">取消</Button>
                 </div>
             </Modal>
+           <!--<quill-editor  style="height: 20rem" />-->
         </div>
     </SubNavigationFrame>
 </template>
@@ -206,4 +207,5 @@ export default {
         }
     }
 }
+</script>
 </script>

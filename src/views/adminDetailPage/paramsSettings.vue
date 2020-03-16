@@ -96,14 +96,20 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '设置'},
                         on:{click: e => {
-                        	this.$router.push({
-                        		name: 'paramsDetailPage',
-                        		query: {
-                        			paramsName: params.row.paramsName,
-                        			Code: params.row.paramsCode,
-                        			id: params.row.id
-                        		}
-                        	})
+                        	let name;
+                        	let Code = params.row.paramsCode;
+                        	if (Code === '0001') name = 'paramsDetailPage';
+                            if (Code === '0002') name = 'articleListPage';
+                        	if (name) {
+                        		this.$router.push({
+                        			name: name,
+                        			query: {
+                        				paramsName: params.row.paramsName,
+                        				Code: Code,
+                        				id: params.row.id
+                        			}
+                        		})
+                        	}
                         }
                     }
                 }),
