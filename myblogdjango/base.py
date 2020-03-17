@@ -35,8 +35,7 @@ class DataSqlHandler(object):
 	def Put_Fields_to_List(self, ModelClass):
 		att_list = []
 		for field in ModelClass._meta.fields:
-			name = field.attname
-			att_list.append(name)
+			att_list.append(field.attname)
 		return att_list
 
 	#序列化数据库查询数据
@@ -107,7 +106,6 @@ class DataSqlHandler(object):
 				_filter = requestData['filter']
 			if 'Order_By' in requestData.keys():
 				_OrderBy = requestData['Order_By']
-
 			PostContent = ModelClass.objects.filter(**_filter).order_by(**_OrderBy)
 			PostContent = self.SerializeData(self, PostContent, ModelClass)
 			return self.ResponseHandler(self, True, PostContent)
@@ -117,11 +115,11 @@ class DataSqlHandler(object):
 	def Data_Handler(self, ModelClass, requestData, type, extra=None):
 		if type=='add':
 			return self.Create_Data_Handler(self, ModelClass, requestData, extra)
-		elif type=='update':
+		if type=='update':
 			return self.Updata_Data_Handler(self, ModelClass, requestData, extra)
-		elif type=='getsingle':
+		if type=='getsingle':
 			return self.Getsingle_Data_Handler(self, ModelClass, requestData, extra)
-		elif type=='delete':
+		if type=='delete':
 			return self.Delete_Data_Handler(self, ModelClass, requestData, extra)
 		else:
 			return self.GetList_Data_Handler(self, ModelClass, requestData, extra)
