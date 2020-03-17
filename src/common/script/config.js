@@ -18,5 +18,12 @@ module.exports = {
         paramsDetailGetSingle: `${Host.host}ParamsDetailSettings/GetSingle/`,
         paramsDetailDelete: `${Host.host}ParamsDetailSettings/Delete/`,
         paramsDetailGetList: `${Host.host}ParamsDetailSettings/GetList/`,
+
+        //博客文章api
+        articleCreate: `${Host.host}Article/Create/`,
+        articleUpdate: `${Host.host}Article/Update/`,
+        articleGetSingle: `${Host.host}Article/GetSingle/`,
+        articleDelete: `${Host.host}Article/Delete/`,
+        articleGetList: `${Host.host}Article/GetList/`,
     }
 }

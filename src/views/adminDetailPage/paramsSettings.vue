@@ -15,8 +15,9 @@
     				</div>
     			</Col>
     		</Row>
-            <Table :columns="columns" :data="tableData"></Table>
-
+            <div >
+                <Table  :columns="columns" :data="tableData"></Table>
+            </div>
             <Modal
     			v-model="paramsModal"
     			:title="createParamsForm.edit ? '编辑博客参数' : '新增博客参数'"
@@ -98,7 +99,7 @@ export default {
                         on:{click: e => {
                         	let name;
                         	let Code = params.row.paramsCode;
-                        	if (Code === '0001') name = 'paramsDetailPage';
+                        	if (Code === '0001' || Code === '0003') name = 'paramsDetailPage';
                             if (Code === '0002') name = 'articleListPage';
                         	if (name) {
                         		this.$router.push({

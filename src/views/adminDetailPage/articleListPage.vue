@@ -15,7 +15,9 @@
                     </div>
                 </Col>
             </Row>
-            <Table :columns="columns" :data="tableData"></Table>
+            <div :style="{overflow: 'auto'}">
+                <Table :style="{minWidth: '1000px'}" :columns="columns" :data="tableData"></Table>  
+            </div>
         </div>
     </SubNavigationFrame>
 </template>
@@ -35,8 +37,8 @@ export default {
                 {title:'文章标题',key:'articleTitle'},
                 {title:'作者', key:'articleAuthor'},
                 {title:'摘要', key:'articleAbstract'},
-                {title:'标签', key:'articleTags'},
-                {title:'创建时间', key:'CreateTime'},
+                {title:'标签', key:'articleTagsName'},
+                {title:'创建时间', key:'CreateTime', render: this.TimeRender},
                 {title:'操作', align: 'center', render:this.toolColumnRender}
             ],
             tableData: []
@@ -46,9 +48,13 @@ export default {
         SubNavigationFrame
     },
     mounted () {
-        
+        this.getAricleListHandler();
     },
     methods: {
+        //时间渲染
+        TimeRender(h, params) {
+            return h('span', {domProps:{innerText:new Date(params.row.CreateTime).Format("yyyy-MM-dd hh:mm")}});
+        },
         //操作列渲染
         toolColumnRender(h, params) {
             return h('div', [
@@ -56,6 +62,12 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '编辑'},
                         on:{click: e => {
+                            this.$router.push({
+                                name: 'addArticle',
+                                query: {
+                                    id: params.row.id
+                                }
+                            })
                             e.stopPropagation();
                         }
                     }
@@ -64,12 +76,55 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
+                            this.deleteAricleHandler(params.row.id)
                             e.stopPropagation();
                        }
                     }
                 })
             ]);
         },
+        //获取文章列表
+        getAricleListHandler(){
+            Action.articleGetList({
+                PostContent: {
+                    _OrderBy: '-CreateTime'
+                }
+            })
+            .then(res => {
+                this.tableData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+         //删除参数详情
+        deleteAricleHandler(ID){
+            if (!ID) return this.$Message.warning('参数ID为空，无法删除！！！');
+            const modal = this.$Modal.confirm({
+                title: '操作确认'
+                ,icon: 'warning'
+                ,content: '是否删除此文章'
+                ,okText: '确定'
+                ,showCancel: true
+                ,loading: true
+                ,onOk: () => {
+                    //发起删除参数请求
+                    Action.articleDelete({
+                        PostContent: {
+                            id: ID
+                        }
+                    }).then(result => {
+                        this.$Message.success('成功删除文章！！！');
+                        this.$Modal.remove()
+                        this.getAricleListHandler();
+                    })
+                    .catch(err => {
+                        this.$Modal.remove()
+                        this.$Message.error(err);
+                    });
+                }
+            });
+        }
     }
 }
 </script>

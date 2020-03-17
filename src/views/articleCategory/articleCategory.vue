@@ -61,18 +61,7 @@ export default {
         SubNavigationFrame
     },
     methods: {
-        //操作列渲染函数
-        toolColumnHandler(h, params){
-            return h('div', [
-                h('Button',{
-                    props:{type:'text'}
-                    ,domProps:{innerText: '进入阅读'}
-                    ,on:{click: e => {
-                        e.stopPropagation();
-                    }}
-                })
-            ]);
-        }
+
     }
 }
 </script>

@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  	<SubNavigationFrame  :title="'新增博客文章'" :breadcrumb="breadcrumbs">
+  	<SubNavigationFrame  :title="$route.query.id ? '编辑博客文章' : '新增博客文章'" :breadcrumb="breadcrumbs">
         <div  slot="navigation" :style="{textAlign:'right',marginTop:'-2.5rem'}">
             <Button @click="$router.go(-1)">返回</Button>
         </div>
@@ -18,6 +18,13 @@
                 </Row>
                 <Row>
                     <Col span="12">
+                        <FormItem  label="文章作者：" prop="articleAuthor">
+                            <Input type="text" v-model="createArticleForm.articleAuthor"  placeholder="请输入文章作者" />
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="12">
                         <FormItem  label="文章摘要：" prop="articleAbstract">
                             <Input type="text" v-model="createArticleForm.articleAbstract" placeholder="请输入文章摘要：" />
                         </FormItem>
@@ -25,15 +32,36 @@
                 </Row>
                 <Row>
                     <Col span="8">
-                        <FormItem class="sub-page-input-container min-input-container" label="文章分类：" prop="articleCagetoryName">
+                        <FormItem class="sub-page-input-container min-input-container" label="文章标签：" prop="">
                             <Select
                                 transfer 
                                 filterable
+                                multiple
+                                clearable
+                                label-in-value
+                                v-model="createArticleForm.articleTagsID" 
+                                :label="createArticleForm.articleTagsName"
+                                @on-change="e => {
+                                    if(e.length === 0) return;
+                                    createArticleForm.articleTagsName = e.map(item => item.label)
+                                }">
+                                <Option 
+                                    v-for="(item,key) in TagListData" 
+                                    :value="item.id" 
+                                    :key="key">{{ item.detailName }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="8">
+                        <FormItem class="sub-page-input-container min-input-container" label="文章分类：" prop="articleCagetoryID">
+                            <Select
+                                transfer 
                                 clearable
                                 label-in-value
                                 v-model="createArticleForm.articleCagetoryID" 
                                 @on-change="e => {
-                                    if(!e) return;
                                     createArticleForm.articleCagetoryName = e.label
                                 }">
                                 <Option 
@@ -70,7 +98,7 @@
                 <Col span="22">
                     <div :style="{textAlign:'right', margin:'1.5rem 0rem'}">
                         <Button  @click="$router.go(-1)">取消</Button>
-                        <Button type="primary" @click="">确认</Button>
+                        <Button type="primary" @click="submitArticleHandler">确认</Button>
                     </div>
                 </Col>
             </Row>
@@ -87,6 +115,7 @@ export default {
     data () {
         return {
             CategoryListData: [],
+            TagListData: [],
             breadcrumbs:[
                 {title: '新增博客文章'},
             ],
@@ -94,23 +123,28 @@ export default {
                 articleTitle: '',
                 articleAuthor: '',
                 articleAbstract: '',
+                articleTagsID: [],
+                articleTagsName: [],
                 articleContent: '',
                 articleCagetoryID: '',
                 articleCagetoryName: ''
             },
             createArticleRules: {
                 articleTitle: [{required: true, message: '请输入文章标题'}],
-                articleAuthor: [{required: true, message: '请输入作者'}],
+                articleAuthor: [{required: true, message: '请输入文章作者'}],
                 articleContent: [{required: true, message: '请输入正文'}],
-                articleCagetoryName: [{required: true, message: '请选择分类'}]
+                articleCagetoryID: [{required: true, message: '请选择分类'}]
             }
         }
     },
     components: {
         SubNavigationFrame
     },
-    mounted () {
+    async mounted () {
         this.getCategoryHandler();
+        this.getTagsHandler();
+        if (this.$route.query.id) this.getArticleDetailHandler();
+        
     },
     methods: {
         getCategoryHandler(){
@@ -124,6 +158,53 @@ export default {
             })
             .then(res => {
                 this.CategoryListData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        getTagsHandler(){
+            //获取分类
+            Action.paramsDetailGetList({
+                PostContent: {
+                    filter: {
+                        detailParentParamCode: '0003'
+                    }
+                }
+            })
+            .then(res => {
+                this.TagListData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        //提交文章
+        submitArticleHandler(){
+            Action[this.$route.query.id ? 'articleUpdate' : 'articleCreate']({
+                PostContent: this.createArticleForm
+            })
+            .then(res => {
+                this.$Message.success(this.$route.query.id ? '成功修改文章！！！' : '成功添加文章！！！')
+                this.$router.push({name: 'articleListPage'})
+            })
+            .catch(err => {
+                if(err.type === 'local') return this.$Message.warning(err.Msg);
+                this.$Message.error(err);
+            })
+        },
+        //获取单篇文章数据
+        getArticleDetailHandler(){
+            Action.articleGetSingle({
+                PostContent: {
+                    id: this.$route.query.id
+                }
+            })
+            .then(res => {
+                res.articleTagsID = res.articleTagsID.split(',').map(item => parseInt(item));
+                res.articleTagsName = res.articleTagsName.split(',');
+                res.articleCagetoryID = parseInt(res.articleCagetoryID)
+                this.createArticleForm = res;
             })
             .catch(err => {
                 this.$Message.error(err);
