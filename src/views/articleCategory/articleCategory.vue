@@ -5,19 +5,10 @@
 <template>
     <SubNavigationFrame :title="$route.meta.title" :breadcrumb="breadcrumbs">
         <div class="article-category-page-container" slot="content">
-            <Row type="flex" justify="space-around">
-                <Col span="11">
-                    <Card :style="{height: '180px', cursor: 'pointer'}">
-                        <p >Content of card</p>
-                        <p>Content of card</p>
-                        <p>Content of card</p>
-                    </Card>
-                </Col>
-                <Col span="11">
-                    <Card :style="{height: '180px', cursor: 'pointer'}">
-                        <p>Content of card</p>
-                        <p>Content of card</p>
-                        <p>Content of card</p>
+            <Row :style="{margin: '.7rem 0'}" type="flex" justify="space-around" v-for="(item, index) in articleListData">
+                <Col span="15">
+                    <Card :style="{height: '220px', cursor: 'pointer', display: 'flex', justifyContent: 'center'}">
+                        <h1>ewfwe</h1>
                     </Card>
                 </Col>
             </Row>
@@ -43,6 +34,7 @@ import Action from './action/articleCategory';
 export default {
     data () {
         return {
+            articleListData: [],
             breadcrumbs:[
                 {title: '文章分类'},
                 {title: this.$route.meta.title}
@@ -60,8 +52,30 @@ export default {
     components: {
         SubNavigationFrame
     },
+    watch: {
+        '$route' : 'getAricleListHandler'
+    },
+    mounted () {
+        this.getAricleListHandler();
+    },
     methods: {
-
+        //获取文章列表
+        getAricleListHandler(){
+            Action.articleGetList({
+                PostContent: {
+                    filter: {
+                        articleCagetoryID: this.$route.query.id
+                    },
+                    _OrderBy: '-CreateTime'
+                }
+            })
+            .then(res => {
+                this.articleListData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
     }
 }
 </script>
