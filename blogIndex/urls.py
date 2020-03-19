@@ -9,4 +9,5 @@ urlpatterns = [
 	url(r'^Article/Delete/$', blogArticleViews.deleteArticleHandler, name='deleteArticleHandler'),
 	url(r'^Article/GetSingle/$', blogArticleViews.getSingleArticleHandler, name='getSingleArticleHandler'),
 	url(r'^Article/GetList/$', blogArticleViews.getArticleListHandler, name='getArticleListHandler'),
+	url(r'^Article/GetPageList/$', blogArticleViews.getArticlePageListHandler, name='getArticlePageListHandler'),
 ]

@@ -24,7 +24,12 @@ def deleteArticleHandler(request):
 	return DataSqlHandler.Data_Handler(DataSqlHandler, ArticleDetail, request, 'delete')
 
 
-#获取文章列表
+#获取文章列表 (不分页)
 @csrf_exempt
 def getArticleListHandler(request):
 	return DataSqlHandler.Data_Handler(DataSqlHandler, ArticleDetail, request, 'getlist')
+
+#获取文章列表 （分页）
+@csrf_exempt
+def getArticlePageListHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler, ArticleDetail, request, 'getpagelist')
