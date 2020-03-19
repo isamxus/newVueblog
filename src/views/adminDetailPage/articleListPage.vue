@@ -5,6 +5,7 @@
 <template>
   	<SubNavigationFrame :title="$route.query.paramsName" :breadcrumb="breadcrumbs">
   		<div  slot="navigation" :style="{textAlign:'right',marginTop:'-2.5rem'}">
+            <Button @click="$router.push({name: 'Index'})">返回主站</Button>
             <Button @click="$router.go(-1)">返回</Button>
         </div>
         <div class="sub-page-container" :style="{'margin-top': '.5rem','padding-top':'1rem'}" slot="content">
@@ -18,7 +19,20 @@
             <div :style="{overflow: 'auto'}">
                 <Table :style="{minWidth: '1000px'}" :columns="columns" :data="tableData"></Table>  
             </div>
-        </div>
+            <!-- 分页 -->
+            <Page
+                :style="{paddingTop: '1rem',textAlign: 'center'}"
+                :total="PageCount"
+                :current="PageNumber"
+                :page-size="PageSize"
+                placement="top"
+                @on-change="e => {PageNumber=e, getAricleListHandler()}" 
+                @on-page-size-change="(size) => { PageSize = size, getAricleListHandler() }"
+                show-elevator
+                show-total
+                show-sizer />
+            </Page>
+        </div>  
     </SubNavigationFrame>
 </template>
 
@@ -41,7 +55,10 @@ export default {
                 {title:'创建时间', key:'CreateTime', render: this.TimeRender},
                 {title:'操作', align: 'center', render:this.toolColumnRender}
             ],
-            tableData: []
+            tableData: [],
+            PageCount: 0,
+            PageNumber: 1,
+            PageSize: 10
         }
     },
     components: {
@@ -85,13 +102,16 @@ export default {
         },
         //获取文章列表
         getAricleListHandler(){
-            Action.articleGetList({
+            Action.articleGetPageList({
                 PostContent: {
-                    _OrderBy: '-CreateTime'
+                    _OrderBy: '-CreateTime',
+                    PageSize: this.PageSize,
+                    PageNumber: this.PageNumber
                 }
             })
             .then(res => {
-                this.tableData = res;
+                this.tableData = res.Items;
+                this.PageCount = res.TotalItems;
             })
             .catch(err => {
                 this.$Message.error(err);

@@ -92,7 +92,7 @@ export default {
                     title: item.detailName,
                     icon: 'ios-navigate',
                     name: item.detailName,
-                    path: `/article/technology?id=${item.id}`
+                    path: `/article/simplePage?id=${item.id}`
                 })
             })
         })

@@ -5,6 +5,7 @@
 <template>
   	<SubNavigationFrame  :title="$route.query.id ? '编辑博客文章' : '新增博客文章'" :breadcrumb="breadcrumbs">
         <div  slot="navigation" :style="{textAlign:'right',marginTop:'-2.5rem'}">
+            <Button @click="$router.push({name: 'Index'})">返回主站</Button>
             <Button @click="$router.go(-1)">返回</Button>
         </div>
   		  <div class="sub-page-container" slot="content">

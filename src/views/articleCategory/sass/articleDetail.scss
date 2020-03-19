@@ -1,0 +1,29 @@
+@charset 'utf-8';
+@import '../../../common/sass/base';
+
+.article-detail-page-container{
+	position: relative;
+	min-height: 600px;
+	.article-content-part{
+		padding: 1rem;
+		width: 65%;
+		height: 600px;
+		background: #fff;
+		position: absolute;
+		left: 0;
+		overflow: auto;
+		span {
+			padding: 0 .7rem;
+			font-size: 10px;
+		}
+	}
+	.comment-content-part{
+		padding: 1rem;
+		position: absolute;
+		width: 30%;
+		background: #fff;
+		height: 600px;
+		right: 0;
+		overflow: auto;
+	}
+}

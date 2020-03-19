@@ -5,6 +5,8 @@ const Index = () => import('../views/blogIndex/index');
 
 //文章分类详情页
 const articleCategory = () => import('../views/articleCategory/articleCategory');
+const articleDetail = () => import('../views/articleCategory/articleDetail');
+
 //后台管理登录页面
 const blogAdmin = () => import('../views/blogAdmin/blogAdmin');
 
@@ -26,6 +28,7 @@ export default new Router({
       	{path:'/adminDetailPage/paramsDetailPage',name: 'paramsDetailPage',component: paramsDetailPage,meta:{title:''}},
       	{path:'/adminDetailPage/articleListPage',name: 'articleListPage',component: articleListPage,meta:{title:''}},
       	{path:'/adminDetailPage/addArticle',name: 'addArticle',component: addArticle,meta:{title:''}},
-      	{path:'/article/technology',name: 'articleCategory',component: articleCategory,meta:{title:'文章列表', cateString:'technology'}}
+      	{path:'/article/simplePage',name: 'articleCategory',component: articleCategory,meta:{title:'文章列表'}},
+      	{path:'/article/detailPage',name: 'articleDetail',component: articleDetail,meta:{title:'文章详情'}}
   	]
 })

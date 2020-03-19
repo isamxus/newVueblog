@@ -25,5 +25,6 @@ module.exports = {
         articleGetSingle: `${Host.host}Article/GetSingle/`,
         articleDelete: `${Host.host}Article/Delete/`,
         articleGetList: `${Host.host}Article/GetList/`,
+        articleGetPageList: `${Host.host}Article/GetPageList/`,
     }
 }
