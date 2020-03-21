@@ -35,7 +35,6 @@ def getSingleParamsHandler(request):
 def deleteParamsHandler(request):
 	return DataSqlHandler.Data_Handler(DataSqlHandler, ParamsSettings, request, 'delete')
 
-
 #获取参数列表
 @csrf_exempt
 def getParamsListHandler(request):
