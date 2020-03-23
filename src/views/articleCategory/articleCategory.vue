@@ -6,8 +6,8 @@
     <SubNavigationFrame :title="$route.meta.title" :breadcrumb="breadcrumbs">
         <div class="article-category-page-container" slot="content">
             <Row :style="{margin: '.7rem 0'}" type="flex" justify="space-around" v-for="(item, index) in articleListData" :key="index">
-                <Col span="15">
-                    <Card :style="{height: '220px', cursor: 'pointer', display: 'flex', justifyContent: 'center'}" >
+                <Col span="18">
+                    <Card :style="{height: '250px', cursor: 'pointer', display: 'flex', justifyContent: 'center'}" >
                         <h1 :style="{textAlign: 'center'}">{{ item.articleTitle }}</h1>
                         <span>分类：{{ item.articleCagetoryName }}</span>
                         <span>标签：{{ item.articleTagsName }}</span>

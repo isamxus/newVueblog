@@ -44,7 +44,7 @@ Vue.use(VueQuillEditor, {
             ['image']
         ]
     },
-    placeholder: '输入富文本内容...'
+    placeholder: '请输入内容...'
 });
 //
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
@@ -86,6 +86,7 @@ router.beforeEach((to, from, next) => {
  		store.commit('showMenu', true);
 	} else {
 		store.commit('showAdminMenu', false);
+        store.commit('showMenu', true);
 	}
 	next();
 })

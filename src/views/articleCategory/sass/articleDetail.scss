@@ -3,11 +3,11 @@
 
 .article-detail-page-container{
 	position: relative;
-	min-height: 600px;
+	min-height: 800px;
 	.article-content-part{
 		padding: 1rem;
 		width: 65%;
-		height: 600px;
+		height: 800px;
 		background: #fff;
 		position: absolute;
 		left: 0;
@@ -20,10 +20,35 @@
 	.comment-content-part{
 		padding: 1rem;
 		position: absolute;
-		width: 30%;
+		width: 34%;
 		background: #fff;
-		height: 600px;
+		height: 800px;
 		right: 0;
 		overflow: auto;
+		.comment-container {
+			.comment-item {
+				margin: .7rem 0;
+				padding: .7rem;
+				border-top: 1px solid #f8f8f9;
+				border-bottom: 1px solid #f8f8f9;
+			}
+		}
+		
+	}
+}
+
+.titlebox {
+	position: relative;
+	margin: .2rem 0;
+	h3 {
+		&::before{
+           	content: ' ';
+            position: absolute;
+           	left: -0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #2d8cf0;
+        }
 	}
 }

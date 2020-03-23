@@ -26,5 +26,13 @@ module.exports = {
         articleDelete: `${Host.host}Article/Delete/`,
         articleGetList: `${Host.host}Article/GetList/`,
         articleGetPageList: `${Host.host}Article/GetPageList/`,
+
+        //文章评论api
+        commentCreate: `${Host.host}Comment/Create/`,
+        commentUpdate: `${Host.host}Comment/Update/`,
+        commentGetSingle: `${Host.host}Comment/GetSingle/`,
+        commentDelete: `${Host.host}Comment/Delete/`,
+        commentGetList: `${Host.host}Comment/GetList/`,
+        commentGetPageList: `${Host.host}Comment/GetPageList/`,
     }
 }
