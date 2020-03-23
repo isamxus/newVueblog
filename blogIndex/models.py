@@ -17,3 +17,11 @@ class ArticleDetail(models.Model):
 	articleCagetoryName = models.CharField(max_length=50)
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
+
+class CommentDetail(models.Model):
+	commentAuthor = models.CharField(max_length=50)
+	commentHeadImg = models.CharField(max_length=200,blank=True)
+	commentContent = models.CharField(max_length=400,blank=True)
+	parentArticleID = models.CharField(max_length=200)
+	CreateTime = models.DateTimeField(auto_now_add=True)
+	UpdateTime = models.DateTimeField(auto_now=True)

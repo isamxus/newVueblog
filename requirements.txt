@@ -1,0 +1,8 @@
+asgiref==3.2.3
+Django==3.0.3
+django-cors-headers==3.2.1
+pythonds==1.2.1
+pytz==2019.3
+simplejson==3.17.0
+sqlparse==0.3.1
+virtualenv==16.7.2

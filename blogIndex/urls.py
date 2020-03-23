@@ -1,6 +1,6 @@
 from django.conf.urls import url
  
-from .blogIndexViews import blogArticleViews
+from .blogIndexViews import blogArticleViews, articleCommentViews
  
 urlpatterns = [
 	#博客文章
@@ -10,4 +10,12 @@ urlpatterns = [
 	url(r'^Article/GetSingle/$', blogArticleViews.getSingleArticleHandler, name='getSingleArticleHandler'),
 	url(r'^Article/GetList/$', blogArticleViews.getArticleListHandler, name='getArticleListHandler'),
 	url(r'^Article/GetPageList/$', blogArticleViews.getArticlePageListHandler, name='getArticlePageListHandler'),
+
+	#文章评论
+	url(r'^Comment/Create/$', articleCommentViews.createCommentHandler, name='createCommentHandler'),
+	url(r'^Comment/Update/$', articleCommentViews.updateCommentHandler, name='updateCommentHandler'),
+	url(r'^Comment/Delete/$', articleCommentViews.deleteCommentHandler, name='deleteCommentHandler'),
+	url(r'^Comment/GetSingle/$', articleCommentViews.getSingleCommentHandler, name='getSingleCommentHandler'),
+	url(r'^Comment/GetList/$', articleCommentViews.getCommentListHandler, name='getCommentListHandler'),
+	url(r'^Comment/GetPageList/$', articleCommentViews.getCommentPageListHandler, name='getCommentPageListHandler'),
 ]

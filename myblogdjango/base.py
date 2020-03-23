@@ -114,11 +114,12 @@ class DataSqlHandler(object):
 		try:
 			requestData = self.PostContent
 			_filter = requestData['filter'] if('filter' in requestData.keys()) else {}
-			_OrderBy = requestData['Order_By'] if('Order_By' in requestData.keys()) else {}
+			_OrderBy = requestData['_OrderBy'] if('_OrderBy' in requestData.keys()) else {}
 			_PageSize = requestData['PageSize'] if('PageSize' in requestData.keys()) else False
 			_PageNumber = requestData['PageNumber'] if('PageNumber' in requestData.keys()) else False
 			if _PageSize and _PageNumber:
-				PostContent = ModelClass.objects.filter(**_filter).order_by(**_OrderBy)
+				print(_OrderBy)
+				PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
 				count = PostContent.count()
 				PostContent = PostContent[((_PageNumber-1) * _PageSize):((_PageNumber) * _PageSize)]	
 				PostContent = self.SerializeData(self, PostContent, ModelClass)
