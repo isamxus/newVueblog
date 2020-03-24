@@ -71,6 +71,7 @@ export default {
                 {title:'参数设置'},
             ],
             columns:[
+                {title: '序号', type: 'index', width: 120},
                 {title:'博客参数',key:'paramsName'},
                 {title:'操作', align: 'center', render:this.toolColumnRender}
             ],
@@ -101,6 +102,7 @@ export default {
                         	let Code = params.row.paramsCode;
                         	if (Code === '0001' || Code === '0003') name = 'paramsDetailPage';
                             if (Code === '0002') name = 'articleListPage';
+                            if (Code === '0004') name = 'commentManagement';
                         	if (name) {
                         		this.$router.push({
                         			name: name,

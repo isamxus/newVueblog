@@ -55,7 +55,7 @@ export default {
     methods: {
         //登录表单提交处理函数
         submitFormHandler () {
-            this.$router.push({name: 'adminDetailPage'});
+            this.$router.push({name: 'paramsSettings'});
             /*Action.submitLoginForm(this.loginForm)
             .then(res => {
                 console.log(res);

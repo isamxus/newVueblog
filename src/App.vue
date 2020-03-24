@@ -68,7 +68,7 @@ export default {
 
             //左侧菜单(博客管理页面)
             adminPageArray: [
-                {title: '首页视图管理',icon:'ios-navigate',name:'adminDetailPage',path:'/adminDetailPage'},
+                //{title: '首页视图管理',icon:'ios-navigate',name:'adminDetailPage',path:'/adminDetailPage'},
                 {title: '参数设置',icon:'ios-navigate',name:'paramsSettings',path:'/adminDetailPage/paramsSettings'},
             ]
         }

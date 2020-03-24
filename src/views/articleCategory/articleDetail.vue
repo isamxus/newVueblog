@@ -112,6 +112,7 @@ export default {
             Action.commentCreate({
                 PostContent: {
                     parentArticleID: this.$route.query.id,
+                    parentArticleTitle: this.articleDetailData.articleTitle,
                     commentContent: this.commentContent,
                     commentHeadImg: '',
                     commentAuthor: ''

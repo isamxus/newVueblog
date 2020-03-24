@@ -75,6 +75,7 @@ export default {
                 {title: this.$route.query.paramsName},
             ],
             columns:[
+                {title: '序号', type: 'index', width: 120},
                 {title:'名称',key:'detailName'},
                 {title:'操作', align: 'center', render:this.toolColumnRender}
             ],
