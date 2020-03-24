@@ -7,17 +7,18 @@ from django.db.models import Q
 from django.db.models import F
 class DataSqlHandler(object):
 	#请求成功返回
-	SuccessMsg = {
-		'status':True,
-		'Msg': '成功！！！'
-	}
+	def SuccessMsg(self):
+		return {
+			'status':True,
+			'Msg': '成功！！！'
+		}
 
 	#请求失败返回
-	FailedMsg = {
-		'status':False, 
-		'Msg': '服务器发生错误，请联系管理员！！！'
-	}
-
+	def FailedMsg(self):
+		return {
+			'status':False,
+			'Msg': '服务器发生错误，请联系管理员！！！'
+		}
 	#处理后的PostContent
 	PostContent = None
 	#对请求数据进行处理
@@ -30,7 +31,7 @@ class DataSqlHandler(object):
 	#对请求进行响应
 	def ResponseHandler(self, status, obj={}):
 		obj = obj if(obj) else []
-		return JsonResponse(dict({'PostContent':obj}, **(DataSqlHandler.SuccessMsg if(status) else DataSqlHandler.FailedMsg)))
+		return JsonResponse(dict({'PostContent':obj}, **(self.SuccessMsg(self) if(status) else self.FailedMsg(self))))
 
 
 	#取得Model类中所有字段并生成列表
@@ -118,7 +119,6 @@ class DataSqlHandler(object):
 			_PageSize = requestData['PageSize'] if('PageSize' in requestData.keys()) else False
 			_PageNumber = requestData['PageNumber'] if('PageNumber' in requestData.keys()) else False
 			if _PageSize and _PageNumber:
-				print(_OrderBy)
 				PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
 				count = PostContent.count()
 				PostContent = PostContent[((_PageNumber-1) * _PageSize):((_PageNumber) * _PageSize)]	
