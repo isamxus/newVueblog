@@ -2,7 +2,6 @@ from django.views.decorators.csrf import csrf_exempt
 from ..models import ArticleDetail
 from myblogdjango.base import DataSqlHandler
 
-
 #添加文章
 @csrf_exempt
 def createArticleHandler(request):

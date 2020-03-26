@@ -5,7 +5,11 @@ from django.core import serializers
 from django.forms import model_to_dict
 from django.db.models import Q
 from django.db.models import F
+
+#基础类
 class DataSqlHandler(object):
+	#处理后的PostContent
+	PostContent = None
 	#请求成功返回
 	def SuccessMsg(self):
 		return {
@@ -14,24 +18,20 @@ class DataSqlHandler(object):
 		}
 
 	#请求失败返回
-	def FailedMsg(self):
-		return {
+	def FailedMsg(self, err={}):
+		return dict({
 			'status':False,
 			'Msg': '服务器发生错误，请联系管理员！！！'
-		}
-	#处理后的PostContent
-	PostContent = None
+		}, **err)
+
 	#对请求数据进行处理
 	def RequestHandler(self, request):
 		requestData = json.loads(json.dumps(request.POST))
-		if 'PostContent' not in requestData.keys():
-			return {}
-		return json.loads(requestData['PostContent'])
+		return json.loads(requestData['PostContent']) if('PostContent' in requestData.keys()) else {}
 
 	#对请求进行响应
-	def ResponseHandler(self, status, obj={}):
-		obj = obj if(obj) else []
-		return JsonResponse(dict({'PostContent':obj}, **(self.SuccessMsg(self) if(status) else self.FailedMsg(self))))
+	def ResponseHandler(self, status, obj={}, err={}):
+		return JsonResponse(dict({'PostContent':obj if(obj) else []}, **(self.SuccessMsg(self) if(status) else self.FailedMsg(self, err))))
 
 
 	#取得Model类中所有字段并生成列表
@@ -49,10 +49,7 @@ class DataSqlHandler(object):
 		for batch in Data:
 			obj = {}
 			for key in self.Put_Fields_to_List(self, ModelClass):
-				if key=='id':
-					obj[key] = batch['pk']
-				else:
-					obj[key] = batch['fields'][key]
+				obj[key] = batch['pk'] if(key=='id') else batch['fields'][key]
 			ret_list.append(obj)
 		return ret_list
 
@@ -66,7 +63,7 @@ class DataSqlHandler(object):
 			Create_Data.save()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
-			return self.ResponseHandler(self, False, e)
+			return self.ResponseHandler(self, False)
 
 	#更新数据
 	def Updata_Data_Handler(self, ModelClass, extra):
@@ -79,7 +76,7 @@ class DataSqlHandler(object):
 			UpdataData.save()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
-			return self.ResponseHandler(self, False, e)
+			return self.ResponseHandler(self, False)
 
 	#获取单个数据
 	def Getsingle_Data_Handler(self, ModelClass, extra):
@@ -88,7 +85,7 @@ class DataSqlHandler(object):
 			SingleData = ModelClass.objects.filter(id=requestData['id']).values()[0]
 			return self.ResponseHandler(self, True, SingleData)
 		except Exception as e:
-			return self.ResponseHandler(self, False, e)
+			return self.ResponseHandler(self, False)
 
 	#删除数据
 	def Delete_Data_Handler(self, ModelClass, extra):
@@ -97,7 +94,7 @@ class DataSqlHandler(object):
 			get_object_or_404(ModelClass, pk=requestData['id']).delete()
 			return self.ResponseHandler(self, True)
 		except Exception as e:
-			return self.ResponseHandler(self, False, e)
+			return self.ResponseHandler(self, False)
 
 	#获取列表数据（不分页）
 	def GetList_Data_Handler(self, ModelClass, extra):
@@ -109,7 +106,7 @@ class DataSqlHandler(object):
 			PostContent = self.SerializeData(self, PostContent, ModelClass)
 			return self.ResponseHandler(self, True, PostContent)
 		except Exception as e:
-			return self.ResponseHandler(self, False, e)
+			return self.ResponseHandler(self, False)
 	#获取列表数据（分页）
 	def GetPageList_Data_Handler(self, ModelClass, extra):
 		try:
@@ -130,7 +127,8 @@ class DataSqlHandler(object):
 						'TotalItems': count
 					})
 			else:
-				return self.ResponseHandler(self, False, '传参错误！！！')
+				return self.ResponseHandler(self, False, err={
+					'err': '传参错误！！！'})
 
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)
@@ -148,3 +146,7 @@ class DataSqlHandler(object):
 			return self.GetList_Data_Handler(self, ModelClass, extra)
 		if type=='getpagelist':
 			return self.GetPageList_Data_Handler(self, ModelClass, extra)
+
+
+
+

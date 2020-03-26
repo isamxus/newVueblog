@@ -11,6 +11,7 @@ from myblogdjango.base import DataSqlHandler
 #type 操作类型，有以下几种类型, 必传:
 	#add 添加数据
 	#update 更新数据
+	#getsingle 获取单个数据
 	#delete 删除数据
 	#getlist 获取列表
 #extra 额外操作集合，可选传
