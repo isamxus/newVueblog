@@ -37,5 +37,9 @@ module.exports = {
 
         //用户管理api
         userCreate: `${Host.host}User/Create/`,
+        userUpdate: `${Host.host}User/Update/`,
+        userDelete: `${Host.host}User/Delete/`,
+        userGetPageList: `${Host.host}User/GetPageList/`,
+        userLogin: `${Host.host}User/Login/`,
     }
 }

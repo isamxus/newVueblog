@@ -103,6 +103,7 @@ export default {
                         	if (Code === '0001' || Code === '0003') name = 'paramsDetailPage';
                             if (Code === '0002') name = 'articleListPage';
                             if (Code === '0004') name = 'commentManagement';
+                            if (Code === '0005') name = 'usersManagement';
                         	if (name) {
                         		this.$router.push({
                         			name: name,

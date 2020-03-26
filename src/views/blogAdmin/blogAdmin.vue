@@ -14,14 +14,14 @@
                 <Row>
                     <Col span="20" offset="2">
                         <FormItem prop="User">
-                            <Input v-model="loginForm.username" type="text" placeholder="请输入用户名称" size="large">
+                            <Input v-model="loginForm.UserName" type="text" placeholder="请输入用户名称" size="large">
                                 <Icon size="24" type="ios-person-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
                     </Col>
                     <Col span="20" offset="2">
                         <FormItem prop="Password">
-                            <Input v-model="loginForm.password" type="text" placeholder="请输入登录密码" size="large">
+                            <Input v-model="loginForm.PassWord" type="text" placeholder="请输入登录密码" size="large">
                                 <Icon size="24" type="ios-lock-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
@@ -51,8 +51,8 @@ export default {
     data () {
         return {
             loginForm: {
-                username: '',
-                password: ''
+                UserName: '',
+                PassWord: '',
             }
         }
     },
@@ -62,7 +62,16 @@ export default {
     methods: {
         //登录表单提交处理函数
         submitFormHandler () {
-            this.$router.push({name: 'paramsSettings'});
+            Action.userLogin({
+                PostContent: this.loginForm
+            })
+            .then(res => {
+                console.log(res);
+                this.$router.push({name: 'paramsSettings'});
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
             /*Action.submitLoginForm(this.loginForm)
             .then(res => {
                 console.log(res);
