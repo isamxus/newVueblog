@@ -35,23 +35,41 @@ class DataSqlHandler(object):
 
 
 	#取得Model类中所有字段并生成列表
-	def Put_Fields_to_List(self, ModelClass):
+	def Put_Fields_to_List(self, ModelClass, extra):
 		att_list = []
 		for field in ModelClass._meta.fields:
+			if extra and field.attname in (extra['ignoreFields']):
+				continue
 			att_list.append(field.attname)
 		return att_list
 
 	#序列化数据库查询数据
-	def SerializeData(self, Data, ModelClass):
+	def SerializeData(self, Data, ModelClass, extra):
 		Data = json.loads(serializers.serialize('json',Data))
 		ret_list = []
 		ret_Fields = ModelClass()
 		for batch in Data:
 			obj = {}
-			for key in self.Put_Fields_to_List(self, ModelClass):
+			for key in self.Put_Fields_to_List(self, ModelClass, extra):
 				obj[key] = batch['pk'] if(key=='id') else batch['fields'][key]
 			ret_list.append(obj)
 		return ret_list
+
+	#验证必传字段并根据筛选条件与数据库匹配
+	def mustFieldsCheck(self, ModelClass, Data, extra):
+		_filter = {}
+		for field in extra['mustFields']:
+			if field not in Data.keys() or not Data[field]:
+				return self.ResponseHandler(self, False, err={'err':("缺少%s参数！！！")%field})
+			if Data[field]:
+				_filter[field] = Data[field]
+
+		checkData = ModelClass.objects.filter(**_filter)
+		if checkData:
+			return self.ResponseHandler(self, True, self.SerializeData(self, checkData, ModelClass, extra))
+		return self.ResponseHandler(self, False, {}, {
+				'err': extra['err'] if('err' in extra.keys()) else '系统发生错误'
+			})
 
 	#添加数据
 	def Create_Data_Handler(self, ModelClass, extra):
@@ -103,7 +121,7 @@ class DataSqlHandler(object):
 			_filter = requestData['filter'] if('filter' in requestData.keys()) else {}
 			_OrderBy = requestData['Order_By'] if('Order_By' in requestData.keys()) else {}
 			PostContent = ModelClass.objects.filter(**_filter).order_by(**_OrderBy)
-			PostContent = self.SerializeData(self, PostContent, ModelClass)
+			PostContent = self.SerializeData(self, PostContent, ModelClass, extra)
 			return self.ResponseHandler(self, True, PostContent)
 		except Exception as e:
 			return self.ResponseHandler(self, False)
@@ -119,7 +137,7 @@ class DataSqlHandler(object):
 				PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
 				count = PostContent.count()
 				PostContent = PostContent[((_PageNumber-1) * _PageSize):((_PageNumber) * _PageSize)]	
-				PostContent = self.SerializeData(self, PostContent, ModelClass)
+				PostContent = self.SerializeData(self, PostContent, ModelClass, extra)
 				return self.ResponseHandler(self, True, {
 						'Items': PostContent,
 						'PageSize': _PageSize,
@@ -132,7 +150,7 @@ class DataSqlHandler(object):
 
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)
-	def Data_Handler(self, ModelClass, requestData, type, extra=None):
+	def Data_Handler(self, ModelClass, requestData, type, extra={}):
 		self.PostContent = self.RequestHandler(self, requestData)
 		if type=='add':
 			return self.Create_Data_Handler(self, ModelClass, extra)

@@ -14,3 +14,11 @@ class UserSqlHandler(DataSqlHandler):
 			return self.ResponseHandler(self, True)
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)
+
+	#用户登录
+	def User_Login_Handler(self, ModelClass, request, extra={}):
+		try:
+			requestData = self.RequestHandler(self, request)
+			return self.mustFieldsCheck(self, ModelClass, requestData, extra)
+		except Exception as e:
+			return self.ResponseHandler(self, False)
