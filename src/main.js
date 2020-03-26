@@ -55,7 +55,7 @@ global.REQUEST_URL = Urls;
 axios.interceptors.response.use(response=>{
 
     if(response.data.status) return response;
-    return Promise.reject(response.data.Msg);
+    return Promise.reject(response.data.err);
 },error=>{
     return Promise.reject(error);
 });

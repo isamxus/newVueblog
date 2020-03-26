@@ -11,7 +11,7 @@
         	<Row>
     			<Col span="8">
     				<div :style="{marginBottom: '.7rem'}">
-    					<Button type="primary"  @click="paramsModal = true"><Icon type="md-add"></Icon>新增博客参数</Button>
+    					<Button type="primary"  @click="paramsModal = true, resetFormHandler()"><Icon type="md-add"></Icon>新增博客参数</Button>
     				</div>
     			</Col>
     		</Row>
@@ -112,7 +112,9 @@ export default {
                         				id: params.row.id
                         			}
                         		})
-                        	}
+                        	} else {
+                                return this.$Message.warning('无该参数设置权限');
+                            }
                         }
                     }
                 }),
@@ -207,7 +209,11 @@ export default {
 			.catch(err => {
 				this.$Message.error(err);
 			})
-    	}
+    	},
+        //重置表单
+        resetFormHandler(){
+            this.createParamsForm = dataFactory();
+        }
     }
 }
 </script>

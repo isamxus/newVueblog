@@ -9,6 +9,7 @@ const articleDetail = () => import('../views/articleCategory/articleDetail');
 
 //后台管理登录页面
 const blogAdmin = () => import('../views/blogAdmin/blogAdmin');
+const blogRegister = () => import('../views/blogAdmin/blogRegister');
 
 //后台管理页面
 const adminDetailPage = () => import('../views/adminDetailPage/adminDetailPage');
@@ -22,8 +23,10 @@ Vue.use(Router)
 
 export default new Router({
   	routes: [
-      	{path:'/',name: 'Index',component: Index,meta:{title:'首页'}},
-      	{path:'/admin',name: 'blogAdmin',component: blogAdmin,meta:{title:'后台管理登录'}},
+        {path:'/',name: 'Index',component: Index,meta:{title:'首页'}},
+        {path:'/login',name: 'login',component: blogAdmin,meta:{title:'用户登录'}},
+      	{path:'/register',name: 'register',component: blogRegister,meta:{title:'用户注册'}},
+        {path:'/admin',name: 'blogAdmin',component: blogAdmin,meta:{title:'博客后台管理系统'}},
       	//{path:'/adminDetailPage',name: 'adminDetailPage',component: adminDetailPage,meta:{title:'首页视图管理'}},
       	{path:'/adminDetailPage/paramsSettings',name: 'paramsSettings',component: paramsSettings,meta:{title:'参数设置'}},
       	{path:'/adminDetailPage/paramsDetailPage',name: 'paramsDetailPage',component: paramsDetailPage,meta:{title:''}},

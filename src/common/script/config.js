@@ -34,5 +34,8 @@ module.exports = {
         commentDelete: `${Host.host}Comment/Delete/`,
         commentGetList: `${Host.host}Comment/GetList/`,
         commentGetPageList: `${Host.host}Comment/GetPageList/`,
+
+        //用户管理api
+        userCreate: `${Host.host}User/Create/`,
     }
 }

@@ -23,11 +23,11 @@
                     <Dropdown @on-click="userToolHandler">
                         <img :src="userHeadImg" v-if="userHeadImg">
                         <div :style="{display: 'flex',alignItems: 'center'}" v-else>
-                            <i :style="{fontSize: '1.8rem'}" class="iconfont icon-icon-user-img"></i>
+                            <Icon type="md-contact" size="36" />
                         </div>
                         <a href="javascript:void(0)">
-                            {{ userInfo ? userInfo.UserName : '&lt;unknown&gt;' }}
-                            <Icon type="arrow-down-b"></Icon>
+                            {{ userInfo ? userInfo.UserName : '系统管理员' }}
+                            <Icon type="md-arrow-dropdown" size="24" />
                         </a>
                         <DropdownMenu slot="list" :style="{textAlign: 'center'}">
                             <DropdownItem name="userinfo">个人信息</DropdownItem>
