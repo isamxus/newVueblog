@@ -81,17 +81,7 @@ REQUEST_URL.handleParams = (params) => {
 }
 
 
-Vue.config.productionTip = false;
-router.beforeEach((to, from, next) => {
-	if (to.path.search('adminDetailPage') != -1) {
- 		store.commit('showAdminMenu', true);
- 		store.commit('showMenu', true);
-	} else {
-		store.commit('showAdminMenu', false);
-        store.commit('showMenu', true);
-	}
-	next();
-})
+
 
 Date.prototype.Format = function(format, timeCheck) {
     if(timeCheck !== false && this.getTime() < 1) return '';
@@ -135,4 +125,26 @@ function ready(){
     document.body.onresize();
 }
 
-    
+
+Vue.config.productionTip = false;
+router.beforeEach((to, from, next) => {
+    if (to.path.search('adminDetailPage') != -1) {
+        if (store.state.UserInfo && !store.state.UserInfo[0].Jurisdiction.find(item => item == '01')){
+            vm.$Modal.error({
+                title: '警告',
+                content: '用户无后台管理权限！！！',
+                okText: '关闭'
+            })
+            return next({
+                path: '/admin',
+                query: {redirect: to.fullPath}
+            })
+        }
+        store.commit('showAdminMenu', true);
+        store.commit('showMenu', true);
+    } else {
+        store.commit('showAdminMenu', false);
+        store.commit('showMenu', true);
+    }
+    next();
+})

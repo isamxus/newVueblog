@@ -55,14 +55,6 @@ export default {
                     ,icon:'ios-navigate'
                     ,name:'article_category'
                     ,children:[]
-                },
-                {
-                    title: '关于作者'
-                    ,icon:'ios-navigate'
-                    ,name:'about_author'
-                    ,children:[
-                        {title: '技术文章',icon:'ios-navigate',name:'technology',path:'/'},
-                    ]
                 }
             ],
 

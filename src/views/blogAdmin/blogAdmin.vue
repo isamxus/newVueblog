@@ -66,10 +66,20 @@ export default {
                 PostContent: this.loginForm
             })
             .then(res => {
-                console.log(res);
-                this.$router.push({name: 'paramsSettings'});
+                if (res.status) {
+                    this.$store.state.UserInfo = res.PostContent.map(item => {
+                        item.Jurisdiction = item.Jurisdiction.split(',')
+                        return item;
+                    });
+                    if (this.$route.meta.title=='用户登录') {
+                        this.$router.push({name: 'Index'});
+                    } else {
+                        this.$router.push({name: 'paramsSettings'});
+                    }
+                }
             })
             .catch(err => {
+                if(err.type === 'local') return this.$Message.warning(err.Msg);
                 this.$Message.error(err);
             })
             /*Action.submitLoginForm(this.loginForm)

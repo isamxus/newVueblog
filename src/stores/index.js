@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-	UserInfo: null,
-	//控制左侧菜单是否收缩
+	    UserInfo: null,
+	   //控制左侧菜单是否收缩
         pageNavShrink: false,
         //是否显示左侧菜单
         showMenu: true,
