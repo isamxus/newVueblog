@@ -6,23 +6,31 @@ from django.forms import model_to_dict
 from django.db.models import Q
 from django.db.models import F
 
+
+
+
+
 #基础类
 class DataSqlHandler(object):
 	#处理后的PostContent
 	PostContent = None
 	#请求成功返回
-	def SuccessMsg(self):
-		return {
+	def SuccessMsg(self, success={}):
+		return dict({
 			'status':True,
 			'Msg': '成功！！！'
-		}
+		}, **(success if (success) else {'success': '请求成功！！！'}))
 
 	#请求失败返回
 	def FailedMsg(self, err={}):
 		return dict({
 			'status':False,
-			'Msg': '服务器发生错误，请联系管理员！！！'
-		}, **err)
+			'Msg': '失败！！！'
+		}, **(err if(err) else {'err': '服务器发生错误，请联系管理员！！！'}))
+
+	#判断key是否存在于dict中并返回value
+	def Is_In_Dict(self, key, dict, type={}):
+		return dict[key] if (dict and key in dict.keys()) else type
 
 	#对请求数据进行处理
 	def RequestHandler(self, request):
@@ -30,15 +38,16 @@ class DataSqlHandler(object):
 		return json.loads(requestData['PostContent']) if('PostContent' in requestData.keys()) else {}
 
 	#对请求进行响应
-	def ResponseHandler(self, status, obj={}, err={}):
-		return JsonResponse(dict({'PostContent':obj if(obj) else []}, **(self.SuccessMsg(self) if(status) else self.FailedMsg(self, err))))
+	def ResponseHandler(self, status, obj={}, success={}, err={}):
+		return JsonResponse(dict({'PostContent':obj if(obj) else []}, **(self.SuccessMsg(self, success) if(status) else self.FailedMsg(self, err))))
 
 
 	#取得Model类中所有字段并生成列表
 	def Put_Fields_to_List(self, ModelClass, extra):
 		att_list = []
+		ignoreList = self.Is_In_Dict(self, 'ignoreFields', extra, [])
 		for field in ModelClass._meta.fields:
-			if extra and field.attname in (extra['ignoreFields']):
+			if field.attname in ignoreList:
 				continue
 			att_list.append(field.attname)
 		return att_list
@@ -58,17 +67,17 @@ class DataSqlHandler(object):
 	#验证必传字段并根据筛选条件与数据库匹配
 	def mustFieldsCheck(self, ModelClass, Data, extra):
 		_filter = {}
-		for field in extra['mustFields']:
+		for field in self.Is_In_Dict(self, 'mustFields', extra, []):
 			if field not in Data.keys() or not Data[field]:
 				return self.ResponseHandler(self, False, err={'err':("缺少%s参数！！！")%field})
 			if Data[field]:
 				_filter[field] = Data[field]
 
-		checkData = ModelClass.objects.filter(**_filter)
+		checkData = ModelClass.objects.filter(**_filter)																				
 		if checkData:
-			return self.ResponseHandler(self, True, self.SerializeData(self, checkData, ModelClass, extra))
-		return self.ResponseHandler(self, False, {}, {
-				'err': extra['err'] if('err' in extra.keys()) else '系统发生错误'
+			return self.ResponseHandler(self, True, self.SerializeData(self, checkData, ModelClass, extra), success={'IsOK': self.Is_In_Dict(self, 'success', extra, False)})
+		return self.ResponseHandler(self, False, err={
+				'err': self.Is_In_Dict(self, 'err', extra, '接口extra传参错误！！！')
 			})
 
 	#添加数据
@@ -118,9 +127,9 @@ class DataSqlHandler(object):
 	def GetList_Data_Handler(self, ModelClass, extra):
 		try:
 			requestData = self.PostContent
-			_filter = requestData['filter'] if('filter' in requestData.keys()) else {}
-			_OrderBy = requestData['Order_By'] if('Order_By' in requestData.keys()) else {}
-			PostContent = ModelClass.objects.filter(**_filter).order_by(**_OrderBy)
+			_filter = self.Is_In_Dict(self, 'filter', requestData)
+			_OrderBy = self.Is_In_Dict(self, '_OrderBy', requestData, 'CreateTime')
+			PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
 			PostContent = self.SerializeData(self, PostContent, ModelClass, extra)
 			return self.ResponseHandler(self, True, PostContent)
 		except Exception as e:
@@ -129,10 +138,10 @@ class DataSqlHandler(object):
 	def GetPageList_Data_Handler(self, ModelClass, extra):
 		try:
 			requestData = self.PostContent
-			_filter = requestData['filter'] if('filter' in requestData.keys()) else {}
-			_OrderBy = requestData['_OrderBy'] if('_OrderBy' in requestData.keys()) else {}
-			_PageSize = requestData['PageSize'] if('PageSize' in requestData.keys()) else False
-			_PageNumber = requestData['PageNumber'] if('PageNumber' in requestData.keys()) else False
+			_filter = self.Is_In_Dict(self, 'filter', requestData, {})
+			_OrderBy = self.Is_In_Dict(self, '_OrderBy', requestData, 'CreateTime')
+			_PageSize = self.Is_In_Dict(self, 'PageSize', requestData, False)
+			_PageNumber = self.Is_In_Dict(self, 'PageNumber', requestData, False)
 			if _PageSize and _PageNumber:
 				PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
 				count = PostContent.count()
@@ -145,8 +154,7 @@ class DataSqlHandler(object):
 						'TotalItems': count
 					})
 			else:
-				return self.ResponseHandler(self, False, err={
-					'err': '传参错误！！！'})
+				return self.ResponseHandler(self, False, err={'err':'缺少PageSize或PageNumber参数！！！'})
 
 		except Exception as e:
 			return self.ResponseHandler(self, False, e)

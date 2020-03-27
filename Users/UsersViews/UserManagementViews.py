@@ -35,6 +35,7 @@ def userLoginHandler(request):
 	return UserSqlHandler.User_Login_Handler(UserSqlHandler, Users, request, extra = {
 				'ignoreFields': ['PassWord'],
 				'mustFields': ['UserName', 'PassWord'],
-				'err': '用户未注册！！！'
+				'err': '用户名未注册或密码错误！！！',
+				'success': True
 			})
 

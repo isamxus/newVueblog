@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'blogIndex',
     'Users',
     'articleDetail',
@@ -54,6 +56,23 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    # 配置默认的认证方式 base:账号密码验证
+    #session：session_id认证
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    # drf的这一阶段主要是做验证,middleware的auth主要是设置session和user到request对象
+    # 默认的验证是按照验证列表从上到下的验证
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication',)
+}
+import datetime
+# 超时时间
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    # token前缀
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
 # session 配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）

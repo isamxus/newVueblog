@@ -1,4 +1,5 @@
 from myblogdjango.base import DataSqlHandler
+from rest_framework.authtoken.models import Token
 
 class UserSqlHandler(DataSqlHandler):
 	#添加数据

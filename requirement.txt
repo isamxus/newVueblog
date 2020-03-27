@@ -1,0 +1,8 @@
+Django==1.11.3
+django-haystack==2.8.1
+jieba==0.39
+Markdown==3.1.1
+Pillow==6.1.0
+pytz==2019.2
+sqlparse==0.3.0
+Whoosh==2.7.4
