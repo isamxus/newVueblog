@@ -76,7 +76,9 @@ REQUEST_URL.handleParams = (params) => {
         ,Platform: 'PC Admin(Web)'
         ,CustomApp: 'PC Admin(Web)'
         ,Mac: 'unknown'
+        ,Token: store.state.UserToken
     };
+
     return params ? QS.stringify(Object.assign(result, objectCopy(params))) : QS.stringify(result);
 }
 

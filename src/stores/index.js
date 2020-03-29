@@ -5,7 +5,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        //用户信息
 	    UserInfo: null,
+        //用户Token
+        UserToken: null,
 	   //控制左侧菜单是否收缩
         pageNavShrink: false,
         //是否显示左侧菜单
@@ -19,6 +22,7 @@ export default new Vuex.Store({
         pageNavShrink(state, value){state.pageNavShrink = value},
         showMenu(state, value){state.showMenu = value},
         keepAliveViews(state, value){state.keepAliveViews = value},
-        showAdminMenu(state, value){state.showAdminMenu = value}
+        showAdminMenu(state, value){state.showAdminMenu = value},
+        UserInfo(state, value){state.UserInfo = value}
     }
 })

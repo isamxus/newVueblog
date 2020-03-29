@@ -26,7 +26,7 @@
                             <Icon type="md-contact" size="36" />
                         </div>
                         <a href="javascript:void(0)">
-                            {{ userInfo ? userInfo.UserName : '系统管理员' }}
+                            {{ userInfo ? userInfo[0].UserName : '游客' }}
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
                         <DropdownMenu slot="list" :style="{textAlign: 'center'}">
@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         pageNavShrink(){ return this.$store.state.pageNavShrink },
-        userInfo(){ return this.$store.state.userInfo },
+        userInfo(){ return this.$store.state.UserInfo },
         userHeadImg(){
             return false;
         },

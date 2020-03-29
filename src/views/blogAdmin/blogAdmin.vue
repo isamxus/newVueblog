@@ -66,11 +66,14 @@ export default {
                 PostContent: this.loginForm
             })
             .then(res => {
-                if (res.status) {
-                    this.$store.state.UserInfo = res.PostContent.map(item => {
+                if (res.IsOK) {
+                    let data = res.PostContent.map(item => {
                         item.Jurisdiction = item.Jurisdiction.split(',')
                         return item;
                     });
+                    this.$store.commit('UserInfo', data);
+                    console.log(this.$store.state.UserInfo)
+                    this.$store.state.UserToken = res.Token;
                     if (this.$route.meta.title=='用户登录') {
                         this.$router.push({name: 'Index'});
                     } else {
