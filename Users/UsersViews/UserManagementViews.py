@@ -5,7 +5,7 @@ from ..base import UserSqlHandler
 #添加用户
 @csrf_exempt
 def createUserHandler(request):
-	return UserSqlHandler.Data_Handler(UserSqlHandler, Users, request, 'add')
+	return UserSqlHandler.Create_User_Handler(UserSqlHandler, Users, request, 'add')
 
 #用户更新
 @csrf_exempt
