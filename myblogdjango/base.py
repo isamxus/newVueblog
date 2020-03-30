@@ -6,9 +6,47 @@ from django.forms import model_to_dict
 from rest_framework.authtoken.models import Token
 from django.db.models import Q
 from django.db.models import F
+import datetime
+from rest_framework_jwt.settings import api_settings
+#验证状态类
+class AuthTokenHandler(object):
+	#Token处理
+	
 
+	#生成payload
+	def payload_handler(self, Data):
+		payload = {
+			'user_id': Data['user_id'].__str__(),
+			'UserName': Data['UserName'],
+			'exp': datetime.datetime.utcnow()
+		}
+		return payload
 
+	#生成token
+	def encode_handler(self, payload):
+		jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+		token = jwt_encode_handler(payload);
+		return token
+	#解析token
+	def decode_handler(self, Token):
+		pass
+	#签发Token
+	def sign_Token_Handler(self, Data):
+		payload = self.payload_handler(self, Data)
+		token = self.encode_handler(self, payload)
+		return token
 
+	#验证Token
+	def check_Token_Handler(self, Data):
+		jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
+		if not 'Token' in Data.keys() or not Data['Token']:
+			return False
+		print(jwt_decode_handler(Data['Token']))
+		#token = self.jwt_decode_handler(Data['Token'])
+		#to = datetime.datetime.utcfromtimestamp(token['exp'])
+		#tn = datetime.datetime.utcfromtimestamp(datetime.datetime.now().timestamp())
+		#print(to)
+		#print(tn)
 
 
 #基础类
@@ -48,6 +86,12 @@ class DataSqlHandler(object):
 	def ResponseHandler(self, status, obj={}, success={}, err={}, extra={}):
 		return JsonResponse(dict({'PostContent':obj if(obj) else []}, **(self.SuccessMsg(self, success, extra=extra) if(status) else self.FailedMsg(self, err, extra=extra))))
 
+	#返回主键字段
+	def return_primary_key(self, ModelClass):
+		for field in ModelClass._meta.fields:
+			if field.primary_key:
+				return field.attname
+		return
 	#取得Model类中所有字段并生成列表
 	def Put_Fields_to_List(self, ModelClass, extra):
 		att_list = []
@@ -60,32 +104,35 @@ class DataSqlHandler(object):
 
 	#序列化数据库查询数据
 	def SerializeData(self, Data, ModelClass, extra):
-		Data = json.loads(serializers.serialize('json',Data))
+		#Data = json.loads(serializers.serialize('json',Data))
 		ret_list = []
 		ret_Fields = ModelClass()
 		for batch in Data:
 			obj = {}
 			for key in self.Put_Fields_to_List(self, ModelClass, extra):
-				obj[key] = batch['pk'] if(key=='id') else batch['fields'][key]
+				obj[key] = batch[key]
 			ret_list.append(obj)
 		return ret_list
 
 	#验证必传字段并返回筛选条件
 	def mustFieldsCheck(self, ModelClass, Data, extra):
 		_filter = {}
-		for field in self.Is_In_Dict(self, 'mustFields', extra, []):
+		must_field_list = self.Is_In_Dict(self, 'mustFields', extra, [])
+		for field in must_field_list:
 			if field not in Data.keys() or not Data[field]:
+				print(field)
+
 				return self.ResponseHandler(self, False, err={'err':("缺少%s参数！！！")%field}, extra=extra)
 			if Data[field]:
 				_filter[field] = Data[field]
 		return _filter
 	#根据筛选条件与数据库匹配
 	def mapDatabase(self, ModelClass, _filter, extra):
-		checkData = ModelClass.objects.filter(**_filter)																				
+		checkData = ModelClass.objects.filter(**_filter).values()																				
 		if checkData:
 			return self.ResponseHandler(self, True, self.SerializeData(self, checkData, ModelClass, extra), success={'IsOK': self.Is_In_Dict(self, 'success', extra, True)}, extra=extra)
 		return self.ResponseHandler(self, False, err={
-				'err': self.Is_In_Dict(self, 'err', extra, '接口extra传参错误！！！')
+				'err': self.Is_In_Dict(self, 'err', extra, '无匹配数据！！！')
 			}, extra=extra)
 	#添加数据
 	def Create_Data_Handler(self, ModelClass, extra):
@@ -103,7 +150,8 @@ class DataSqlHandler(object):
 	def Updata_Data_Handler(self, ModelClass, extra):
 		try:
 			requestData = self.PostContent
-			UpdataData = get_object_or_404(ModelClass, pk=requestData['id'])
+			primary_key = self.return_primary_key(self, ModelClass)
+			UpdataData = get_object_or_404(ModelClass, pk=requestData[primary_key])
 			Updata_Data = ModelClass()
 			for field in requestData:
 				setattr(UpdataData, field, requestData[field])
@@ -116,7 +164,8 @@ class DataSqlHandler(object):
 	def Getsingle_Data_Handler(self, ModelClass, extra):
 		try:
 			requestData = self.PostContent
-			extra['mustFields'] = self.Is_In_Dict(self, 'mustFields', extra, ['id'])
+			primary_key = self.return_primary_key(self, ModelClass)
+			extra['mustFields'] = [primary_key]
 			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
 			if type(response).__name__ != 'dict':
 				return response
@@ -129,11 +178,12 @@ class DataSqlHandler(object):
 	def Delete_Data_Handler(self, ModelClass, extra):
 		try:
 			requestData = self.PostContent
-			extra['mustFields'] = self.Is_In_Dict(self, 'mustFields', extra, ['id'])
+			primary_key = self.return_primary_key(self, ModelClass)
+			extra['mustFields'] = [primary_key]
 			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
 			if type(response).__name__ != 'dict':
 				return response
-			get_object_or_404(ModelClass, pk=requestData['id']).delete()
+			get_object_or_404(ModelClass, pk=requestData[primary_key]).delete()
 			return self.ResponseHandler(self, True, extra=extra)
 		except Exception as e:
 			return self.ResponseHandler(self, False ,extra=extra)
@@ -144,10 +194,11 @@ class DataSqlHandler(object):
 			requestData = self.PostContent
 			_filter = self.Is_In_Dict(self, 'filter', requestData)
 			_OrderBy = self.Is_In_Dict(self, '_OrderBy', requestData, 'CreateTime')
-			PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
+			PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy).values()
 			PostContent = self.SerializeData(self, PostContent, ModelClass, extra)
 			return self.ResponseHandler(self, True, PostContent, extra=extra)
 		except Exception as e:
+			print(e)
 			return self.ResponseHandler(self, False, extra=extra)
 	#获取列表数据（分页）
 	def GetPageList_Data_Handler(self, ModelClass, extra):
@@ -159,7 +210,7 @@ class DataSqlHandler(object):
 			_PageNumber = self.Is_In_Dict(self, 'PageNumber', requestData, False)
 			if _PageSize and _PageNumber:
 				if (isinstance(_PageSize, int) and _PageSize > 0) and (isinstance(_PageNumber, int) and _PageNumber > 0):
-					PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy)
+					PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy).values()
 					count = PostContent.count()
 					PostContent = PostContent[((_PageNumber-1) * _PageSize):((_PageNumber) * _PageSize)]	
 					PostContent = self.SerializeData(self, PostContent, ModelClass, extra)

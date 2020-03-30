@@ -67,12 +67,7 @@ REST_FRAMEWORK = {
     'rest_framework.authentication.BasicAuthentication',)
 }
 import datetime
-# 超时时间
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    # token前缀
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
-}
+
 # session 配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # 引擎（默认）
 SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名（默认）

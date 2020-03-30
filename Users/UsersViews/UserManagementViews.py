@@ -39,3 +39,7 @@ def userLoginHandler(request):
 				'success': True
 			})
 
+#获取用户登录状态
+@csrf_exempt
+def UserCheckStatusHandler(request):
+	return UserSqlHandler.User_CheckStatus_Handler(UserSqlHandler, Users, request)
