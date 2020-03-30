@@ -96,7 +96,7 @@ export default {
         getAricleDetailHandler(){
             Action.articleGetSingle({
                 PostContent: {
-                    id: this.$route.query.id
+                    article_id: this.$route.query.id
                 }
             })
             .then(res => {

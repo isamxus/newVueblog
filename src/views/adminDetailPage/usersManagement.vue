@@ -56,6 +56,7 @@ export default {
         SubNavigationFrame
     },
     mounted () {
+        this.$store.commit('showAdminMenu', true);
         this.getUsersListHandler();
     },
     methods: {

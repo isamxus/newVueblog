@@ -95,6 +95,7 @@ export default {
     	SubNavigationFrame
     },
     mounted () {
+        this.$store.commit('showAdminMenu', true);
         this.paramsShowHandler();
     },
     methods: {
@@ -112,7 +113,7 @@ export default {
                                 detailParentParamID: this.$route.query.id,
                                 detailParentParamCode: this.$route.query.Code,
                                 edit: true,
-                                id: params.row.id
+                                id: params.row.detail_params_id
                             })
                             this.paramsModal = true;
                             e.stopPropagation();
@@ -124,7 +125,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
-                            this.deleteDetailHandler(params.row.id)
+                            this.deleteDetailHandler(params.row.detail_params_id)
                             e.stopPropagation();
                        }
                     }
@@ -193,7 +194,7 @@ export default {
                     //发起删除参数请求
                     Action.paramsDetailDelete({
                         PostContent: {
-                            id: ID
+                            detail_params_id: ID
                         }
                     }).then(result => {
                         this.$Message.success('成功删除参数！！！');

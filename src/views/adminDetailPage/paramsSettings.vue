@@ -87,6 +87,7 @@ export default {
     	SubNavigationFrame
     },
     mounted () {
+        this.$store.commit('showAdminMenu', true);
     	//获取参数列表
     	this.getParamsListHandler();
     },
@@ -110,7 +111,7 @@ export default {
                         			query: {
                         				paramsName: params.row.paramsName,
                         				Code: Code,
-                        				id: params.row.id
+                        				id: params.row.params_id
                         			}
                         		})
                         	} else {
@@ -127,7 +128,7 @@ export default {
                             	paramsName: params.row.paramsName,
                             	paramsCode: params.row.paramsCode,
                             	edit: true,
-                            	id: params.row.id
+                            	id: params.row.params_id
                             })
                             this.paramsModal = true;
                             e.stopPropagation();
@@ -138,7 +139,7 @@ export default {
                        	props:{type:'text'},
                        	domProps:{innerText: '删除'},
                        	on:{click: e => {
-                       		this.deleteParamsHandler(params.row.id);
+                       		this.deleteParamsHandler(params.row.params_id);
                             e.stopPropagation();
                        }
                     }
@@ -187,7 +188,7 @@ export default {
                     //发起删除参数请求
                     Action.paramsDelete({
                         PostContent: {
-                        	id: ID
+                        	params_id: ID
                         }
                     }).then(result => {
                         this.$Message.success('成功删除参数！！！');

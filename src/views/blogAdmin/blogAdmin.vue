@@ -72,7 +72,7 @@ export default {
                         return item;
                     });
                     this.$store.commit('UserInfo', data);
-                    console.log(this.$store.state.UserInfo)
+                    localStorage.setItem('Token', JSON.stringify(res.Token));
                     this.$store.state.UserToken = res.Token;
                     if (this.$route.meta.title=='用户登录') {
                         this.$router.push({name: 'Index'});

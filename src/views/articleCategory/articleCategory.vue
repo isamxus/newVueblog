@@ -16,7 +16,7 @@
                         <Button long :style="{marginTop: '1.2rem'}" @click="$router.push({
                             name: 'articleDetail',
                             query: {
-                                id: item.id
+                                id: item.article_id
                             }
                         })">进入阅读</Button>
                     </Card>

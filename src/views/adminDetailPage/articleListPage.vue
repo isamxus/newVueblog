@@ -66,6 +66,7 @@ export default {
         SubNavigationFrame
     },
     mounted () {
+        this.$store.commit('showAdminMenu', true);
         this.getAricleListHandler();
     },
     methods: {
@@ -83,7 +84,7 @@ export default {
                             this.$router.push({
                                 name: 'addArticle',
                                 query: {
-                                    id: params.row.id
+                                    id: params.row.article_id
                                 }
                             })
                             e.stopPropagation();
@@ -94,7 +95,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
-                            this.deleteAricleHandler(params.row.id)
+                            this.deleteAricleHandler(params.row.article_id)
                             e.stopPropagation();
                        }
                     }
@@ -132,7 +133,7 @@ export default {
                     //发起删除参数请求
                     Action.articleDelete({
                         PostContent: {
-                            id: ID
+                            article_id: ID
                         }
                     }).then(result => {
                         this.$Message.success('成功删除文章！！！');

@@ -41,5 +41,6 @@ module.exports = {
         userDelete: `${Host.host}User/Delete/`,
         userGetPageList: `${Host.host}User/GetPageList/`,
         userLogin: `${Host.host}User/Login/`,
+        userCheckStatus: `${Host.host}User/CheckLoginStatus/`,
     }
 }

@@ -76,7 +76,7 @@ REQUEST_URL.handleParams = (params) => {
         ,Platform: 'PC Admin(Web)'
         ,CustomApp: 'PC Admin(Web)'
         ,Mac: 'unknown'
-        ,Token: store.state.UserToken
+        ,Token: JSON.parse(localStorage.getItem('Token'))
     };
 
     return params ? QS.stringify(Object.assign(result, objectCopy(params))) : QS.stringify(result);
@@ -144,6 +144,8 @@ router.beforeEach((to, from, next) => {
         }
         store.commit('showAdminMenu', true);
         store.commit('showMenu', true);
+    } else if (to.path.search('admin') != -1 || to.path.search('login') != -1 ||to.path.search('register') != -1) {
+        store.commit('showMenu', false);
     } else {
         store.commit('showAdminMenu', false);
         store.commit('showMenu', true);

@@ -54,36 +54,31 @@ import SubNavigationFrame from '../../components/SubNavigationFrame/SubNavigatio
 import Action from './action/blogIndex';
 
 export default {
-	data () {
-		return {
-			breadcrumbs: [
-  	      		{title: '工作日报'}
-  	  		],
-  	  		//
-  	  		CarouselIndex: 0,
-  	  		//
-  	  		CarouselData: [0, 1, 2, 3]
-		}
-	},
-	components: {
-		SubNavigationFrame
-	},
-	mounted () {
+	  data () {
+		    return {
+			      breadcrumbs: [],
+  	        CarouselIndex: 0,
+  	        CarouselData: [0, 1, 2, 3]
+		    }
+	  },
+	  components: {
+		    SubNavigationFrame
+	  },
+	  mounted () {
         this.$store.commit('showMenu', true);
         this.$store.commit('showAdminMenu', false);
-	},
-	methods: {
-		test () {
-			Action.testAxios({
-				info: 'success'
-			})
-			.then(res => {
-				console.log(res);
-			})
-			.catch(err => {
-				console.log(err);
-			})
-		}
-	}
+        this.checkLoginStatusHandler();
+	  },
+	  methods: {
+        checkLoginStatusHandler(){
+            Action.getStatusInfo()
+            .then(res => {
+               
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        }
+	  }
 }
 </script>

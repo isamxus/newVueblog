@@ -58,7 +58,8 @@ export default {
         SubNavigationFrame
     },
     mounted () {
-       this.getCommentListHandler();
+        this.$store.commit('showAdminMenu', true);
+        this.getCommentListHandler();
     },
     methods: {
         //时间渲染
@@ -101,7 +102,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
-                            this.deleteCommentHandler(params.row.id)
+                            this.deleteCommentHandler(params.row.comment_id)
                             e.stopPropagation();
                        }
                     }
@@ -122,7 +123,7 @@ export default {
                     //发起删除参数请求
                     Action.commentDelete({
                         PostContent: {
-                            id: ID
+                            comment_id: ID
                         }
                     }).then(result => {
                         this.$Message.success('成功删除评论！！！');

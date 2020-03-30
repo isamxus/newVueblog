@@ -67,7 +67,7 @@
                                 }">
                                 <Option 
                                     v-for="(item,key) in CategoryListData" 
-                                    :value="item.id" 
+                                    :value="item.detail_params_id" 
                                     :key="key">{{ item.detailName }}</Option>
                             </Select>
                         </FormItem>
@@ -142,6 +142,7 @@ export default {
         SubNavigationFrame
     },
     async mounted () {
+        this.$store.commit('showAdminMenu', true);
         this.getCategoryHandler();
         this.getTagsHandler();
         if (this.$route.query.id) this.getArticleDetailHandler();
@@ -198,7 +199,7 @@ export default {
         getArticleDetailHandler(){
             Action.articleGetSingle({
                 PostContent: {
-                    id: this.$route.query.id
+                    article_id: this.$route.query.id
                 }
             })
             .then(res => {
