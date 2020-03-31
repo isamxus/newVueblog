@@ -39,7 +39,13 @@ class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 	def User_CheckStatus_Handler(self, ModelClass, request, extra={}):
 		try:
 			requestData = self.RequestHandler(self, request, True)
-			return self.ResponseHandler(self, True, self.check_login_status(self, requestData, True))
+			result = self.check_login_status(self, requestData)
+			return self.ResponseHandler(self, True,
+				extra={
+					'extraFields': {
+						'IsLogin': result
+					}
+				})
 		except Exception as e:
 			print(e)
 			return self.ResponseHandler(self, False)

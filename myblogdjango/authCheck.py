@@ -35,7 +35,6 @@ class AuthTokenHandler(object):
 		md5.update(("%s.%s" % (header, payload)).encode())
 		signature = md5.hexdigest()
 		token = "%s.%s.%s" % (header, payload, signature)
-		print(token)
 		return token
 
 	#获取payload
@@ -52,17 +51,20 @@ class AuthTokenHandler(object):
 			'UserInfo': None
 		}
 		if 'Token' not in Data.keys() or not Data['Token']:
-			return False
+			return check_result['IsLogin']
 		Token = Data['Token']
 		payload = self.get_payload(self, Token)
 		ot = datetime.utcfromtimestamp(payload['iat'])
 		nt = datetime.utcfromtimestamp(time.time())
 		if ((nt - ot).seconds) > self.TIME_OUT:
-			return False
+			return check_result['IsLogin']
 		user_id = payload['user_id']
 		result = Users.objects.filter(user_id=user_id).values()[0]
+		if not result:
+			return check_result['IsLogin']
 		del result['PassWord']
 		check_result['IsLogin'] = True
 		check_result['UserInfo'] = result
+		#print(check_result['IsLogin'])
 		return check_result if(NeedsUserInfo) else check_result['IsLogin']
 		

@@ -43,10 +43,6 @@ class DataSqlHandler(object):
 
 	#对请求进行响应
 	def ResponseHandler(self, status, obj={}, success={}, err={}, extra={}):
-		Data = self.RequestHandler(self, self.requestData, True)
-		result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
-		extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
-		extra['extraFields'].update(IsLogin=result)
 		return JsonResponse(dict({'PostContent':obj if(obj) else []}, **(self.SuccessMsg(self, success, extra=extra) if(status) else self.FailedMsg(self, err, extra=extra))))
 
 	#返回主键字段
@@ -83,8 +79,6 @@ class DataSqlHandler(object):
 		must_field_list = self.Is_In_Dict(self, 'mustFields', extra, [])
 		for field in must_field_list:
 			if field not in Data.keys() or not Data[field]:
-				print(field)
-
 				return self.ResponseHandler(self, False, err={'err':("缺少%s参数！！！")%field}, extra=extra)
 			if Data[field]:
 				_filter[field] = Data[field]
@@ -192,8 +186,13 @@ class DataSqlHandler(object):
 			return self.ResponseHandler(self, False, e, extra=extra)
 	def Data_Handler(self, ModelClass, requestData, type, extra={}):
 		try:
+			Data = self.RequestHandler(self, requestData, True)
+			result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
+			extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
+			extra['extraFields'].update(IsLogin=result)
+
+
 			self.PostContent = self.RequestHandler(self, requestData)
-			self.requestData = requestData
 			if type=='add':
 				return self.Create_Data_Handler(self, ModelClass, extra)
 			if type=='update':
