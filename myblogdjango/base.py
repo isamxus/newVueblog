@@ -6,54 +6,13 @@ from django.forms import model_to_dict
 from rest_framework.authtoken.models import Token
 from django.db.models import Q
 from django.db.models import F
-import datetime
-from rest_framework_jwt.settings import api_settings
-#验证状态类
-class AuthTokenHandler(object):
-	#Token处理
-	
-
-	#生成payload
-	def payload_handler(self, Data):
-		payload = {
-			'user_id': Data['user_id'].__str__(),
-			'UserName': Data['UserName'],
-			'exp': datetime.datetime.utcnow()
-		}
-		return payload
-
-	#生成token
-	def encode_handler(self, payload):
-		jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-		token = jwt_encode_handler(payload);
-		return token
-	#解析token
-	def decode_handler(self, Token):
-		pass
-	#签发Token
-	def sign_Token_Handler(self, Data):
-		payload = self.payload_handler(self, Data)
-		token = self.encode_handler(self, payload)
-		return token
-
-	#验证Token
-	def check_Token_Handler(self, Data):
-		jwt_decode_handler = api_settings.JWT_DECODE_HANDLER
-		if not 'Token' in Data.keys() or not Data['Token']:
-			return False
-		print(jwt_decode_handler(Data['Token']))
-		#token = self.jwt_decode_handler(Data['Token'])
-		#to = datetime.datetime.utcfromtimestamp(token['exp'])
-		#tn = datetime.datetime.utcfromtimestamp(datetime.datetime.now().timestamp())
-		#print(to)
-		#print(tn)
-
-
+from .authCheck import AuthTokenHandler
 #基础类
 class DataSqlHandler(object):
 	#处理后的PostContent
 	PostContent = None
-
+	#缓存请求数据
+	requestData = None
 	#判断key是否存在于dict中并返回value
 	def Is_In_Dict(self, key, dict, type={}):
 		return dict[key] if (dict and key in dict.keys()) else type
@@ -84,6 +43,10 @@ class DataSqlHandler(object):
 
 	#对请求进行响应
 	def ResponseHandler(self, status, obj={}, success={}, err={}, extra={}):
+		Data = self.RequestHandler(self, self.requestData, True)
+		result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
+		extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
+		extra['extraFields'].update(IsLogin=result)
 		return JsonResponse(dict({'PostContent':obj if(obj) else []}, **(self.SuccessMsg(self, success, extra=extra) if(status) else self.FailedMsg(self, err, extra=extra))))
 
 	#返回主键字段
@@ -230,6 +193,7 @@ class DataSqlHandler(object):
 	def Data_Handler(self, ModelClass, requestData, type, extra={}):
 		try:
 			self.PostContent = self.RequestHandler(self, requestData)
+			self.requestData = requestData
 			if type=='add':
 				return self.Create_Data_Handler(self, ModelClass, extra)
 			if type=='update':
@@ -244,7 +208,5 @@ class DataSqlHandler(object):
 				return self.GetPageList_Data_Handler(self, ModelClass, extra)
 		except Exception as e:
 			print(e)
-
-
 
 

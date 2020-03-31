@@ -1,4 +1,5 @@
-from myblogdjango.base import DataSqlHandler, AuthTokenHandler
+from myblogdjango.base import DataSqlHandler
+from myblogdjango.authCheck import AuthTokenHandler
 #from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from rest_framework.authtoken.models import Token
 from django.conf import settings
@@ -6,7 +7,7 @@ from .models import Users
 from rest_framework_jwt.settings import api_settings
 #serializer = Serializer(settings.SECRET_KEY, 300)
 
-class UserSqlHandler(DataSqlHandler, AuthTokenHandler):
+class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 	#添加数据
 	def Create_User_Handler(self, ModelClass, request, action):
 		try:
@@ -38,7 +39,7 @@ class UserSqlHandler(DataSqlHandler, AuthTokenHandler):
 	def User_CheckStatus_Handler(self, ModelClass, request, extra={}):
 		try:
 			requestData = self.RequestHandler(self, request, True)
-			self.check_Token_Handler(self, requestData)
+			return self.ResponseHandler(self, True, self.check_login_status(self, requestData, True))
 		except Exception as e:
 			print(e)
 			return self.ResponseHandler(self, False)
