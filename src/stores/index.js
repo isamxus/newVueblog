@@ -5,6 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        //是否登陆
+        IsLogin: false,
         //用户信息
 	    UserInfo: null,
         //用户Token

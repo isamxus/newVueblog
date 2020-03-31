@@ -26,7 +26,7 @@
                             <Icon type="md-contact" size="36" />
                         </div>
                         <a href="javascript:void(0)">
-                            {{ userInfo ? userInfo[0].UserName : '游客' }}
+                            {{ IsLogin ? userInfo.UserName : '游客' }}
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
                         <DropdownMenu slot="list" :style="{textAlign: 'center'}">
@@ -48,7 +48,8 @@ export default {
     },
     computed: {
         pageNavShrink(){ return this.$store.state.pageNavShrink },
-        userInfo(){ return this.$store.state.UserInfo },
+        IsLogin(){return this.$store.state.IsLogin},
+        userInfo(){ return JSON.parse(localStorage.getItem('UserInfo'))},
         userHeadImg(){
             return false;
         },

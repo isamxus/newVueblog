@@ -26,7 +26,7 @@
   					<Card>
   						<p slot="title">留言板</p>
                 		<Input type="textarea" :rows="5" :autosize="{minRows: 5,maxRows: 5}"></Input>
-                		<Button type="primary" @click="test" :style="{margin: '.7rem 0'}" long>留言</Button>
+                		<Button type="primary" @click="" :style="{margin: '.7rem 0'}" long>留言</Button>
                 		<h4>留言列表</h4>
   					</Card>
   				</Col>
@@ -73,7 +73,7 @@ export default {
         checkLoginStatusHandler(){
             Action.getStatusInfo()
             .then(res => {
-               
+              
             })
             .catch(err => {
                 this.$Message.error(err);

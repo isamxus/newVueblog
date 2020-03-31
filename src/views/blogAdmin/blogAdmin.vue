@@ -67,12 +67,14 @@ export default {
             })
             .then(res => {
                 if (res.IsOK) {
+
                     let data = res.PostContent.map(item => {
                         item.Jurisdiction = item.Jurisdiction.split(',')
                         return item;
                     });
-                    this.$store.commit('UserInfo', data);
+                    this.$store.commit('UserInfo', data[0]);
                     localStorage.setItem('Token', JSON.stringify(res.Token));
+                    localStorage.setItem('UserInfo', JSON.stringify(data[0]))
                     this.$store.state.UserToken = res.Token;
                     if (this.$route.meta.title=='用户登录') {
                         this.$router.push({name: 'Index'});

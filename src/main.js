@@ -55,8 +55,11 @@ global.REQUEST_URL = Urls;
 
 
 axios.interceptors.response.use(response=>{
-
-    if(response.data.status) return response;
+    if(response.data.status) {
+        store.state.IsLogin = response.data.IsLogin;
+        if (!store.state.IsLogin) localStorage.removeItem('UserInfo');
+        return response;
+    }
     return Promise.reject(response.data.err);
 },error=>{
     return Promise.reject(error);
@@ -131,7 +134,7 @@ function ready(){
 Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
     if (to.path.search('adminDetailPage') != -1) {
-        if (store.state.UserInfo && !store.state.UserInfo[0].Jurisdiction.find(item => item == '01')){
+        if (store.state.UserInfo && !store.state.UserInfo.Jurisdiction.find(item => item == '01')){
             vm.$Modal.error({
                 title: '警告',
                 content: '用户无后台管理权限！！！',
