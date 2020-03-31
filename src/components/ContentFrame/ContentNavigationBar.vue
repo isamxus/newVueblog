@@ -29,10 +29,13 @@
                             {{ IsLogin ? userInfo.UserName : '游客' }}
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
-                        <DropdownMenu slot="list" :style="{textAlign: 'center'}">
-                            <DropdownItem name="userinfo">个人信息</DropdownItem>
-                            <DropdownItem name="company">我的企业</DropdownItem>
-                            <DropdownItem name="logout" divided>退出</DropdownItem>
+                        <DropdownMenu v-show="$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
+                            <DropdownItem name="logout">退出登录</DropdownItem>
+                        </DropdownMenu>
+
+                        <DropdownMenu v-show="!$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
+                            <DropdownItem name="userinfo">登录</DropdownItem>
+                            <DropdownItem name="company">注册</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -58,18 +61,7 @@ export default {
     methods: {
     	//用户工具栏点击时处理函数
         userToolHandler(name){
-            switch(name){
-                case 'logout':
-                    this.userLogoutHandler();
-                    break;
-                case 'userinfo':
-                    this.$router.push({path: '/PersonalSettings/PersonalSetting'});
-                    break;
-                case 'company': 
-                    this.$router.push({path: '/PersonalSettings/EnterpriseApplyInfo'});
-                    break;
-                    
-            }
+            
         },
         //用户退出时处理函数
         userLogoutHandler(){
