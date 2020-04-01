@@ -76,6 +76,7 @@ export default {
                     localStorage.setItem('Token', JSON.stringify(res.Token));
                     localStorage.setItem('UserInfo', JSON.stringify(data[0]))
                     this.$store.state.UserToken = res.Token;
+                    this.$store.state.IsLogin = res.IsLogin;
                     if (this.$route.meta.title=='用户登录') {
                         this.$router.push({name: 'Index'});
                     } else {

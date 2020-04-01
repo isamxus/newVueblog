@@ -25,6 +25,22 @@
                 show-total
                 show-sizer />
             </Page>
+            <Modal
+                v-model="popModal"
+                :title="'设置用户权限'"
+                width=600>
+                <div v-for="(item, index) in AuthList" :key="index">
+                    <h4>{{ item.title }}</h4>
+                    <div :style="{padding: '.7rem'}">
+                        <Checkbox border   v-for="(value, key) in item.children" :key="key" @on-change="e => checkBoxselHandler(e, value)">{{ value.Name }}</Checkbox>
+                    </div>
+                    
+                </div>
+                <div slot="footer">
+                    <Button type="primary" @click="">确定</Button>
+                    <Button @click="popModal=false">取消</Button>
+                </div>
+            </Modal>
         </div>  
     </SubNavigationFrame>
 </template>
@@ -49,7 +65,18 @@ export default {
             usersListData: [],
             PageCount: 0,
             PageNumber: 1,
-            PageSize: 10
+            PageSize: 10,
+            popModal: false,
+            checkAllGroup: [],
+            AuthList: [
+                {
+                    title: '页面权限',
+                    children: [
+                        { Name: '博客首页', Code: '00', IsSelect: false},
+                        { Name: '后台管理', Code: '01', IsSelect: false}
+                    ] 
+                }
+            ]
         }
     },
     components: {
@@ -91,6 +118,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '编辑'},
                         on:{click: e => {
+                            this.popModal = true;
                             e.stopPropagation();
                         }
                     }
@@ -99,7 +127,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
-                            this.deleteUserHandler(params.row.id);
+                            this.deleteUserHandler(params.row.user_id);
                             e.stopPropagation();
                        }
                     }
@@ -120,7 +148,7 @@ export default {
                     //发起删除参数请求
                     Action.userDelete({
                         PostContent: {
-                            id: ID
+                            user_id: ID
                         }
                     }).then(result => {
                         this.$Message.success('成功删除用户！！！');
@@ -134,6 +162,14 @@ export default {
                 }
             });
         },
+        //选择权限处理函数
+        /*authSelectHandler(data, arr){
+            console.log(data)
+        },*/
+        //复选框选中处理函数
+        checkBoxselHandler(e, value){
+            console.log(value)
+        }
     }
 }
 </script>

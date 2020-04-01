@@ -54,16 +54,6 @@ global.REQUEST_URL = Urls;
 
 
 
-axios.interceptors.response.use(response=>{
-    if(response.data.status) {
-        store.state.IsLogin = response.data.IsLogin;
-        if (!store.state.IsLogin) localStorage.removeItem('UserInfo');
-        return response;
-    }
-    return Promise.reject(response.data.err);
-},error=>{
-    return Promise.reject(error);
-});
 
 const objectCopy = obj => {
    return JSON.parse(JSON.stringify(obj));
@@ -135,11 +125,13 @@ Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
     if (to.path.search('adminDetailPage') != -1) {
         if (store.state.UserInfo && !store.state.UserInfo.Jurisdiction.find(item => item == '01')){
-            vm.$Modal.error({
+            return vm.$Modal.error({
                 title: '警告',
                 content: '用户无后台管理权限！！！',
                 okText: '关闭'
             })
+        }
+        if (!localStorage.getItem('UserInfo')) {
             return next({
                 path: '/admin',
                 query: {redirect: to.fullPath}
@@ -155,3 +147,27 @@ router.beforeEach((to, from, next) => {
     }
     next();
 })
+
+
+axios.interceptors.response.use(response=>{
+    if(response.data.status) {
+        store.state.IsLogin = response.data.IsLogin;
+        if (!store.state.IsLogin) localStorage.removeItem('UserInfo');
+        if (window.location.href.search('adminDetailPage') != -1 && !store.state.IsLogin) {
+            vm.$Modal.warning({
+                title: '安全警告'
+                ,content: '登录已失效，您需要重新登录'
+                ,okText: '重新登录'
+                ,onOk: ()=>{
+                    router.push({
+                        name: 'blogAdmin'
+                    })
+                }
+            });
+        }
+        return response;
+    }
+    return Promise.reject(response.data.err);
+},error=>{
+    return Promise.reject(error);
+});
