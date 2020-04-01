@@ -32,12 +32,12 @@
                 <div v-for="(item, index) in AuthList" :key="index">
                     <h4>{{ item.title }}</h4>
                     <div :style="{padding: '.7rem'}">
-                        <Checkbox border   v-for="(value, key) in item.children" :key="key" @on-change="e => checkBoxselHandler(e, value)">{{ value.Name }}</Checkbox>
+                        <Checkbox  v-model="value.IsSelected"  v-for="(value, key) in item.children" :key="key" >{{ value.Name }}</Checkbox>
                     </div>
                     
                 </div>
                 <div slot="footer">
-                    <Button type="primary" @click="">确定</Button>
+                    <Button type="primary" @click="checkBoxselHandler">确定</Button>
                     <Button @click="popModal=false">取消</Button>
                 </div>
             </Modal>
@@ -48,6 +48,29 @@
 <script>
 import Action from './action/usersManagement';
 import SubNavigationFrame from '../../components/SubNavigationFrame/SubNavigationFrame';
+
+
+const dataFactory = () => {
+    return  [
+                {
+                    title: '页面权限',
+                    children: [
+                        { Name: '博客首页', Code: '00', IsSelected: false},
+                        { Name: '后台管理', Code: '01', IsSelected: false}
+                    ] 
+                },
+                {
+                    title: '参数权限',
+                    children: [
+                        { Name: '文章分类', Code: '0001', IsSelected: false},
+                        { Name: '文章设置', Code: '0002', IsSelected: false},
+                        { Name: '文章标签', Code: '0003', IsSelected: false},
+                        { Name: '文章评论', Code: '0004', IsSelected: false},
+                        { Name: '用户管理', Code: '0005', IsSelected: false}
+                    ]
+                }
+            ]
+}
 //<quill-editor  style="height: 20rem" />
 export default {
     name: 'commentManagement',
@@ -68,15 +91,9 @@ export default {
             PageSize: 10,
             popModal: false,
             checkAllGroup: [],
-            AuthList: [
-                {
-                    title: '页面权限',
-                    children: [
-                        { Name: '博客首页', Code: '00', IsSelect: false},
-                        { Name: '后台管理', Code: '01', IsSelect: false}
-                    ] 
-                }
-            ]
+            AuthList: dataFactory(),
+            allSelected: [],
+            user_id: ''
         }
     },
     components: {
@@ -91,7 +108,7 @@ export default {
         TimeRender(h, params) {
             return h('span', {domProps:{innerText:new Date(params.row.CreateTime).Format("yyyy-MM-dd hh:mm")}});
         },
-        //获取评论列表
+        //获取用户列表
         getUsersListHandler(){
             Action.userGetPageList({
                 PostContent: {
@@ -119,6 +136,22 @@ export default {
                         domProps:{innerText: '编辑'},
                         on:{click: e => {
                             this.popModal = true;
+                            this.user_id = params.row.user_id;
+                            //校验权限
+                            let JusList = params.row.Jurisdiction.split(',');
+                            this.AuthList = dataFactory();  
+                            let fn = arr => {
+                                for (let i = 0; i < arr.length; i++) {
+                                    if (arr[i].children && arr[i].children.length>0) {
+                                        fn(arr[i].children);
+                                        continue
+                                    }
+                                    if (JusList.findIndex(item => item == arr[i].Code) != -1) {
+                                        arr[i].IsSelected = true;
+                                    }
+                                }
+                            }
+                            fn(this.AuthList);
                             e.stopPropagation();
                         }
                     }
@@ -167,8 +200,35 @@ export default {
             console.log(data)
         },*/
         //复选框选中处理函数
-        checkBoxselHandler(e, value){
-            console.log(value)
+        checkBoxselHandler(){
+            let allSelected = [];
+            let fn = (arr) => {
+                for(let i = 0; i < arr.length; i++){
+                    if (arr[i].children && arr[i].children.length > 0) {
+                        fn(arr[i].children);
+                        continue;
+                    }
+                    if (arr[i].IsSelected) {
+                        allSelected.push(arr[i].Code);
+                    }
+                }
+            }
+            fn(this.AuthList);
+
+            //发起更新用户权限请求
+            Action.userUpdate({
+                PostContent: {
+                    user_id: this.user_id,
+                    Jurisdiction: allSelected.join(',')
+                }
+            })
+            .then(res => {
+                this.getUsersListHandler();
+                this.popModal = false;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
         }
     }
 }

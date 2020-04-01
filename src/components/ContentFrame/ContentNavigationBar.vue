@@ -29,13 +29,13 @@
                             {{ IsLogin ? userInfo.UserName : '游客' }}
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
-                        <DropdownMenu v-show="$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
-                            <DropdownItem name="logout">退出登录</DropdownItem>
+                        <DropdownMenu @on-click="userToolHandler" v-show="$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
+                            <DropdownItem  name="logout">退出登录</DropdownItem>
                         </DropdownMenu>
 
-                        <DropdownMenu v-show="!$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
+                        <DropdownMenu v-show="!$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}" @on-click="userToolHandler">
                             <DropdownItem name="userinfo">登录</DropdownItem>
-                            <DropdownItem name="company">注册</DropdownItem>
+                            <DropdownItem name="register">注册</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -61,12 +61,39 @@ export default {
     methods: {
     	//用户工具栏点击时处理函数
         userToolHandler(name){
-            
+            if (name == 'userinfo') {
+                this.$router.push({
+                    name: 'login'
+                })
+            }
+            if (name == 'register') {
+                this.$router.push({
+                    name: 'register'
+                })
+            }
+            if (name == 'logout') {
+                const modal = this.$Modal.confirm({
+                    title: '操作确认'
+                    ,icon: 'warning'
+                    ,content: '是否退出登录'
+                    ,okText: '确定'
+                    ,showCancel: true
+                    ,loading: true
+                    ,onOk: () => {
+
+                        this.$Modal.remove();
+                        localStorage.removeItem('Token');
+                        this.$store.state.IsLogin = false;
+                        this.$Message.warning('你已退出登录！！！')
+                        if (window.location.href.search('adminDetailPage') != -1) {
+                            this.$router.push({
+                                name: 'blogAdmin'
+                            })
+                        }
+                    }
+                });
+            }
         },
-        //用户退出时处理函数
-        userLogoutHandler(){
-            
-        }
     }
     
 }
