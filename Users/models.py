@@ -7,7 +7,7 @@ class Users(models.Model):
 	UserHeadImg = models.ImageField(upload_to='ImageCollect/UserHeadImg',blank=True)
 	UserName = models.CharField(max_length=50)
 	PassWord = models.CharField(max_length=50)
-	Jurisdiction = models.CharField(max_length=400,blank=True)
+	Jurisdiction = models.CharField(max_length=400,blank=True, default='00')
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 

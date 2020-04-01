@@ -8,7 +8,7 @@ class AuthTokenHandler(object):
 	HEADER = {'typ': 'JWP', 'alg': 'default'}
 	KEY = 'Amxue_Li'
 	SALT = 'www.amxus.info'
-	TIME_OUT = 60
+	TIME_OUT = 60 * 10
 	#加密
 	def encrypt(self, obj):
 		value = signing.dumps(obj, key=self.KEY, salt=self.SALT)
@@ -65,6 +65,5 @@ class AuthTokenHandler(object):
 		del result['PassWord']
 		check_result['IsLogin'] = True
 		check_result['UserInfo'] = result
-		#print(check_result['IsLogin'])
 		return check_result if(NeedsUserInfo) else check_result['IsLogin']
 		
