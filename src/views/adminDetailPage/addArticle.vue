@@ -48,7 +48,7 @@
                                 }">
                                 <Option 
                                     v-for="(item,key) in TagListData" 
-                                    :value="item.id" 
+                                    :value="item.detail_params_id" 
                                     :key="key">{{ item.detailName }}</Option>
                             </Select>
                         </FormItem>

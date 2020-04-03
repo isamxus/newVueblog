@@ -10,6 +10,31 @@
         </div>
         <div class="sub-page-container" :style="{'margin-top': '.5rem','padding-top':'1rem'}" slot="content">
             <Row>
+                <Form ref="formRefs" :label-width="100"  :model="searchForm">
+                    <Col span="8">
+                        <FormItem class="sub-page-input-container min-input-container" label="文章分类：" prop="">
+                            <Select
+                                transfer 
+                                filterable
+                                clearable
+                                label-in-value
+                                v-model="searchForm.articleCagetoryID">
+                                <Option 
+                                    v-for="(item,key) in CategoryListData" 
+                                    :value="item.detail_params_id" 
+                                    :key="item.detail_params_id">{{ item.detailName }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
+                        <div class="sub-page-input-container min-input-container" :style="{paddingLeft: '1.5rem', textAlign: 'left'}">
+                            <Button type="primary" @click="getAricleListHandler()">查询</Button>
+                            <Button  :style="{marginLeft: '.5rem'}" @click="resetFormHandler()">重置</Button>
+                        </div>
+                    </Col>
+                </Form>
+            </Row>
+            <Row>
                 <Col span="8">
                     <div :style="{marginBottom: '.7rem'}">
                         <Button type="primary"  @click="$router.push({name: 'addArticle'})"><Icon type="md-add"></Icon>新增{{$route.query.paramsName}}</Button>
@@ -39,7 +64,13 @@
 <script>
 import Action from './action/articleListPage';
 import SubNavigationFrame from '../../components/SubNavigationFrame/SubNavigationFrame';
-//<quill-editor  style="height: 20rem" />
+
+const dataFactory = params => Object.assign({
+    articleCagetoryID: '',
+    articleTagsID: ''
+}, params);
+
+
 export default {
     name: 'articleListPage',
     data () {
@@ -50,12 +81,15 @@ export default {
             columns:[
                 {title: '序号', type: 'index', width: 120},
                 {title:'文章标题',key:'articleTitle'},
+                {title:'文章分类',key:'articleCagetoryName'},
                 {title:'作者', key:'articleAuthor'},
                 {title:'摘要', key:'articleAbstract'},
                 {title:'标签', key:'articleTagsName'},
                 {title:'创建时间', key:'CreateTime', render: this.TimeRender},
                 {title:'操作', align: 'center', render:this.toolColumnRender}
             ],
+            searchForm: dataFactory(),
+            CategoryListData: [],
             tableData: [],
             PageCount: 0,
             PageNumber: 1,
@@ -68,6 +102,7 @@ export default {
     mounted () {
         this.$store.commit('showAdminMenu', true);
         this.getAricleListHandler();
+        this.getCategoryHandler();
     },
     methods: {
         //时间渲染
@@ -102,13 +137,37 @@ export default {
                 })
             ]);
         },
+        //重置表单
+        resetFormHandler(){
+            this.searchForm = dataFactory();
+            this.getAricleListHandler();
+        },
+        getCategoryHandler(){
+            //获取分类
+            Action.paramsDetailGetList({
+                PostContent: {
+                    filter: {
+                        detailParentParamCode: '0001'
+                    }
+                }
+            })
+            .then(res => {
+                this.CategoryListData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
         //获取文章列表
         getAricleListHandler(){
+            let _filter = objectCopy(this.searchForm);
+            for(let o in _filter){ if(_filter[o] === '') delete _filter[o]};
             Action.articleGetPageList({
                 PostContent: {
                     _OrderBy: '-CreateTime',
                     PageSize: this.PageSize,
-                    PageNumber: this.PageNumber
+                    PageNumber: this.PageNumber,
+                    filter: _filter
                 }
             })
             .then(res => {
