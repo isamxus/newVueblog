@@ -96,7 +96,10 @@ class DataSqlHandler(object):
 		try:
 			requestData = self.PostContent
 			Create_Data = ModelClass()
+			primary_key = self.return_primary_key(self, ModelClass)
 			for field in requestData:
+				if primary_key == field:
+					continue
 				setattr(Create_Data, field, requestData[field])
 			Create_Data.save()
 			return self.ResponseHandler(self, True, extra=extra)

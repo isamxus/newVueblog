@@ -16,6 +16,7 @@ class ArticleDetail(models.Model):
 	articleContent = models.TextField()
 	articleCagetoryID = models.CharField(max_length=50)
 	articleCagetoryName = models.CharField(max_length=50)
+	IsDeleted = models.BooleanField(default=False)
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 
@@ -27,7 +28,18 @@ class CommentDetail(models.Model):
 	commentContent = models.CharField(max_length=400,blank=True)
 	parentArticleID = models.CharField(max_length=200)
 	parentArticleTitle = models.CharField(max_length=200)
+	IsDeleted = models.BooleanField(default=False)
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 
 
+#首页Tab页表
+class IndexTab(models.Model):
+	IndexTabID = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False)
+	IndexTabName = models.CharField(max_length=20)
+	IndexTabContent = models.TextField()
+	IndexTabCode = models.CharField(max_length=20)
+	IsShowTab = models.BooleanField(default=True, blank=True)
+	CreateTime = models.DateTimeField(auto_now_add=True)
+	UpdateTime = models.DateTimeField(auto_now=True)
+	IsDeleted = models.BooleanField(default=False)

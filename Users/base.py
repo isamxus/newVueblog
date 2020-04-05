@@ -1,11 +1,9 @@
 from myblogdjango.base import DataSqlHandler
 from myblogdjango.authCheck import AuthTokenHandler
-#from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from rest_framework.authtoken.models import Token
+from django.db import connection
+from django.contrib.auth.hashers import check_password
 from django.conf import settings
 from .models import Users
-from rest_framework_jwt.settings import api_settings
-#serializer = Serializer(settings.SECRET_KEY, 300)
 
 class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 	#添加数据
@@ -16,11 +14,15 @@ class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 				return self.ResponseHandler(self, False, err={'err':'用户名已经存在！！！'})
 			return self.Data_Handler(self, ModelClass, request, action)
 		except Exception as e:
+			print(e)
 			return self.ResponseHandler(self, False, e)
 
 	#用户登录
 	def User_Login_Handler(self, ModelClass, request, extra={}):
 		try:
+			cursor=connection.cursor()
+			cursor.execute("select * from auth_user")
+			print(cursor.fetchall())
 			requestData = self.RequestHandler(self, request)
 			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
 			if type(response).__name__ != 'dict':

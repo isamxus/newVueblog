@@ -1,6 +1,6 @@
 from django.conf.urls import url
  
-from .blogIndexViews import blogArticleViews, articleCommentViews
+from .blogIndexViews import blogArticleViews, articleCommentViews, blogIndexViews
  
 urlpatterns = [
 	#博客文章
@@ -18,4 +18,11 @@ urlpatterns = [
 	url(r'^Comment/GetSingle/$', articleCommentViews.getSingleCommentHandler, name='getSingleCommentHandler'),
 	url(r'^Comment/GetList/$', articleCommentViews.getCommentListHandler, name='getCommentListHandler'),
 	url(r'^Comment/GetPageList/$', articleCommentViews.getCommentPageListHandler, name='getCommentPageListHandler'),
+
+	#Tab
+	url(r'^Tab/Create/$', blogIndexViews.createTabHandler, name='createTabHandler'),
+	url(r'^Tab/Update/$', blogIndexViews.updateTabHandler, name='updateTabHandler'),
+	url(r'^Tab/Delete/$', blogIndexViews.deleteTabHandler, name='deleteTabHandler'),
+	url(r'^Tab/GetSingle/$', blogIndexViews.getSingleTabHandler, name='getSingleTabHandler'),
+	url(r'^Tab/GetList/$', blogIndexViews.getTabListHandler, name='getTabListHandler'),
 ]

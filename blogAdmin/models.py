@@ -6,6 +6,7 @@ class ParamsSettings(models.Model):
 	params_id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False)
 	paramsName = models.CharField(max_length=100)
 	paramsCode = models.CharField(max_length=50)
+	IsDeleted = models.BooleanField(default=False)
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 
@@ -18,5 +19,7 @@ class ParamsContent(models.Model):
 	detailParentParamCode = models.CharField(max_length=50)
 	detailParentParamID = models.CharField(max_length=100)
 	detailParentParam = models.CharField(max_length=100)
+	IsDeleted = models.BooleanField(default=False)
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
+
