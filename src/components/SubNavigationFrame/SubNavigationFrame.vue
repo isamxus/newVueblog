@@ -7,7 +7,7 @@
         <div slot="content">
             <div class="sub-navigation-container" v-show="!hiddenBreadAndTitle">
                 <Breadcrumb v-show="!hiddenBreadcrumb">
-                    <BreadcrumbItem :to="$store.state.showAdminMenu ? '/adminDetailPage' : '/'">首页</BreadcrumbItem>
+                    <BreadcrumbItem :to="$store.state.showAdminMenu ? '/adminDetailPage/paramsSettings' : '/'">首页</BreadcrumbItem>
                     <BreadcrumbItem :to="item.path" v-for="(item,index) in breadcrumb" :key="index">{{item.title}}</BreadcrumbItem>
                 </Breadcrumb>
                 <h2 v-show="!showTitle" class="sub-navigation-title">{{ title }}</h2>

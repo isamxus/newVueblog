@@ -10,7 +10,7 @@ const Action = {
 	paramsUpdate (params) {
 		let PostContent = params.PostContent;
 		if(!PostContent.paramsName) return Promise.reject({Msg: '请输入参数名称', type: 'local'});
-		if(!PostContent.paramsCode) return Promise.reject({Msg: '请输入参数权限码', type: 'local'});
+		//if(!PostContent.paramsCode) return Promise.reject({Msg: '请输入参数权限码', type: 'local'});
         return axios.post(REQUEST_URL.paramsUpdate, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
 	},
 	//获取单个参数
