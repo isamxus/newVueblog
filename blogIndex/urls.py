@@ -25,4 +25,7 @@ urlpatterns = [
 	url(r'^Tab/Delete/$', blogIndexViews.deleteTabHandler, name='deleteTabHandler'),
 	url(r'^Tab/GetSingle/$', blogIndexViews.getSingleTabHandler, name='getSingleTabHandler'),
 	url(r'^Tab/GetList/$', blogIndexViews.getTabListHandler, name='getTabListHandler'),
+
+	#首页轮播图
+	url(r'^IndexImage/Upload/$', blogIndexViews.Index_ImageUpload_Handler, name='Index_ImageUpload_Handler'),
 ]

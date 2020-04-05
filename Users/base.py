@@ -20,9 +20,6 @@ class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 	#用户登录
 	def User_Login_Handler(self, ModelClass, request, extra={}):
 		try:
-			cursor=connection.cursor()
-			cursor.execute("select * from auth_user")
-			print(cursor.fetchall())
 			requestData = self.RequestHandler(self, request)
 			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
 			if type(response).__name__ != 'dict':

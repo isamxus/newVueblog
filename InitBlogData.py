@@ -11,9 +11,10 @@ class InitBlog(object):
 		{'paramsName': '文章评论', 'paramsCode': '0004'},
 		{'paramsName': '用户管理', 'paramsCode': '0005'},
 		{'paramsName': '首页Tab页', 'paramsCode': '0006'},
+		{'paramsName': '首页轮播图', 'paramsCode': '0007'},
 	]
 	#权限
-	AuthList = '00,01,0001,0002,0003,0004,0005,0006'
+	AuthList = '00,01,0001,0002,0003,0004,0005,0006,0007'
 	#首页Tab页
 	TabList = [
 		{'IndexTabName': '最新文章', 'IndexTabContent': '', 'IndexTabCode': '000601'}
@@ -85,9 +86,8 @@ class InitBlog(object):
 			if confirmInit != 'yes' or confirmInit != 'no':
 				confirmInit = None
 				continue
-		Params_List_To_Insert = []
-		Tab_List_To_Insert = []
 		Status = os.system(r"python manage.py flush")
+		
 		self.Init_Data(self.paramsList, ParamsSettings, '正在初始化博客参数', '博客参数初始化成功')
 		self.Init_Data(self.TabList, IndexTab, '正在初始化Tab页', '初始化Tab页成功')
 

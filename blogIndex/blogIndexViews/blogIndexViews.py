@@ -1,7 +1,8 @@
 from django.views.decorators.csrf import csrf_exempt
-from ..models import IndexTab
+from ..models import IndexTab, IndexImage, IndexImage
 from myblogdjango.base import DataSqlHandler
-
+from myblogdjango.filesHandle import FilesHandler
+from django.http import JsonResponse
 #添加Tab
 @csrf_exempt
 def createTabHandler(request):
@@ -27,3 +28,9 @@ def deleteTabHandler(request):
 @csrf_exempt
 def getTabListHandler(request):
 	return DataSqlHandler.Data_Handler(DataSqlHandler, IndexTab, request, 'getlist')
+
+
+#首页轮播图上传
+@csrf_exempt
+def Index_ImageUpload_Handler(request):
+	return FilesHandler.Upload_Files_Handler(FilesHandler, IndexImage, request)

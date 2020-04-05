@@ -1,10 +1,6 @@
 from django.db import models
 import uuid
 # Create your models here.
-# 首页轮播图
-class HomePageCarouselImage(models.Model):
-	pass
-
 #文章详情表
 class ArticleDetail(models.Model):
 	article_id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False)
@@ -43,3 +39,27 @@ class IndexTab(models.Model):
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)
 	IsDeleted = models.BooleanField(default=False)
+
+#首页轮播图
+class IndexImageManagement(models.Model):
+	IndexImageID = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False)
+	IndexImageName = models.CharField(max_length=100)
+	IndexImageUrl = models.CharField(max_length=200)
+	CreateTime = models.DateTimeField(auto_now_add=True)
+	ConnectArticleID = models.CharField(max_length=100)
+	ConnectArticleName = models.CharField(max_length=100)
+	UpdateTime = models.DateTimeField(auto_now=True)
+	IsDeleted = models.BooleanField(default=False)
+
+class IndexImage(models.Model):
+	ImageID = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False)
+	Image = models.ImageField(upload_to="images/IndexImage")
+	CreateTime = models.DateTimeField(auto_now_add=True)
+	UpdateTime = models.DateTimeField(auto_now=True)
+	IsDeleted = models.BooleanField(default=False)
+
+	def get_file_field(self):
+		return 'Image'
+
+	def get_file_path(self):
+		return 'images/IndexImage'

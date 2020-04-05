@@ -15,7 +15,7 @@ class DataSqlHandler(object):
 	requestData = None
 	#判断key是否存在于dict中并返回value
 	def Is_In_Dict(self, key, dict, type={}):
-		return dict[key] if (dict and key in dict.keys()) else type
+		return dict[key] if (dict and key in dict.keys() and dict[key]) else type
 
 	#请求成功返回
 	def SuccessMsg(self, success={}, extra={}):
@@ -31,7 +31,13 @@ class DataSqlHandler(object):
 			'Msg': '失败！！！'
 		}, **(err if(err) else {'err': '服务器发生错误，请联系管理员！！！'}), **(self.Is_In_Dict(self, 'extraFields', extra, {})))
 
-
+	#验证登录状态
+	def loginStatus(self, requestData, extra):
+		Data = self.RequestHandler(self, requestData, True)
+		result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
+		extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
+		extra['extraFields'].update(IsLogin=result)
+		return extra
 	#对请求数据进行处理
 	def RequestHandler(self, request, returnOther=False):
 		requestData = json.loads(json.dumps(request.POST))
@@ -187,14 +193,27 @@ class DataSqlHandler(object):
 
 		except Exception as e:
 			return self.ResponseHandler(self, False, e, extra=extra)
+	#批量插入数据
+	def Batch_Insert_Data(self, ModelClass, extra):
+		try:
+			List_To_Insert = [] 
+			extra['Data'] = self.Is_In_Dict(self, 'Data', extra, False)
+			if not isinstance(extra['Data'], list):
+				return self.ResponseHandler(self, False, err={'err':'extra["Data"]必须为list！！！'}, extra=extra)
+			requestData = self.PostContent if not extra['Data'] else extra['Data']
+			for item in requestData:
+				exp = ModelClass()
+				for field in item.keys():
+					setattr(exp, field, item[field])
+				List_To_Insert.append(exp)
+			ModelClass.objects.bulk_create(List_To_Insert)
+			return self.ResponseHandler(self, True, extra=extra)
+		except Exception as e:
+			print(e)
+
 	def Data_Handler(self, ModelClass, requestData, type, extra={}):
 		try:
-			Data = self.RequestHandler(self, requestData, True)
-			result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
-			extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
-			extra['extraFields'].update(IsLogin=result)
-
-
+			extra = self.loginStatus(self, requestData, extra)
 			self.PostContent = self.RequestHandler(self, requestData)
 			if type=='add':
 				return self.Create_Data_Handler(self, ModelClass, extra)
@@ -202,7 +221,7 @@ class DataSqlHandler(object):
 				return self.Updata_Data_Handler(self, ModelClass, extra)
 			if type=='getsingle':
 				return self.Getsingle_Data_Handler(self, ModelClass, extra)
-			if type=='delete':
+			if type=='delete':	
 				return self.Delete_Data_Handler(self, ModelClass, extra)
 			if type=='getlist':
 				return self.GetList_Data_Handler(self, ModelClass, extra)
@@ -210,5 +229,4 @@ class DataSqlHandler(object):
 				return self.GetPageList_Data_Handler(self, ModelClass, extra)
 		except Exception as e:
 			print(e)
-
 
