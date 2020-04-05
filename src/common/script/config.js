@@ -49,5 +49,8 @@ module.exports = {
         TabGetSingle: `${Host.host}Tab/GetSingle/`,
         TabDelete: `${Host.host}Tab/Delete/`,
         TabGetList: `${Host.host}Tab/GetList/`,
+
+        //首页轮播图 api
+        IndexImageUpload: `${Host.host}IndexImage/Upload/`,
     }
 }

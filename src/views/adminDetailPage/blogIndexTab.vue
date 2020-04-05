@@ -19,7 +19,7 @@
             <Table  :columns="columns" :data="tabListData"></Table>
             <Modal
                 v-model="popModal"
-                :title="'编辑Tab页'"
+                :title="createTabForm.edit ? '编辑Tab页': '新增Tab页'"
                 width=800>
                 <Form 
                     :style="{marginBottom: '2.5rem'}"

@@ -117,6 +117,7 @@ export default {
                             if (Code === '0004') name = 'commentManagement';
                             if (Code === '0005') name = 'usersManagement';
                             if (Code === '0006') name = 'blogIndexTab';
+                            if (Code === '0007') name = 'blogIndexImage';
                         	if (name) {
                         		this.$router.push({
                         			name: name,
