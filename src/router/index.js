@@ -39,6 +39,6 @@ export default new Router({
       	{path:'/adminDetailPage/addArticle',name: 'addArticle',component: addArticle,meta:{title:''}},
       	{path:'/article/simplePage',name: 'articleCategory',component: articleCategory,meta:{title:'文章列表'}},
       	{path:'/article/detailPage',name: 'articleDetail',component: articleDetail,meta:{title:'文章详情'}},
-        {path:'/article/blogIndexTab',name: 'blogIndexTab',component: blogIndexTab,meta:{title:'首页Tab'}},
+        {path:'/adminDetailPage/blogIndexTab',name: 'blogIndexTab',component: blogIndexTab,meta:{title:'首页Tab'}},
     ]
 })
