@@ -1,5 +1,6 @@
 from django.conf.urls import url
- 
+from django.views.static import serve
+from django.conf import settings
 from .blogIndexViews import blogArticleViews, articleCommentViews, blogIndexViews
  
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
 
 	#首页轮播图
 	url(r'^IndexImage/Upload/$', blogIndexViews.Index_ImageUpload_Handler, name='Index_ImageUpload_Handler'),
+	url(r'^media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

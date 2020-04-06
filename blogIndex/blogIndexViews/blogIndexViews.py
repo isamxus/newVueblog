@@ -34,3 +34,7 @@ def getTabListHandler(request):
 @csrf_exempt
 def Index_ImageUpload_Handler(request):
 	return FilesHandler.Upload_Files_Handler(FilesHandler, IndexImage, request)
+
+#首页轮播图下载
+def Index_ImageDownload_Handler(request):
+	return FilesHandler.Download_Files_Handler(FilesHandler, request)

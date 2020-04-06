@@ -62,4 +62,4 @@ class IndexImage(models.Model):
 		return 'Image'
 
 	def get_file_path(self):
-		return 'images/IndexImage'
+		return 'images/IndexImage/'

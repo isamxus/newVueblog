@@ -1,6 +1,12 @@
 from .base import DataSqlHandler
-
+from .settings import BASE_DIR
+from django.http import JsonResponse
 class FilesHandler(DataSqlHandler):
+	#下载文件
+	def Download_Files_Handler(self, requestData):
+		urlList = BASE_DIR + '\\'.join(requestData.GET.get('url').split('/'))
+		return JsonResponse({urlList: urlList})
+
 	#添加文件
 	def Upload_Files_Handler(self, ModelClass, requestData, extra={}):
 		batchList = []
@@ -13,8 +19,11 @@ class FilesHandler(DataSqlHandler):
 			exp[fileField] = item
 			batchList.append(exp)
 		extra['Data'] = batchList
+		extra['extraFields'] = {
+			'State': 1
+		}
 		self.Batch_Insert_Data(self, ModelClass, extra)
 		return self.ResponseHandler(self, True, {
 				'name': file[0].name,
 				'Address': filePath + file[0].name
-			})
+			},extra=extra)
