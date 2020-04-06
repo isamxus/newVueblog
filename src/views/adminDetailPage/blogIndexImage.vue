@@ -38,16 +38,18 @@
                             :on-format-error="handleFormatError"
                             :on-error="handleError" 
                             :on-exceeded-size="handleMaxSize"
-                            :show-upload-list="true"
+                            :show-upload-list="false"
                             :style="{display: 'inline-block'}">
                             <Button>上传图片</Button>
                         </Upload>
                         <p>说明：请上传jpg,jpeg,png格式的图片</p>
-                        <!--<div class="attachment-name" v-if="createModal.DocUrl" @click="downLoadFileHandler(createModal.DocUrl,createModal.FileName)">
-                            <div style="font-size: .7rem;word-break: break-all;" ><span :style="{color:'#495060',paddingRight:'.2rem'}">
-                                <Icon type="paperclip"></Icon>
-                            </span>{{ createModal.FileName }}</div>
-                        </div>-->
+                        <div  v-if="createModal.IndexImageUrl" >
+                            <div style="font-size: .7rem;word-break: break-all;cursor: pointer;" @click="openUrlHandler(createModal.IndexImageUrl, createModal.IndexImageName)">
+                                <Icon type="ios-link" />
+                                <span :style="{color:'#2d8cf0',paddingRight:'.2rem'}">
+                                {{ createModal.IndexImageName }}
+                            </span></div>
+                        </div>
                     </FormItem>
                 </Form>            
                 <div slot="footer" >
@@ -67,6 +69,7 @@ const dataFactory = params => Object.assign({
     uploadStatus: null,
     IndexImageName: '',
     IndexImageUrl: '',
+    uploadList: []
 }, params);
 
 
@@ -86,7 +89,7 @@ export default {
             popModal: false,
             createModal: dataFactory(),
             createModalRules: {},
-            uploadList: []
+            
         }
     },
     components: {
@@ -125,12 +128,11 @@ export default {
         },
         //图片上传前钩子
         handleBeforeUploadNum(com, file) {
-            console.log(file)
-            if(!com) return (this.handleError({Msg: '无法获取上传组件', State: -1}, file, this.uploadList), false);
-            if(com.$props.maxSize && (file.size / 1024 > com.$props.maxSize)) return (this.handleError({Msg: '文件体积过大，无法上传', State: -1}, file, this.uploadList), false);
+            if(!com) return (this.handleError({Msg: '无法获取上传组件', State: -1}, file, this.createModal.uploadList), false);
+            if(com.$props.maxSize && (file.size / 1024 > com.$props.maxSize)) return (this.handleError({Msg: '文件体积过大，无法上传', State: -1}, file, this.createModal.uploadList), false);
             
             this.createModal.uploadStatus = this.$Message.loading({content:'正在上传文档，请稍等...', duration:0});
-            const checkNum = this.uploadList.length;
+            const checkNum = this.createModal.uploadList.length;
             if(checkNum) this.$refs.uploadFileRef.clearFiles();
         },
         //上传成功钩子
@@ -159,7 +161,6 @@ export default {
         },
          //上传失败钩子
         handleError(error,file,fileList) {
-            console.log(error)
             this.createModal.uploadStatus();
             this.createModal.uploadStatus = null;
             this.$Message.warning(error && error.Msg || '文件上传失败');
@@ -170,6 +171,11 @@ export default {
             this.createModal.uploadStatus = null;
             this.$Message.warning('超出文件大小限制，文档不能超过 15M');
         },
+        //打开图片
+        openUrlHandler(url, fileName){
+            let strUrl = `${REQUEST_URL.IndexImageDownload}${url}`;
+            window.open(strUrl);
+        }
     }
 }
 </script>
