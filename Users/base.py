@@ -27,6 +27,7 @@ class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 			checkData = ModelClass.objects.filter(**response)
 			if checkData:
 				extra['extraFields'] = {
+					'IsLogin': True,
 					'Token': self.sign_Token_Handler(self, checkData.values()[0])
 				}
 			return self.mapDatabase(self, ModelClass,response, extra)

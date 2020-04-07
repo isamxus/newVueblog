@@ -43,6 +43,12 @@ class AuthTokenHandler(object):
 		payload = self.decrypt(self, payload)
 		return payload
 
+
+	#重新签发Token
+	def resign_Token(self, Token):
+		payload = self.get_payload(self, Token)
+		UserInfo = Users.objects.filter(user_id=payload['user_id']).values()[0]
+		return self.sign_Token_Handler(self, UserInfo)
 		
 	#验证登陆状态
 	def check_login_status(self, Data, NeedsUserInfo=False):

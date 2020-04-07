@@ -30,4 +30,9 @@ urlpatterns = [
 	#首页轮播图
 	url(r'^IndexImage/Upload/$', blogIndexViews.Index_ImageUpload_Handler, name='Index_ImageUpload_Handler'),
 	url(r'^media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
+	url(r'^IndexImage/Create/$', blogIndexViews.createImageHandler, name='createImageHandler'),
+	url(r'^IndexImage/Update/$', blogIndexViews.updateImageHandler, name='updateImageHandler'),
+	url(r'^IndexImage/Delete/$', blogIndexViews.deleteImageHandler, name='deleteImageHandler'),
+	url(r'^IndexImage/GetSingle/$', blogIndexViews.getSingleImageHandler, name='getSingleImageHandler'),
+	url(r'^IndexImage/GetList/$', blogIndexViews.getImageListHandler, name='getImageListHandler'),
 ]

@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from ..models import IndexTab, IndexImage, IndexImage
+from ..models import IndexTab, IndexImage, IndexImageManagement
 from myblogdjango.base import DataSqlHandler
 from myblogdjango.filesHandle import FilesHandler
 from django.http import JsonResponse
@@ -35,6 +35,27 @@ def getTabListHandler(request):
 def Index_ImageUpload_Handler(request):
 	return FilesHandler.Upload_Files_Handler(FilesHandler, IndexImage, request)
 
-#首页轮播图下载
-def Index_ImageDownload_Handler(request):
-	return FilesHandler.Download_Files_Handler(FilesHandler, request)
+#创建首页轮播图
+@csrf_exempt
+def createImageHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler,IndexImageManagement, request, 'add')
+
+#更新首页轮播图
+@csrf_exempt
+def updateImageHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler,IndexImageManagement, request, 'update')
+
+#获取一个首页轮播图
+@csrf_exempt
+def getSingleImageHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler,IndexImageManagement, request, 'getsingle')
+
+#删除一个首页轮播图
+@csrf_exempt
+def deleteImageHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler,IndexImageManagement, request, 'delete')
+
+#获取首页轮播图集合(不分页)
+@csrf_exempt
+def getImageListHandler(request):
+	return DataSqlHandler.Data_Handler(DataSqlHandler,IndexImageManagement, request, 'getlist')

@@ -46,8 +46,11 @@ class IndexImageManagement(models.Model):
 	IndexImageName = models.CharField(max_length=100)
 	IndexImageUrl = models.CharField(max_length=200)
 	CreateTime = models.DateTimeField(auto_now_add=True)
+	ConnectArticleCateID = models.CharField(max_length=100)
+	ConnectArticleCateName = models.CharField(max_length=100)
 	ConnectArticleID = models.CharField(max_length=100)
 	ConnectArticleName = models.CharField(max_length=100)
+	ShowOnIndex = models.BooleanField(default=False)
 	UpdateTime = models.DateTimeField(auto_now=True)
 	IsDeleted = models.BooleanField(default=False)
 
