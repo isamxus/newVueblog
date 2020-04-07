@@ -42,5 +42,17 @@ module.exports = {
         userGetPageList: `${Host.host}User/GetPageList/`,
         userLogin: `${Host.host}User/Login/`,
         userCheckStatus: `${Host.host}User/CheckLoginStatus/`,
+
+        //首页Tab api
+        TabCreate: `${Host.host}Tab/Create/`,
+        TabUpdate: `${Host.host}Tab/Update/`,
+        TabGetSingle: `${Host.host}Tab/GetSingle/`,
+        TabDelete: `${Host.host}Tab/Delete/`,
+        TabGetList: `${Host.host}Tab/GetList/`,
+
+        //首页轮播图 api
+        IndexImageUpload: `${Host.host}IndexImage/Upload/`,
+        IndexImageDownload: `${Host.host}media/`,
+
     }
 }

@@ -27,6 +27,21 @@
                         </FormItem>
                     </Col>
                     <Col span="8">
+                        <FormItem class="sub-page-input-container min-input-container" label="文章标签：" prop="">
+                            <Select
+                                transfer 
+                                filterable
+                                clearable
+                                label-in-value
+                                v-model="searchForm.articleTagsID">
+                                <Option 
+                                    v-for="(item,key) in TagListData" 
+                                    :value="item.detail_params_id" 
+                                    :key="item.detail_params_id">{{ item.detailName }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="8">
                         <div class="sub-page-input-container min-input-container" :style="{paddingLeft: '1.5rem', textAlign: 'left'}">
                             <Button type="primary" @click="getAricleListHandler()">查询</Button>
                             <Button  :style="{marginLeft: '.5rem'}" @click="resetFormHandler()">重置</Button>
@@ -90,6 +105,7 @@ export default {
             ],
             searchForm: dataFactory(),
             CategoryListData: [],
+            TagListData: [],
             tableData: [],
             PageCount: 0,
             PageNumber: 1,
@@ -103,6 +119,7 @@ export default {
         this.$store.commit('showAdminMenu', true);
         this.getAricleListHandler();
         this.getCategoryHandler();
+        this.getTagsHandler();
     },
     methods: {
         //时间渲染
@@ -153,6 +170,22 @@ export default {
             })
             .then(res => {
                 this.CategoryListData = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        getTagsHandler(){
+            //获取标签
+            Action.paramsDetailGetList({
+                PostContent: {
+                    filter: {
+                        detailParentParamCode: '0003'
+                    }
+                }
+            })
+            .then(res => {
+                this.TagListData = res;
             })
             .catch(err => {
                 this.$Message.error(err);

@@ -28,7 +28,7 @@
                     </Col>
                     <Col span="20" offset="2">
                         <FormItem prop="Password">
-                            <Input v-model="loginForm.passwordConfirm" type="text" placeholder="请再次输入密码" size="large">
+                            <Input v-model="loginForm.PassWordConfirm" type="text" placeholder="请再次输入密码" size="large">
                                 <Icon size="24" type="ios-lock-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
@@ -67,13 +67,19 @@ export default {
     methods: {
         //添加参数
         createUserHandler(){
+            console.log(this.loginForm)
             Action.userCreate({
                 PostContent: this.loginForm
             })
             .then(res => {
+                this.$Message.success('注册成功，即将跳转至登录页面')
+                setTimeout(()=>{
+                    this.$router.push({name: 'login'});
+                }, 2000);
                
             })
             .catch(err => {
+                if(err.type === 'local') return this.$Message.warning(err.Msg);
                 this.$Message.error(err);
             })
         },

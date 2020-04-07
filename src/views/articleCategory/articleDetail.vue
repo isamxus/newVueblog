@@ -13,7 +13,7 @@
                     <h2 :style="{textAlign: 'center'}">{{ articleDetailData.articleTitle }}</h2>
                     <div :style="{display: 'flex', justifyContent: 'center', margin: '.7rem'}">
                         <span><Icon type="md-browsers" />分类：{{ articleDetailData.articleCagetoryName }}</span>
-                        <span><Icon type="ios-pricetags" />标签：{{ articleDetailData.articleTagsName }}</span>
+                        <span><Icon type="ios-pricetags" />标签：{{ articleDetailData.articleTagsName || '无' }}</span>
                         <span><Icon type="md-time" />{{ articleDetailData.CreateTime }}</span>
                     </div>
                     <p v-html="articleDetailData.articleContent"></p>
@@ -39,6 +39,7 @@
                             <Avatar icon="ios-person"  />
                         </Col>
                         <Col span="20">
+                            <Row>{{ item.commentAuthor }}</Row>
                             <span :style="{fontSize: '10px'}">{{item.CreateTime}}</span>
                         </Col>
                         <Col span="24">
@@ -109,13 +110,15 @@ export default {
         },
         //创建一条评论
         createCommentHandler(){
+            if (!this.$store.state.IsLogin) return this.$Message.warning('请登录后发表评论！！！');
+            let UserName = JSON.parse(localStorage.getItem('UserInfo')).UserName;
             Action.commentCreate({
                 PostContent: {
                     parentArticleID: this.$route.query.id,
                     parentArticleTitle: this.articleDetailData.articleTitle,
                     commentContent: this.commentContent,
                     commentHeadImg: '',
-                    commentAuthor: ''
+                    commentAuthor: UserName
                 }
             })
             .then(res => {

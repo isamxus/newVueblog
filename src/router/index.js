@@ -19,6 +19,9 @@ const articleListPage = () => import('../views/adminDetailPage/articleListPage')
 const addArticle = () => import('../views/adminDetailPage/addArticle');
 const commentManagement = () => import('../views/adminDetailPage/commentManagement');
 const usersManagement = () => import('../views/adminDetailPage/usersManagement');
+const blogIndexTab = () => import('../views/adminDetailPage/blogIndexTab');
+const blogIndexImage = () => import('../views/adminDetailPage/blogIndexImage');
+
 
 Vue.use(Router)
 
@@ -35,7 +38,10 @@ export default new Router({
       	{path:'/adminDetailPage/commentManagement',name: 'commentManagement',component: commentManagement,meta:{title:''}},
       	{path:'/adminDetailPage/usersManagement',name: 'usersManagement',component: usersManagement,meta:{title:''}},
       	{path:'/adminDetailPage/addArticle',name: 'addArticle',component: addArticle,meta:{title:''}},
+        {path:'/adminDetailPage/blogIndexTab',name: 'blogIndexTab',component: blogIndexTab,meta:{title:'首页Tab'}},
+        {path:'/adminDetailPage/blogIndexImage',name: 'blogIndexImage',component: blogIndexImage,meta:{title:'首页轮播图'}},
+
       	{path:'/article/simplePage',name: 'articleCategory',component: articleCategory,meta:{title:'文章列表'}},
       	{path:'/article/detailPage',name: 'articleDetail',component: articleDetail,meta:{title:'文章详情'}},
-  	]
+    ]
 })

@@ -66,7 +66,8 @@ const dataFactory = () => {
                         { Name: '文章设置', Code: '0002', IsSelected: false},
                         { Name: '文章标签', Code: '0003', IsSelected: false},
                         { Name: '文章评论', Code: '0004', IsSelected: false},
-                        { Name: '用户管理', Code: '0005', IsSelected: false}
+                        { Name: '用户管理', Code: '0005', IsSelected: false},
+                        { Name: '首页Tab页', Code: '0006', IsSelected: false},
                     ]
                 }
             ]
@@ -156,10 +157,12 @@ export default {
                         }
                     }
                 }),
+
                    h('Button',{
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
+                            if (params.row.IsSuperUser) return this.$Message.warning('无法删除超级用户！！！')
                             this.deleteUserHandler(params.row.user_id);
                             e.stopPropagation();
                        }

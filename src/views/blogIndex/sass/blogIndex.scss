@@ -5,4 +5,17 @@
 	.carousel-image {
 		height: 20rem;
 	}
+	.recent-article-tab {
+		padding: .5rem;
+		margin: .2rem 0;
+		border-top: 1px solid #f8f8f9;
+		border-bottom: 1px solid #f8f8f9;
+		.title:hover{
+			color: #2db7f5;
+		}
+		.title{
+			cursor: pointer;
+		}
+	}
+
 }

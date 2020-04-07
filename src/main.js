@@ -58,7 +58,15 @@ global.REQUEST_URL = Urls;
 const objectCopy = obj => {
    return JSON.parse(JSON.stringify(obj));
 };
+const encodeURLParam = (object, hasSymbol) => {
+    var stringBuffer = hasSymbol ? '?' : '';
+    for(var o in object){
+        stringBuffer += `${o}=${encodeURIComponent(object[o])}&`;
+    }
+    return stringBuffer.substring(0, stringBuffer.length-1);
+};
 global.objectCopy = objectCopy;
+global.encodeURLParam = encodeURLParam;
 //Qs处理axios Post请求
 REQUEST_URL.handleParams = (params) => {
 	if (params) params.PostContent = params.PostContent ? JSON.stringify(params.PostContent) : {};
