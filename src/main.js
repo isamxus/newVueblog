@@ -77,7 +77,7 @@ REQUEST_URL.handleParams = (params) => {
         ,Platform: 'PC Admin(Web)'
         ,CustomApp: 'PC Admin(Web)'
         ,Mac: 'unknown'
-        ,Token: JSON.parse(localStorage.getItem('Token'))
+        ,Token: JSON.parse(window.localStorage.getItem('Token'))
     };
 
     return params ? QS.stringify(Object.assign(result, objectCopy(params))) : QS.stringify(result);
@@ -161,6 +161,10 @@ axios.interceptors.response.use(response=>{
     if(response.data.status) {
         store.state.IsLogin = response.data.IsLogin;
         if (!store.state.IsLogin) localStorage.removeItem('UserInfo');
+        if (response.data.Token && store.state.IsLogin) {
+            window.localStorage.setItem('Token', JSON.stringify(response.data.Token));
+        }
+        /*console.log(JSON.parse(window.localStorage.getItem('Token')))*/
         if (window.location.href.search('adminDetailPage') != -1 && !store.state.IsLogin) {
             vm.$Modal.warning({
                 title: '安全警告'

@@ -73,7 +73,6 @@ export default {
                         return item;
                     });
                     this.$store.commit('UserInfo', data[0]);
-                    localStorage.setItem('Token', JSON.stringify(res.Token));
                     localStorage.setItem('UserInfo', JSON.stringify(data[0]))
                     this.$store.state.UserToken = res.Token;
                     this.$store.state.IsLogin = res.IsLogin;

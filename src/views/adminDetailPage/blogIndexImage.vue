@@ -19,7 +19,7 @@
             <Table  :columns="columns" :data="tableList"></Table>
             <Modal
                 v-model="popModal"
-                :title="'编辑Tab页'"
+                :title="createModal.edit ? '编辑' : '新增'"
                 width=600>
                 <Form
                     ref="createForm"
@@ -27,7 +27,7 @@
                     :label-width="100"
                     :model="createModal"
                     :rules="createModalRules">
-                    <FormItem label="轮播图片：" prop="ContractTemplateName">
+                    <FormItem  label="轮播图片：" prop="ContractTemplateName">
                         <Upload 
                             ref="uploadFileRef" 
                             :action="uploadUrl" 
@@ -51,9 +51,18 @@
                             </span></div>
                         </div>
                     </FormItem>
+                    <FormItem class="sub-page-input-container min-input-container" label="关联文章：" prop="ConnectArticleID">
+                        <Cascader :data="articleListData" v-model="selectData"  :load-data="loadArticleData" @on-change="articleSelectHandler"></Cascader>
+                    </FormItem>
+                    <FormItem label="是否显示：" prop="ShowOnIndex">
+                        <Switch v-model="createModal.ShowOnIndex">
+                            <span slot="open">是</span>
+                            <span slot="close">否</span>
+                        </Switch>
+                    </FormItem>
                 </Form>            
                 <div slot="footer" >
-                    <Button type="primary" @click="">确定</Button>
+                    <Button type="primary" @click="submitDataHandler">确定</Button>
                     <Button @click="popModal=false">取消</Button>
                 </div>
             </Modal>
@@ -69,7 +78,13 @@ const dataFactory = params => Object.assign({
     uploadStatus: null,
     IndexImageName: '',
     IndexImageUrl: '',
-    uploadList: []
+    uploadList: [],
+    ConnectArticleID: '',
+    ConnectArticleName: '',
+    ConnectArticleCateID: '',
+    ConnectArticleCateName: '',
+    ShowOnIndex: false,
+    edit: false
 }, params);
 
 
@@ -81,14 +96,19 @@ export default {
             ],
             columns:[
                 {title: '序号', type: 'index', width: 120},
-                {title: '链接文章'},
+                {title: '关联文章', key: 'ConnectArticleName'},
+                {title: '首页显示', render: this.ShowOnIndexRender},
                 {title:'操作', align: 'center', render:this.toolColumnRender}
             ],
             tableList: [],
             uploadUrl: REQUEST_URL.IndexImageUpload,
             popModal: false,
             createModal: dataFactory(),
-            createModalRules: {},
+            createModalRules: {
+                ConnectArticleID: [{required: true, message: '请选择关联文章'}],
+            },
+            articleListData: [],
+            selectData: []
             
         }
     },
@@ -97,8 +117,13 @@ export default {
     },
     mounted () {
         this.$store.commit('showAdminMenu', true);
+        this.getCategoryHandler();
+        this.getImageListHandler();
     },
     methods: {
+        ShowOnIndexRender(h, params){
+            return h('span', {domProps:{innerText: params.row.ShowOnIndex ? '是' : '否'}});
+        },
         //操作列渲染
         toolColumnRender(h, params) {
             return h('div', [
@@ -107,8 +132,11 @@ export default {
                         domProps:{innerText: '编辑'},
                         on:{click: e => {
                             e.stopPropagation();
+                            this.createModal = params.row;
+                            this.selectData = [this.createModal.ConnectArticleCateID, this.createModal.ConnectArticleID];
                             this.popModal = true;
                             params.row.edit = true;
+                            
                         }
                     }
                 }),
@@ -117,13 +145,39 @@ export default {
                         domProps:{innerText: '删除'},
                         on:{click: e => {
                             e.stopPropagation();
-                       }
+                            if (!params.row.IndexImageID) return this.$Message.warning('参数ID为空，无法删除！！！');
+                            const modal = this.$Modal.confirm({
+                                title: '操作确认'
+                                ,icon: 'warning'
+                                ,content: '是否删除此轮播图'
+                                ,okText: '确定'
+                                ,showCancel: true
+                                ,loading: true
+                                ,onOk: () => {
+                                    //发起删除轮播图请求
+                                    Action.IndexImageDelete({
+                                        PostContent: {
+                                            IndexImageID: params.row.IndexImageID
+                                        }
+                                    }).then(result => {
+                                        this.$Message.success('成功删除轮播图！！！');
+                                        this.$Modal.remove()
+                                        this.getImageListHandler();
+                                    })
+                                    .catch(err => {
+                                        this.$Modal.remove()
+                                        this.$Message.error(err);
+                                    });
+                                }
+                            });
+                        }
                     }
                 })
             ]);
         },
          //重置表单
         resetFormHandler(){
+            this.createModal = dataFactory();
             this.popModal = true;
         },
         //图片上传前钩子
@@ -175,6 +229,91 @@ export default {
         openUrlHandler(url, fileName){
             let strUrl = `${REQUEST_URL.IndexImageDownload}${url}`;
             window.open(strUrl);
+        },
+        getCategoryHandler(){
+            //获取分类
+            Action.paramsDetailGetList({
+                PostContent: {
+                    filter: {
+                        detailParentParamCode: '0001'
+                    }
+                }
+            })
+            .then(res => {
+                this.articleListData = res.map(item => {
+                    return {
+                        value: item.detail_params_id,
+                        label: item.detailName,
+                        children: [],
+                        loading: false
+                    }
+                });
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        //加载数据
+        loadArticleData(item, callback){
+            item.loading = true;
+            //获取文章列表
+            Action.articleGetList({
+                PostContent: {
+                    filter: {
+                        articleCagetoryID: item.value
+                    }
+                }
+            })
+            .then(res => {
+                item.children = res.map(e => {
+                    return {
+                        value: e.article_id,
+                        label: e.articleTitle,
+                        parentName: e.articleCagetoryName,
+                        parentID: e.articleCagetoryID
+                    }
+                })
+                item.loading = false;
+                callback();
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+
+        },
+        //关联文章选择
+        articleSelectHandler(value, selectedData){
+            if (selectedData.length == 0) return;
+            let batch = selectedData[selectedData.length - 1];
+            this.createModal.ConnectArticleCateID = batch.parentID;
+            this.createModal.ConnectArticleCateName = batch.parentName;
+            this.createModal.ConnectArticleID = batch.value;
+            this.createModal.ConnectArticleName = batch.label;
+        },
+        //获取轮播图集合
+        getImageListHandler(){
+            Action.IndexImageGetList()
+            .then(res => {
+                this.tableList = res;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+        },
+        //提交表单处理
+        submitDataHandler(){
+            if (!this.createModal.IndexImageName) return this.$Message.warning('请上传图片');
+            if (!this.createModal.ConnectArticleID) return this.$Message.warning('请选择关联文章');
+            Action[ this.createModal.edit ? 'IndexImageUpdate' : 'IndexImageCreate']({
+                PostContent: this.createModal
+            })
+            .then(res => {
+                this.popModal = false;
+                this.getImageListHandler();
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
         }
     }
 }

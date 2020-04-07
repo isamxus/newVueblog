@@ -115,7 +115,7 @@ export default {
             const modal = this.$Modal.confirm({
                 title: '操作确认'
                 ,icon: 'warning'
-                ,content: '是否删除此文章'
+                ,content: '是否删除此评论'
                 ,okText: '确定'
                 ,showCancel: true
                 ,loading: true
