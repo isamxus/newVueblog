@@ -13,7 +13,11 @@ const Action = {
 	//获取Tab页
 	tabGetlist(params){
         return axios.post(REQUEST_URL.TabGetList, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
-	}
+	},
+	//获取轮播图集合
+	IndexImageGetList(params){
+        return axios.post(REQUEST_URL.IndexImageGetList, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
+	},
 }
 
 export default Action;

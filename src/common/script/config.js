@@ -53,6 +53,11 @@ module.exports = {
         //首页轮播图 api
         IndexImageUpload: `${Host.host}IndexImage/Upload/`,
         IndexImageDownload: `${Host.host}media/`,
+        IndexImageCreate: `${Host.host}IndexImage/Create/`,
+        IndexImageUpdate: `${Host.host}IndexImage/Update/`,
+        IndexImageGetSingle: `${Host.host}IndexImage/GetSingle/`,
+        IndexImageDelete: `${Host.host}IndexImage/Delete/`,
+        IndexImageGetList: `${Host.host}IndexImage/GetList/`,
 
     }
 }

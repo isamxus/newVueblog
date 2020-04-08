@@ -8,8 +8,15 @@
   			<Row :style="{background: '#fff'}">
   				<Col span="15">
   					<Carousel autoplay v-model="CarouselIndex" loop>
-        				<CarouselItem v-for="(item, key) in CarouselData" :key="key">
-            				<div class="carousel-image"></div>
+        				<CarouselItem v-for="(item, key) in IndexImageData" :key="key">
+            				<div @click="$router.push({
+                                name: 'articleDetail',
+                                query: {
+                                    id: item.ConnectArticleID
+                                }
+                            })" class="carousel-image" :style="{backgroundImage: `url('${item.IndexImageUrl}')`}">
+                                      
+                            </div>
         				</CarouselItem>
     				</Carousel>
   				</Col>
@@ -39,18 +46,19 @@ import SubNavigationFrame from '../../components/SubNavigationFrame/SubNavigatio
 import Action from './action/blogIndex';
 
 export default {
-	  data () {
-		    return {
-			      breadcrumbs: [],
+	data () {
+		return {
+			breadcrumbs: [],
   	        CarouselIndex: 0,
   	        CarouselData: [0, 1, 2, 3],
             articleListData: [],
-            tabListData: []
-		    }
-	  },
-	  components: {
-		    SubNavigationFrame
-	  },
+            tabListData: [],
+            IndexImageData: []
+		}
+	},
+	components: {
+		SubNavigationFrame
+	},
     computed: {
         recentArtShow(){
             return this.tabListData.find(item => item.IndexTabCode == '000601') && this.tabListData.find(item => item.IndexTabCode == '000601').IsShowTab;
@@ -59,14 +67,15 @@ export default {
             return this.tabListData.filter(item => item.IndexTabCode != '000601' && item.IsShowTab );
         }
     },
-	  mounted () {
+	mounted () {
         this.$store.commit('showMenu', true);
         this.$store.commit('showAdminMenu', false);
         this.checkLoginStatusHandler();
         this.getAricleListHandler();
         this.getTabListHandler();
-	  },
-	  methods: {
+        this.getImageListHandler();
+	},
+	methods: {
         checkLoginStatusHandler(){
             Action.getStatusInfo()
             .then(res => {
@@ -107,7 +116,20 @@ export default {
             .catch(err => {
                 this.$Message.error(err);
             })
+        },
+        //获取轮播图集合
+        getImageListHandler(){
+            Action.IndexImageGetList()
+            .then(res => {
+                this.IndexImageData = res.map(item => {
+                    item.IndexImageUrl = `${REQUEST_URL.IndexImageDownload}${item.IndexImageUrl}`;
+                    return item;
+                }).filter(e => e.ShowOnIndex);
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
         }
-	  }
+	}
 }
 </script>

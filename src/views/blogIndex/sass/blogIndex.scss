@@ -17,5 +17,13 @@
 			cursor: pointer;
 		}
 	}
+	.carousel-image{
+		cursor: pointer;
+		background: {
+        	size: 100%;
+            position: center;
+            repeat: no-repeat;
+        }
+	}
 
 }

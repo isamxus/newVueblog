@@ -182,7 +182,7 @@ export default {
             const modal = this.$Modal.confirm({
                 title: '操作确认'
                 ,icon: 'warning'
-                ,content: '是否删除此用户'
+                ,content: '是否删除此Tab页'
                 ,okText: '确定'
                 ,showCancel: true
                 ,loading: true
