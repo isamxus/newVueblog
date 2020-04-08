@@ -36,9 +36,9 @@ class DataSqlHandler(object):
 		Data = self.RequestHandler(self, requestData, True)
 		result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
 		extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
-		'''if result == True:
+		if result == True:
 			Token = AuthTokenHandler.resign_Token(AuthTokenHandler, Data['Token'])
-			extra['extraFields'].update(Token=Token)'''
+			extra['extraFields'].update(Token=Token)
 		extra['extraFields'].update(IsLogin=result)
 		return extra
 	#对请求数据进行处理

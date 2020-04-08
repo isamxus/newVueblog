@@ -12,6 +12,7 @@ class ArticleDetail(models.Model):
 	articleContent = models.TextField()
 	articleCagetoryID = models.CharField(max_length=50)
 	articleCagetoryName = models.CharField(max_length=50)
+	articleViews = models.PositiveIntegerField(default=0)
 	IsDeleted = models.BooleanField(default=False)
 	CreateTime = models.DateTimeField(auto_now_add=True)
 	UpdateTime = models.DateTimeField(auto_now=True)

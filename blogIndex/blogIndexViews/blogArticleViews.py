@@ -1,5 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from ..models import ArticleDetail
+from ..base import IndexSqlHandler
 from myblogdjango.base import DataSqlHandler
 
 #添加文章
@@ -15,7 +16,7 @@ def updateArticleHandler(request):
 #获取一篇文章
 @csrf_exempt
 def getSingleArticleHandler(request):
-	return DataSqlHandler.Data_Handler(DataSqlHandler,ArticleDetail, request, 'getsingle')
+	return IndexSqlHandler.Get_Single_Handler(IndexSqlHandler,ArticleDetail, request)
 
 #删除文章
 @csrf_exempt
