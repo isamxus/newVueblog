@@ -2,6 +2,7 @@ import os
 
 class AutoDeploy(object):
 	#设置IP账号密码并返回
+	DeFaultIP = '112.74.47.33'
 	IP = None
 	UserName = None
 	PassWord = None
@@ -26,17 +27,52 @@ class AutoDeploy(object):
 		return
 
 	def connect_to_linux(self):
+
+
+		'''
+		ps = 'ljc834775778'
 		ssh = paramiko.SSHClient()
 		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		ssh.connect(self.IP, self.Port, self.UserName, self.PassWord, timeout=10)
-		chan = ssh.invoke_shell()
-		chan.send('cd blogManagement'+'\n')
-		resp=chan.recv(65535)
-		print(resp)
-		#stdin, stdout, stderr = ssh.exec_command(a, get_pty=True)
+		cmd = 'useradd -m -s /bin/bash ljc7;usermod -a -G sudo ljc7;password ljc7'
+		stdin, stdout, stderr = ssh.exec_command(cmd, get_pty=True)
+		stdin.write('%s' % ps)
+		time.sleep(1)
+		#stdin.write('%s\n' % ps)
+		#time.sleep(1)
+		stdin.flush()
+		
+		out = stdout.readlines()
+		print(out)
+		ssh.close()
 		#result = stdout.read()
 		#print(result.decode('utf-8'))
-		#ssh.close()
+		#ssh.close()'''
+		tran = paramiko.Transport((self.IP, 22,))
+		tran.start_client()
+		tran.auth_password(self.UserName, self.PassWord)
+		chan = tran.open_session()
+		chan.get_pty()
+		chan.invoke_shell()
+		
+		while True:
+			readable, writeable, error = select.select([chan, sys.stdin, ],[],[])
+			'''
+			if chan in readable:
+				try:
+					x = u(chan.recv(1024))
+					if len(x) == 0:
+						print('\r\n*** EOF\r\n')
+						break
+					sys.stdout.write(x)
+					sys.stdout.flush()
+				except socket.timeout:
+					pass
+			if sys.stdin in readable:
+				inp = sys.stdin.readline()
+				chan.sendall(inp)'''
+		chan.close()
+		#tran.close()
 		return
 
 
@@ -45,7 +81,12 @@ if __name__ == '__main__':
 	import django
 	django.setup()
 	import paramiko
+	import socket
+	import sys
+	import select
+	from paramiko.py3compat import u
 	import re
+	import time
 	exp = AutoDeploy()
 	exp.set_user_password()
 	exp.connect_to_linux()
