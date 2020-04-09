@@ -48,32 +48,32 @@ class AutoDeploy(object):
 		#result = stdout.read()
 		#print(result.decode('utf-8'))
 		#ssh.close()'''
+		name = 'ljc16'
 		tran = paramiko.Transport((self.IP, 22,))
 		tran.start_client()
 		tran.auth_password(self.UserName, self.PassWord)
 		chan = tran.open_session()
 		chan.get_pty()
 		chan.invoke_shell()
-		
+		orderlist = [
+			'useradd -m -s /bin/bash ' + name + '\r',
+			'usermod -a -G sudo ' + name + '\r',
+			'passwd ' + name + '\r',
+			'ljc834775778\r',
+			'ljc834775778\r',
+			'su - ' + name + '\r',
+		]
+		for order in orderlist:
+			chan.send(order)
 		while True:
-			readable, writeable, error = select.select([chan, sys.stdin, ],[],[])
-			'''
-			if chan in readable:
-				try:
-					x = u(chan.recv(1024))
-					if len(x) == 0:
-						print('\r\n*** EOF\r\n')
-						break
-					sys.stdout.write(x)
-					sys.stdout.flush()
-				except socket.timeout:
-					pass
-			if sys.stdin in readable:
-				inp = sys.stdin.readline()
-				chan.sendall(inp)'''
-		chan.close()
+			time.sleep(0.2)
+			rst = chan.recv(1024).decode('utf-8')
+			print(rst)
+			if len(rst) == 0:
+				break
+		#chan.close()
 		#tran.close()
-		return
+		#return
 
 
 if __name__ == '__main__':
