@@ -8,6 +8,11 @@
   			<Row :style="{background: '#fff'}">
   				<Col span="15">
   					<Carousel autoplay v-model="CarouselIndex" loop>
+                        <CarouselItem   v-show="IndexImageData.length==0">
+                            <div class="carousel-image">
+                                
+                            </div>
+                        </CarouselItem>
         				<CarouselItem v-for="(item, key) in IndexImageData" :key="key">
             				<div @click="$router.push({
                                 name: 'articleDetail',

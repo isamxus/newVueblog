@@ -79,6 +79,10 @@ export default {
             }
         })
         .then(res => {
+            if (res.length == 0) {
+                delete this.pageArray[1].children;
+                this.pageArray[1].path = '/';
+            }
             res.map((item, index) => {
                 this.$set(this.pageArray[1].children, index, {
                     title: item.detailName,
