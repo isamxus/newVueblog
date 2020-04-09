@@ -15,6 +15,7 @@
                         <span><Icon type="md-browsers" />分类：{{ articleDetailData.articleCagetoryName }}</span>
                         <span><Icon type="ios-pricetags" />标签：{{ articleDetailData.articleTagsName || '无' }}</span>
                         <span><Icon type="md-time" />{{ articleDetailData.CreateTime }}</span>
+                        <span><Icon type="md-eye" />浏览{{ articleDetailData.articleViews }}</span>
                     </div>
                     <p v-html="articleDetailData.articleContent"></p>
                 </div>
