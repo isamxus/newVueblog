@@ -17,22 +17,24 @@ class AutoDeploy(object):
 	
 	#创建角色指令
 	createUserOrderList = [
-		'useradd -m -s /bin/bash ' + DefaultName + '\r',
-		'usermod -a -G sudo ' + DefaultName + '\r',
-		'echo "' + DefaultName + '":"' + DefaultPasswd + '" | chpasswd' + '\r',
+		'su - ljc\r',
 	]
 
 	#更新环境指令
 	updateEnvirOrderList = [
-		'sudo apt-get update\r',
+		'git clone https://github.com/isamxus/blogManagement.git\r',
 		#'sudo pip3 install virtualenv\r',
 		#'sudo service nginx start\r',
 	]
+	#取消弹窗
+	cancelPopList = [
+		#'export DEBIAN_FRONTEND=noninteractive0\r',
+	]
 	#更新环境指令
 	upgradeEnvirOrderList = [
-		'sudo apt-get upgrade\r',
-		'sudo apt-get install nginx\r',
-		'sudo apt-get install git python3 python3-pip\r',
+		#'sudo apt-get -y upgrade\r',
+		#'sudo apt-get -y install nginx\r',
+		#'sudo apt-get -y install git python3\r',
 	]
 	def set_user_password(self):
 		confirm = False
@@ -58,14 +60,16 @@ class AutoDeploy(object):
 		exp.send(order)
 		result = ''
 		p = re.compile(r'%s'%map)
-		Choice = re.compile(r'continue')
+		Choice = re.compile(r'[Y/n]')
 		while True:
 			time.sleep(0.5)
 			rst = exp.recv(65535)
 			rst = rst.decode('utf-8')
 			result += rst
-			if '[Y/n]' in rst:
-				print('map!!!!!!')
+			'''if Choice.search(rst):
+			
+				exp.recv(65535)
+				print('map!!!!!!')'''
 			if p.search(rst):
 				print(result)
 				print(len(rst))
@@ -117,9 +121,11 @@ class AutoDeploy(object):
 		tran.auth_password(self.UserName, self.PassWord)
 		
 		#创建角色并设置密码
+		
 		self.excute_Order(tran, self.createUserOrderList, '~#')
-		self.excute_Order(tran, self.updateEnvirOrderList, 'Done')
-		self.excute_Order(tran, self.upgradeEnvirOrderList, 'upgraded')
+		self.excute_Order(tran, self.updateEnvirOrderList, 'done.')
+		#self.excute_Order(tran, self.cancelPopList, '~#')
+		#self.excute_Order(tran, self.upgradeEnvirOrderList, 'upgraded')
 
 		#更新环境
 		#self.excute_Order(tran, self.updateEnvirOrderList)
@@ -133,7 +139,7 @@ class AutoDeploy(object):
 			#'su - ' + name + '\r',
 		]
 		
-		tran.close()
+		#tran.close()
 		#return
 
 
