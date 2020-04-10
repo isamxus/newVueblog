@@ -1,12 +1,39 @@
 import os
 
 class AutoDeploy(object):
-	#设置IP账号密码并返回
-	DeFaultIP = '112.74.47.33'
-	IP = None
-	UserName = None
-	PassWord = None
+	#默认新建的用户名和密码
+	DefaultName = 'ljc114'
+	DefaultPasswd = 'ljc834775778'
+
+	#连接IP
+	IP = '112.74.47.33'
+
+	#服务器初始用户名和密码
+	UserName = 'root'
+	PassWord = 'Qq123456'
+
+	#默认端口
 	Port = 22
+	
+	#创建角色指令
+	createUserOrderList = [
+		'useradd -m -s /bin/bash ' + DefaultName + '\r',
+		'usermod -a -G sudo ' + DefaultName + '\r',
+		'echo "' + DefaultName + '":"' + DefaultPasswd + '" | chpasswd' + '\r',
+	]
+
+	#更新环境指令
+	updateEnvirOrderList = [
+		'sudo apt-get update\r',
+		#'sudo pip3 install virtualenv\r',
+		#'sudo service nginx start\r',
+	]
+	#更新环境指令
+	upgradeEnvirOrderList = [
+		'sudo apt-get upgrade\r',
+		'sudo apt-get install nginx\r',
+		'sudo apt-get install git python3 python3-pip\r',
+	]
 	def set_user_password(self):
 		confirm = False
 		while not confirm:
@@ -25,6 +52,42 @@ class AutoDeploy(object):
 				continue
 			confirm = True
 		return
+
+	#读取回显
+	def read_output(self, exp, order, map):
+		exp.send(order)
+		result = ''
+		p = re.compile(r'%s'%map)
+		Choice = re.compile(r'continue')
+		while True:
+			time.sleep(0.5)
+			rst = exp.recv(65535)
+			rst = rst.decode('utf-8')
+			result += rst
+			if '[Y/n]' in rst:
+				print('map!!!!!!')
+			if p.search(rst):
+				print(result)
+				print(len(rst))
+				break
+		return True
+
+	#创建角色
+	def create_User(self, exp, list, map):
+		return self.excute_Order(exp, list)
+
+	#遍历指令并执行
+	def excute_Order(self, tran, list, map):
+		exp = tran.open_session()
+		exp.get_pty()
+		exp.invoke_shell()
+		for order in list:
+			if self.read_output(exp, order, map):
+				print('成功')
+			else:
+				print('失败')
+		exp.close()
+		return True
 
 	def connect_to_linux(self):
 
@@ -48,31 +111,29 @@ class AutoDeploy(object):
 		#result = stdout.read()
 		#print(result.decode('utf-8'))
 		#ssh.close()'''
-		name = 'ljc16'
+		
 		tran = paramiko.Transport((self.IP, 22,))
 		tran.start_client()
 		tran.auth_password(self.UserName, self.PassWord)
-		chan = tran.open_session()
-		chan.get_pty()
-		chan.invoke_shell()
+		
+		#创建角色并设置密码
+		self.excute_Order(tran, self.createUserOrderList, '~#')
+		self.excute_Order(tran, self.updateEnvirOrderList, 'Done')
+		self.excute_Order(tran, self.upgradeEnvirOrderList, 'upgraded')
+
+		#更新环境
+		#self.excute_Order(tran, self.updateEnvirOrderList)
 		orderlist = [
-			'useradd -m -s /bin/bash ' + name + '\r',
-			'usermod -a -G sudo ' + name + '\r',
-			'passwd ' + name + '\r',
-			'ljc834775778\r',
-			'ljc834775778\r',
-			'su - ' + name + '\r',
+			#'sudo apt-get update\r',
+			#'sudo apt-get upgrade\r',
+			#'sudo apt-get install nginx\r',
+			#'sudo apt-get install git python3 python3-pip',
+			#'sudo pip3 install virtualenv\r',
+			#'sudo service nginx start',
+			#'su - ' + name + '\r',
 		]
-		for order in orderlist:
-			chan.send(order)
-		while True:
-			time.sleep(0.2)
-			rst = chan.recv(1024).decode('utf-8')
-			print(rst)
-			if len(rst) == 0:
-				break
-		#chan.close()
-		#tran.close()
+		
+		tran.close()
 		#return
 
 
