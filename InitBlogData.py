@@ -1,7 +1,4 @@
 import os
-
-
-
 class InitBlog(object):
 	#参数列表
 	paramsList = [
@@ -23,25 +20,35 @@ class InitBlog(object):
 		Pass = False
 		UserName = None
 		PassWord = None
+		IsCreate = None
 		while not Pass:
+			if not IsCreate:
+				IsCreate = input('是否创建超级用户？(yes/no):')
+				continue
+			if IsCreate == 'no':
+				print('取消创建超级用户')
+				return
+			if IsCreate != 'yes' or IsCreate != 'no':
+				IsCreate = None
+				continue
 			if not UserName:
-				UserName = input('please enter your UserName: ')
+				UserName = input('请输入用户名: ')
 				continue
 			if not PassWord:
-				PassWord = input('please enter your PassWord: ')
+				PassWord = input('请输入密码: ')
 				continue
-			ConfirmPassWord = input('please enter your PassWord again: ')
+			ConfirmPassWord = input('请再次输入密码: ')
 			if ConfirmPassWord != PassWord:
-				print('The two passwords are inconsistent')
+				print('两次输入密码不一致')
 				UserName = None
 				PassWord = None
 				continue
 			if Users.objects.filter(UserName=UserName).count() > 0:
-				print('UserName already exists')
+				print('用户名已存在')
 				UserName = None
 				PassWord = None
 				continue
-			print('SuperUser created successfully')
+			print('超级用户创建成功')
 			Pass = True
 		try:
 			user = Users()
@@ -82,14 +89,16 @@ class InitBlog(object):
 				print('中止初始化博客数据')
 				return
 			if confirmInit == 'yes':
+				os.system(r"del db.sqlite3")
+				os.system(r"python manage.py makemigrations")
+				os.system(r"python manage.py migrate")
+				self.Init_Data(self.paramsList, ParamsSettings, '正在初始化博客参数', '博客参数初始化成功')
+				self.Init_Data(self.TabList, IndexTab, '正在初始化Tab页', '初始化Tab页成功')
 				confirm = True
 			if confirmInit != 'yes' or confirmInit != 'no':
 				confirmInit = None
 				continue
-		Status = os.system(r"python manage.py flush")
-		
-		self.Init_Data(self.paramsList, ParamsSettings, '正在初始化博客参数', '博客参数初始化成功')
-		self.Init_Data(self.TabList, IndexTab, '正在初始化Tab页', '初始化Tab页成功')
+		#Status = os.system(r"python manage.py flush")
 
 if __name__ == '__main__':
 	os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myblogdjango.settings")
@@ -99,5 +108,5 @@ if __name__ == '__main__':
 	from blogAdmin.models import ParamsSettings
 	from blogIndex.models import IndexTab
 	exp = InitBlog()
-	exp.Init_Blog_Function()
 	exp.Create_SuperUser_Handler()
+	exp.Init_Blog_Function()
