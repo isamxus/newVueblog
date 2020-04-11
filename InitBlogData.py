@@ -91,7 +91,7 @@ class InitBlog(object):
 				print('中止初始化博客数据')
 				return
 			if confirmInit == 'yes':
-				os.system(r"del db.sqlite3")
+				os.system(r"sudo rm db.sqlite3")
 				os.system(r"python3 manage.py makemigrations")
 				os.system(r"python3 manage.py migrate")
 				self.Init_Data(self.paramsList, ParamsSettings, '正在初始化博客参数', '博客参数初始化成功')
