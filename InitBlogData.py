@@ -25,31 +25,33 @@ class InitBlog(object):
 			if not IsCreate:
 				IsCreate = input('是否创建超级用户？(yes/no):')
 				continue
+			if IsCreate == 'yes':
+				if not UserName:
+					UserName = input('请输入用户名: ')
+					continue
+				if not PassWord:
+					PassWord = input('请输入密码: ')
+					continue
+				ConfirmPassWord = input('请再次输入密码: ')
+				if ConfirmPassWord != PassWord:
+					print('两次输入密码不一致')
+					UserName = None
+					PassWord = None
+					continue
+				if Users.objects.filter(UserName=UserName).count() > 0:
+					print('用户名已存在')
+					UserName = None
+					PassWord = None
+					continue
+				print('超级用户创建成功')
+				Pass = True
 			if IsCreate == 'no':
 				print('取消创建超级用户')
 				return
 			if IsCreate != 'yes' or IsCreate != 'no':
 				IsCreate = None
 				continue
-			if not UserName:
-				UserName = input('请输入用户名: ')
-				continue
-			if not PassWord:
-				PassWord = input('请输入密码: ')
-				continue
-			ConfirmPassWord = input('请再次输入密码: ')
-			if ConfirmPassWord != PassWord:
-				print('两次输入密码不一致')
-				UserName = None
-				PassWord = None
-				continue
-			if Users.objects.filter(UserName=UserName).count() > 0:
-				print('用户名已存在')
-				UserName = None
-				PassWord = None
-				continue
-			print('超级用户创建成功')
-			Pass = True
+			
 		try:
 			user = Users()
 			user.UserName = UserName
@@ -108,5 +110,5 @@ if __name__ == '__main__':
 	from blogAdmin.models import ParamsSettings
 	from blogIndex.models import IndexTab
 	exp = InitBlog()
-	exp.Create_SuperUser_Handler()
 	exp.Init_Blog_Function()
+	exp.Create_SuperUser_Handler()
