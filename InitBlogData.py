@@ -114,4 +114,3 @@ if __name__ == '__main__':
 	exp.Create_SuperUser_Handler()
 	os.system(r"sudo service nginx stop")
 	os.system(r"sudo service nginx start")
-	os.system(r"gunicorn --bind unix:/tmp/www.amxus.info.socket myblogdjango.wsgi:application")
