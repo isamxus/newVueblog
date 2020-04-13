@@ -18,10 +18,13 @@ export default new Vuex.Store({
         //全局缓存视图
         keepAliveViews: [],
         //是否显示后台管理菜单
-        showAdminMenu: false
+        showAdminMenu: false,
+        //480px屏幕菜单
+        navshow_480px: false
     },
     mutations: {
         pageNavShrink(state, value){state.pageNavShrink = value},
+        navshow_480px(state, value){state.navshow_480px = value},
         showMenu(state, value){state.showMenu = value},
         keepAliveViews(state, value){state.keepAliveViews = value},
         showAdminMenu(state, value){state.showAdminMenu = value},

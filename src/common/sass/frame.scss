@@ -24,7 +24,9 @@ html {
         top: 0;
     }
 }
-
+.shrink {
+    width: 3.5rem;
+}
 /* 右视图附加样式 */
 .page-container{
     position: absolute;
@@ -39,3 +41,4 @@ html {
 .navigation {
 	transition: all .3s;
 }
+

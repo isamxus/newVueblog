@@ -5,7 +5,7 @@
                 <router-view />
             <!--</keep-alive>-->
         </div>
-        <div class="page-navigation" v-if="showMenu" :style="{width: pageNavShrink ? '3.5rem' : '12rem'}">
+        <div  :class="{'page-navigation':true, 'shrink':pageNavShrink}" v-if="showMenu">
               <!--
                 <div class="page-logo" :style="{display: 'flex',alignItems: 'center'}">
                     <img v-show="!pageNavShrink" class="nav-logo" :style="{height: '70%'}" src="./assets/logo.png">
@@ -37,6 +37,7 @@
 <script>
 //载入样式
 import './common/sass/frame.scss';
+import './common/sass/frame480.scss';
 //载入组件
 import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SidebarMenuShrink from './components/SidebarMenu/SidebarMenuShrink';

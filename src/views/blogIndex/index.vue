@@ -6,7 +6,7 @@
   	<SubNavigationFrame :hiddenBreadAndTitle="true" >
   		<div class="blog-index-container" slot="content">
   			<Row :style="{background: '#fff'}">
-  				<Col span="15">
+  				<Col span="15" class="IndexLeft">
   					<Carousel autoplay v-model="CarouselIndex" loop>
                         <CarouselItem   v-show="IndexImageData.length==0">
                             <div class="carousel-image">
@@ -25,7 +25,7 @@
         				</CarouselItem>
     				</Carousel>
   				</Col>
-  				<Col span="9" :style="{padding: '.7rem'}"> 
+  				<Col span="9" class="IndexRight" :style="{padding: '.7rem'}"> 
   					 <Tabs :value="recentArtShow ? 'RecentlyArticle' : CustomTabList.length > 0 ? CustomTabList[0].IndexTabID : 'noTab'">
                 <TabPane label="无" name="noTab" v-if="!recentArtShow && CustomTabList.length==0">
                     无
