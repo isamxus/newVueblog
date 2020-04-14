@@ -113,7 +113,7 @@ export default {
                                 detailParentParamID: this.$route.query.id,
                                 detailParentParamCode: this.$route.query.Code,
                                 edit: true,
-                                id: params.row.detail_params_id
+                                detail_params_id: params.row.detail_params_id
                             })
                             this.paramsModal = true;
                             e.stopPropagation();

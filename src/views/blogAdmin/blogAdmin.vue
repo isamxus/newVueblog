@@ -84,6 +84,7 @@ export default {
                 }
             })
             .catch(err => {
+                console.log(err)
                 if(err.type === 'local') return this.$Message.warning(err.Msg);
                 this.$Message.error(err);
             })

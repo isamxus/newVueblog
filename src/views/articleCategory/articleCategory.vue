@@ -6,8 +6,8 @@
     <SubNavigationFrame :title="$route.meta.title" :breadcrumb="breadcrumbs">
         <div class="article-category-page-container" slot="content">
             <Row :style="{margin: '.7rem 0'}" type="flex" justify="space-around" v-for="(item, index) in articleListData" :key="index">
-                <Col span="18">
-                    <Card :style="{height: '250px', cursor: 'pointer', display: 'flex', justifyContent: 'center'}" >
+                <Col span="18" class="artBoard_480px">
+                    <Card class="Card_480px" :style="{height: '250px', cursor: 'pointer', display: 'flex', justifyContent: 'center'}" >
                         <h1 :style="{textAlign: 'center'}">{{ item.articleTitle }}</h1>
                         <span>分类：{{ item.articleCagetoryName }}</span>
                         <span>标签：{{ item.articleTagsName }}</span>
@@ -24,6 +24,7 @@
             </Row>
             <!-- 分页 -->
             <Page
+                class="PageTool"
                 :style="{paddingTop: '1rem',textAlign: 'center'}"
                 :total="PageCount"
                 :current="PageNumber"
@@ -34,6 +35,19 @@
                 show-elevator
                 show-total
                 show-sizer />
+            </Page>
+
+
+             <!-- 分页 -->
+            <Page
+                class="PageTool_480px"
+                :style="{paddingTop: '1rem',textAlign: 'center', display: 'none'}"
+                :total="PageCount"
+                :current="PageNumber"
+                :page-size="PageSize"
+                placement="top"
+                @on-change="e => {PageNumber=e, getAricleListHandler()}" 
+                @on-page-size-change="(size) => { PageSize = size, getAricleListHandler() }" />
             </Page>
         </div>
         

@@ -9,7 +9,7 @@
         </div>
         <div class="article-detail-page-container" slot="content">
             <div class="article-content-part">
-                <div :style="{borderBottom: '1px solid #f8f8f9', padding: '.7rem'}">
+                <div class="content_480px" :style="{borderBottom: '1px solid #f8f8f9', padding: '.7rem'}">
                     <h2 :style="{textAlign: 'center'}">{{ articleDetailData.articleTitle }}</h2>
                     <div :style="{display: 'flex', justifyContent: 'center', margin: '.7rem'}">
                         <span><Icon type="md-browsers" />分类：{{ articleDetailData.articleCagetoryName }}</span>
@@ -28,7 +28,40 @@
                 </div>
                 <div :style="{textAlign:'right', margin:'1.5rem 0rem'}">
                     <Button type="primary"  @click="createCommentHandler">发布评论</Button>
-                </div>       
+                </div>
+                <div class="Comment_list_480px" :style="{display: 'none'}">
+                    <div class="titlebox" :style="{marginTop: '.7rem'}">
+                        <h3>评论列表</h3>
+                    </div>
+                    <div class="comment-container">
+                        <Row class="comment-item" v-for="(item, index) in commentListData" :key="item.id">
+                            <Col span="4">
+                            <Avatar icon="ios-person"  />
+                            </Col>
+                            <Col span="20">
+                                <Row>{{ item.commentAuthor }}</Row>
+                                <span :style="{fontSize: '10px'}">{{item.CreateTime}}</span>
+                            </Col>
+                            <Col span="24">
+                                <p :style="{wordBreak: 'break-all', padding: '.7rem 0'}">{{ item.commentContent }}</p>
+                            </Col>
+                        </Row>
+                    </div>
+                    <!-- 分页 -->
+                    <Page
+                        size="small"
+                        :style="{paddingTop: '1rem',textAlign: 'center'}"
+                        :total="PageCount"
+                        :current="PageNumber"
+                        :page-size="PageSize"
+                        placement="top"
+                        @on-change="e => {PageNumber=e, getCommentListHandler()}" 
+                        @on-page-size-change="(size) => { PageSize = size, getCommentListHandler() }"
+                        show-elevator
+                        show-total/>
+                    </Page>
+                </div>  
+                  
             </div>
             <div class="comment-content-part">
                 <div class="titlebox">

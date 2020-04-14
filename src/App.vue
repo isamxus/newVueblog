@@ -50,10 +50,10 @@ export default {
             openNames:['sys_settiger'],
             //左侧菜单(博客前端页面)
             pageArray: [
-                {title: '首页',icon:'ios-navigate',name:'Index',path:'/'},
+                {title: '首页',icon:'ios-home',name:'Index',path:'/'},
                 {
                     title: '文章分类'
-                    ,icon:'ios-navigate'
+                    ,icon:'ios-apps'
                     ,name:'article_category'
                     ,children:[]
                 }
@@ -87,7 +87,7 @@ export default {
             res.map((item, index) => {
                 this.$set(this.pageArray[1].children, index, {
                     title: item.detailName,
-                    icon: 'ios-navigate',
+                    icon: 'md-card',
                     name: item.detailName,
                     path: `/article/simplePage?id=${item.detail_params_id}`
                 })
