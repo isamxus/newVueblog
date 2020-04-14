@@ -121,7 +121,6 @@ class DataSqlHandler(object):
 			requestData = self.PostContent
 			primary_key = self.return_primary_key(self, ModelClass)
 			UpdataData = get_object_or_404(ModelClass, pk=requestData[primary_key])
-			Updata_Data = ModelClass()
 			for field in requestData:
 				setattr(UpdataData, field, requestData[field])
 			UpdataData.save()
