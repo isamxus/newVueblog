@@ -2,11 +2,7 @@ from .base import DataSqlHandler
 from .settings import BASE_DIR
 from django.http import JsonResponse
 class FilesHandler(DataSqlHandler):
-	#下载文件
-	def Download_Files_Handler(self, requestData):
-		urlList = BASE_DIR + '\\'.join(requestData.GET.get('url').split('/'))
-		return JsonResponse({urlList: urlList})
-
+	
 	#添加文件
 	def Upload_Files_Handler(self, ModelClass, requestData, extra={}):
 		batchList = []
