@@ -16,7 +16,9 @@
                     </div>
                 </Col>
             </Row>
-            <Table :columns="columns" :data="tableData"></Table>
+            <div :style="{overflow: 'auto'}">
+                <Table :style="{minWidth: '1040px'}" :columns="columns" :data="tableData"></Table>
+            </div>
             <Modal
                 v-model="paramsModal"
                 :title="createDetailForm.edit ? '编辑' + $route.query.paramsName : '新增' + $route.query.paramsName"

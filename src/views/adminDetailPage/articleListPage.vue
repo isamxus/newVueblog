@@ -57,7 +57,7 @@
                 </Col>
             </Row>
             <div :style="{overflow: 'auto'}">
-                <Table :style="{minWidth: '1000px'}" :columns="columns" :data="tableData"></Table>  
+                <Table :style="{minWidth: '1040px'}" :columns="columns" :data="tableData"></Table>  
             </div>
             <!-- 分页 -->
             <Page

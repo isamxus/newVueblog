@@ -38,6 +38,8 @@
 //载入样式
 import './common/sass/frame.scss';
 import './common/sass/frame480.scss';
+import './common/sass/frame720.scss';
+import './common/sass/frame960.scss';
 //载入组件
 import SidebarMenu from './components/SidebarMenu/SidebarMenu';
 import SidebarMenuShrink from './components/SidebarMenu/SidebarMenuShrink';

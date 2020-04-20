@@ -16,7 +16,9 @@
                     </div>
                 </Col>
             </Row>
-            <Table  :columns="columns" :data="tableList"></Table>
+            <div :style="{overflow: 'auto'}">
+                <Table :style="{minWidth: '1040px'}"  :columns="columns" :data="tableList"></Table>
+            </div>
             <Modal
                 v-model="popModal"
                 :title="createModal.edit ? '编辑' : '新增'"
@@ -92,7 +94,7 @@ export default {
     data () {
         return {
             breadcrumbs:[
-                {title: this.$route.query.paramsName}
+                {title: this.$route.query.paramsName}   
             ],
             columns:[
                 {title: '序号', type: 'index', width: 120},
@@ -195,7 +197,7 @@ export default {
                 this.handleError(res, file, fileList);
                 return fileList.splice(fileList.length - 1 , 1);
             }
-            
+            console.log(file)
             this.createModal.uploadStatus();
             this.createModal.uploadStatus = null;
             
@@ -206,6 +208,7 @@ export default {
             let form = this.createModal;
             form.IndexImageName = file.name;
             form.IndexImageUrl = file.response.PostContent.Address;
+            
         },
          //上传文档错误钩子
         handleFormatError(file,fileList) {

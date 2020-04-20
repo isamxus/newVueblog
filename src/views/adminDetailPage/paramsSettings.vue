@@ -17,8 +17,8 @@
     			</Col>
     		</Row>
             -->
-            <div >
-                <Table  :columns="columns" :data="tableData"></Table>
+            <div :style="{overflow: 'auto'}">
+                <Table :style="{minWidth: '1040px'}"  :columns="columns" :data="tableData"></Table>
             </div>
             <Modal
     			v-model="paramsModal"
