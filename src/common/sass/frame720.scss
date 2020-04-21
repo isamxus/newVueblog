@@ -4,7 +4,7 @@ html {
     background-color: #F0F1F5;
 }
 
-@media (max-width: 720px) {
+@media (min-width: 480px) and (max-width: 720px) {
    .page-navigation{
    		width: 8rem;
     	background-color: $color_content;

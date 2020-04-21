@@ -7,6 +7,10 @@ const Index = () => import('../views/blogIndex/index');
 const articleCategory = () => import('../views/articleCategory/articleCategory');
 const articleDetail = () => import('../views/articleCategory/articleDetail');
 
+//用户设置页面
+const userSettings = () => import('../views/blogAdmin/userSettings');
+
+
 //后台管理登录页面
 const blogAdmin = () => import('../views/blogAdmin/blogAdmin');
 const blogRegister = () => import('../views/blogAdmin/blogRegister');
@@ -37,6 +41,7 @@ export default new Router({
         {path:'/login',name: 'login',component: blogAdmin,meta:{title:'用户登录'}},
       	{path:'/register',name: 'register',component: blogRegister,meta:{title:'用户注册'}},
         {path:'/admin',name: 'blogAdmin',component: blogAdmin,meta:{title:'博客后台管理系统'}},
+        {path:'/blogAdmin/userSettings',name: 'userSettings',component: userSettings,meta:{title:'修改用户信息'}},
       	{path:'/adminDetailPage/paramsSettings',name: 'paramsSettings',component: paramsSettings,meta:{title:'参数设置'}},
       	{path:'/adminDetailPage/paramsDetailPage',name: 'paramsDetailPage',component: paramsDetailPage,meta:{title:''}},
       	{path:'/adminDetailPage/articleListPage',name: 'articleListPage',component: articleListPage,meta:{title:''}},

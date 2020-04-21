@@ -30,6 +30,7 @@
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
                         <DropdownMenu @on-click="userToolHandler" v-show="$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
+                            <DropdownItem  name="usersettings">个人信息</DropdownItem>
                             <DropdownItem  name="logout">退出登录</DropdownItem>
                         </DropdownMenu>
 
@@ -69,6 +70,11 @@ export default {
             if (name == 'register') {
                 this.$router.push({
                     name: 'register'
+                })
+            }
+            if (name == 'usersettings') {
+                this.$router.push({
+                    name: 'userSettings'
                 })
             }
             if (name == 'logout') {
