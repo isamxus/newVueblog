@@ -34,12 +34,21 @@ class DataSqlHandler(object):
 	#验证登录状态
 	def loginStatus(self, requestData, extra):
 		Data = self.RequestHandler(self, requestData, True)
-		result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
+		needUserInfo = self.Is_In_Dict(self, 'needUserInfo', extra, False)
 		extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
-		if result == True:
-			Token = AuthTokenHandler.resign_Token(AuthTokenHandler, Data['Token'])
-			extra['extraFields'].update(Token=Token)
-		extra['extraFields'].update(IsLogin=result)
+		if needUserInfo == True:
+			result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data, True)
+			if result['IsLogin']:
+				Token = AuthTokenHandler.resign_Token(AuthTokenHandler, Data['Token'])
+				extra['extraFields'].update(Token=Token)
+			extra['extraFields'].update(IsLogin=result['IsLogin'])
+			extra['extraFields'].update(UserInfo=result['UserInfo'])
+		else:
+			result = AuthTokenHandler.check_login_status(AuthTokenHandler, Data)
+			if result == True:
+				Token = AuthTokenHandler.resign_Token(AuthTokenHandler, Data['Token'])
+				extra['extraFields'].update(Token=Token)
+			extra['extraFields'].update(IsLogin=result)
 		return extra
 	#对请求数据进行处理
 	def RequestHandler(self, request, returnOther=False):
@@ -121,7 +130,10 @@ class DataSqlHandler(object):
 			requestData = self.PostContent
 			primary_key = self.return_primary_key(self, ModelClass)
 			UpdataData = get_object_or_404(ModelClass, pk=requestData[primary_key])
+			onlyUpdate = self.Is_In_Dict(self, 'onlyUpdate', extra, False)
 			for field in requestData:
+				if onlyUpdate and field not in onlyUpdate:
+					continue
 				setattr(UpdataData, field, requestData[field])
 			UpdataData.save()
 			return self.ResponseHandler(self, True, extra=extra)

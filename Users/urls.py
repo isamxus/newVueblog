@@ -10,5 +10,6 @@ urlpatterns = [
 	url(r'^User/GetPageList/$', UserManagementViews.getUsersPageListHandler, name='getUsersPageListHandler'),
 	url(r'^User/Delete/$', UserManagementViews.deleteUserHandler, name='deleteUserHandler'),
 	url(r'^User/Login/$', UserManagementViews.userLoginHandler, name='userLoginHandler'),
+	url(r'^UserImage/Upload/$', UserManagementViews.User_ImageUpload_Handler, name='User_ImageUpload_Handler'),
 	url(r'^User/CheckLoginStatus/$', UserManagementViews.UserCheckStatusHandler, name='UserCheckStatusHandler'),
 ]

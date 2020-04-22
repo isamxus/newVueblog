@@ -1,7 +1,8 @@
 from django.views.decorators.csrf import csrf_exempt
 from ..models import Users
 from ..base import UserSqlHandler
-
+from myblogdjango.filesHandle import FilesHandler
+from blogIndex.models import IndexImage
 #添加用户
 @csrf_exempt
 def createUserHandler(request):
@@ -10,7 +11,10 @@ def createUserHandler(request):
 #用户更新
 @csrf_exempt
 def updateUserHandler(request):
-	return UserSqlHandler.Data_Handler(UserSqlHandler, Users, request, 'update')
+	return UserSqlHandler.User_Update_Handler(UserSqlHandler, Users, request, 'update', extra={
+			'onlyUpdate': ['UserName', 'UserHeadImg'],
+			'needUserInfo': True
+		})
 
 #获取一个用户信息
 '''@csrf_exempt
@@ -43,3 +47,8 @@ def userLoginHandler(request):
 @csrf_exempt
 def UserCheckStatusHandler(request):
 	return UserSqlHandler.User_CheckStatus_Handler(UserSqlHandler, Users, request)
+
+#用户头像上传
+@csrf_exempt
+def User_ImageUpload_Handler(request):
+	return FilesHandler.Upload_Files_Handler(FilesHandler, IndexImage, request)
