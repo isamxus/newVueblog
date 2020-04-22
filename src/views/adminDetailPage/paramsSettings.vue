@@ -119,7 +119,6 @@ export default {
                             if (Code === '0006') name = 'blogIndexTab';
                             if (Code === '0007') name = 'blogIndexImage';
                         	if (name) {
-                                console.log(name)
                         		this.$router.push({
                         			name: name,
                         			query: {

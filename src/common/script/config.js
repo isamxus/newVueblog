@@ -1,9 +1,13 @@
 const Host = {
-    host: 'http://127.0.0.1:8000/'
+    host: 'http://127.0.0.1:8000/',
+    //host: 'http://www.amxus.info/'
 };
 
 module.exports = {
     Urls: {
+        //静态资源下载
+        staticDownload: `${Host.host}media/`,
+
         testAxios: `${Host.host}`,
         //参数设置api
         paramsCreate: `${Host.host}ParamsSettings/Create/`,
@@ -39,9 +43,12 @@ module.exports = {
         userCreate: `${Host.host}User/Create/`,
         userUpdate: `${Host.host}User/Update/`,
         userDelete: `${Host.host}User/Delete/`,
+
         userGetPageList: `${Host.host}User/GetPageList/`,
         userLogin: `${Host.host}User/Login/`,
         userCheckStatus: `${Host.host}User/CheckLoginStatus/`,
+        userImageUpload: `${Host.host}UserImage/Upload/`,
+
 
         //首页Tab api
         TabCreate: `${Host.host}Tab/Create/`,

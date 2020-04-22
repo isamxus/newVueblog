@@ -26,7 +26,7 @@
                             <Icon type="md-contact" size="36" />
                         </div>
                         <a href="javascript:void(0)">
-                            {{ IsLogin ? userInfo.UserName : '游客' }}
+                            {{ userInfo ? userInfo.UserName : '游客' }}
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
                         <DropdownMenu @on-click="userToolHandler" v-show="$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
@@ -50,14 +50,22 @@ export default {
 	props:{
         
     },
+    data () {
+        return {
+            UserName: ''
+        }
+    },
     computed: {
         pageNavShrink(){ return this.$store.state.pageNavShrink },
         IsLogin(){return this.$store.state.IsLogin},
-        userInfo(){ return JSON.parse(localStorage.getItem('UserInfo'))},
+        userInfo(){ return this.$store.state.UserInfo},
         userHeadImg(){
             return false;
         },
-        showMenu(){return this.$store.state.showMenu;}
+        showMenu(){return this.$store.state.showMenu;},
+    },
+    mounted () {
+
     },
     methods: {
     	//用户工具栏点击时处理函数

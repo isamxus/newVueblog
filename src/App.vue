@@ -1,9 +1,9 @@
 <template>
     <div id="app">
         <div class="page-container" :style="{left: !showMenu ? '0' : pageNavShrink ? '3.5rem' : '12rem'}">
-            <!--<keep-alive :include="$store.state.keepAliveViews" :max="5">-->
+            <keep-alive :include="$store.state.keepAliveViews" :max="5">
                 <router-view />
-            <!--</keep-alive>-->
+            </keep-alive>
         </div>
         <div  :class="{'page-navigation':true, 'shrink':pageNavShrink}" v-if="showMenu">
               <!--
@@ -73,6 +73,7 @@ export default {
         SidebarMenuShrink
     },
     mounted () {
+        this.$store.state.UserInfo = JSON.parse(localStorage.getItem('UserInfo'));
         //获取分类导航列表
         Action.paramsDetailGetList({
             PostContent: {

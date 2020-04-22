@@ -164,6 +164,10 @@ axios.interceptors.response.use(response=>{
         if (response.data.Token && store.state.IsLogin) {
             window.localStorage.setItem('Token', JSON.stringify(response.data.Token));
         }
+        if (response.data.UserInfo) {
+            store.state.UserInfo =  response.data.UserInfo;
+            localStorage.setItem('UserInfo', JSON.stringify(response.data.UserInfo));
+        }
         /*console.log(JSON.parse(window.localStorage.getItem('Token')))*/
         if (window.location.href.search('adminDetailPage') != -1 && !store.state.IsLogin) {
             vm.$Modal.warning({
