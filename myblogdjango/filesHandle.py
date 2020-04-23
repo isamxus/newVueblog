@@ -18,7 +18,7 @@ class FilesHandler(DataSqlHandler):
 		extra['extraFields'] = {
 			'State': 1
 		}
-		self.Batch_Insert_Data(self, ModelClass, extra)
+		self.Batch_Insert_Data(self, ModelClass, requestData, extra)
 		return self.ResponseHandler(self, True, {
 				'name': file[0].name,
 				'Address': filePath + file[0].name

@@ -131,37 +131,35 @@ class DataSqlHandler(object):
 		
 
 	#添加数据
-	def Create_Data_Handler(self, ModelClass, extra):
+	def Create_Data_Handler(self, ModelClass, PostData, extra):
 		try:
-			requestData = self.PostContent
 			Create_Data = ModelClass()
 			primary_key = self.return_primary_key(self, ModelClass)
-			for field in requestData:
+			for field in PostData:
 				if primary_key == field:
 					continue
-				setattr(Create_Data, field, requestData[field])
+				setattr(Create_Data, field, PostData[field])
 			Create_Data.save()
 			return self.ResponseHandler(self, True, extra=extra)
 		except Exception as e:
 			return self.ResponseHandler(self, False, extra=extra)
 
 	#更新数据
-	def Updata_Data_Handler(self, ModelClass, extra):
+	def Updata_Data_Handler(self, ModelClass, PostData, extra):
 		try:
-			requestData = self.PostContent
 			primary_key = self.return_primary_key(self, ModelClass)
-			UpdataData = get_object_or_404(ModelClass, pk=requestData[primary_key])
+			UpdataData = get_object_or_404(ModelClass, pk=PostData[primary_key])
 			#只需要更新的字段集合
 			onlyUpdate = self.Is_In_Dict(self, 'onlyUpdate', extra, False)
 			#自定义在extraFields里返回的字段
 			ReturnFields = self.Is_In_Dict(self, 'ReturnFields', extra, False)
 			extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
-			for field in requestData:
+			for field in PostData:
 				if onlyUpdate and field not in onlyUpdate:
 					continue
-				setattr(UpdataData, field, requestData[field])
+				setattr(UpdataData, field, PostData[field])
 			UpdataData.save()
-			SingleData = self.Handle_Return_Data(self, ModelClass, primary_key, requestData[primary_key], extra)
+			SingleData = self.Handle_Return_Data(self, ModelClass, primary_key, PostData[primary_key], extra)
 			if ReturnFields:
 				extra['extraFields'][ReturnFields] = SingleData
 				SingleData = None
@@ -170,12 +168,11 @@ class DataSqlHandler(object):
 			return self.ResponseHandler(self, False, extra=extra)
 
 	#获取单个数据
-	def Getsingle_Data_Handler(self, ModelClass, extra):
+	def Getsingle_Data_Handler(self, ModelClass, PostData, extra):
 		try:
-			requestData = self.PostContent
 			primary_key = self.return_primary_key(self, ModelClass)
 			extra['mustFields'] = [primary_key]
-			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
+			response = self.mustFieldsCheck(self, ModelClass, PostData, extra)
 			if type(response).__name__ != 'dict':
 				return response
 			SingleData = ModelClass.objects.filter(**response).values()[0]
@@ -184,25 +181,23 @@ class DataSqlHandler(object):
 			return self.ResponseHandler(self, False, extra=extra)
 
 	#删除数据
-	def Delete_Data_Handler(self, ModelClass, extra):
+	def Delete_Data_Handler(self, ModelClass, PostData, extra):
 		try:
-			requestData = self.PostContent
 			primary_key = self.return_primary_key(self, ModelClass)
 			extra['mustFields'] = [primary_key]
-			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
+			response = self.mustFieldsCheck(self, ModelClass, PostData, extra)
 			if type(response).__name__ != 'dict':
 				return response
-			get_object_or_404(ModelClass, pk=requestData[primary_key]).delete()
+			get_object_or_404(ModelClass, pk=PostData[primary_key]).delete()
 			return self.ResponseHandler(self, True, extra=extra)
 		except Exception as e:
 			return self.ResponseHandler(self, False ,extra=extra)
 
 	#获取列表数据（不分页）
-	def GetList_Data_Handler(self, ModelClass, extra):
+	def GetList_Data_Handler(self, ModelClass, PostData, extra):
 		try:
-			requestData = self.PostContent
-			_filter = self.Is_In_Dict(self, 'filter', requestData)
-			_OrderBy = self.Is_In_Dict(self, '_OrderBy', requestData, 'CreateTime')
+			_filter = self.Is_In_Dict(self, 'filter', PostData)
+			_OrderBy = self.Is_In_Dict(self, '_OrderBy', PostData, 'CreateTime')
 			PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy).values()
 			PostContent = self.SerializeData(self, PostContent, ModelClass, extra)
 			return self.ResponseHandler(self, True, PostContent, extra=extra)
@@ -210,13 +205,12 @@ class DataSqlHandler(object):
 			print(e)
 			return self.ResponseHandler(self, False, extra=extra)
 	#获取列表数据（分页）
-	def GetPageList_Data_Handler(self, ModelClass, extra):
+	def GetPageList_Data_Handler(self, ModelClass, PostData, extra):
 		try:
-			requestData = self.PostContent
-			_filter = self.Is_In_Dict(self, 'filter', requestData, {})
-			_OrderBy = self.Is_In_Dict(self, '_OrderBy', requestData, 'CreateTime')
-			_PageSize = self.Is_In_Dict(self, 'PageSize', requestData, False)
-			_PageNumber = self.Is_In_Dict(self, 'PageNumber', requestData, False)
+			_filter = self.Is_In_Dict(self, 'filter', PostData, {})
+			_OrderBy = self.Is_In_Dict(self, '_OrderBy', PostData, 'CreateTime')
+			_PageSize = self.Is_In_Dict(self, 'PageSize', PostData, False)
+			_PageNumber = self.Is_In_Dict(self, 'PageNumber', PostData, False)
 			if _PageSize and _PageNumber:
 				if (isinstance(_PageSize, int) and _PageSize > 0) and (isinstance(_PageNumber, int) and _PageNumber > 0):
 					PostContent = ModelClass.objects.filter(**_filter).order_by(_OrderBy).values()
@@ -237,13 +231,13 @@ class DataSqlHandler(object):
 		except Exception as e:
 			return self.ResponseHandler(self, False, e, extra=extra)
 	#批量插入数据
-	def Batch_Insert_Data(self, ModelClass, extra):
+	def Batch_Insert_Data(self, ModelClass, PostData, extra):
 		try:
 			List_To_Insert = [] 
 			extra['Data'] = self.Is_In_Dict(self, 'Data', extra, False)
 			if not isinstance(extra['Data'], list):
 				return self.ResponseHandler(self, False, err={'err':'extra["Data"]必须为list！！！'}, extra=extra)
-			requestData = self.PostContent if not extra['Data'] else extra['Data']
+			requestData = PostData if not extra['Data'] else extra['Data']
 			for item in requestData:
 				exp = ModelClass()
 				for field in item.keys():
@@ -257,19 +251,19 @@ class DataSqlHandler(object):
 	def Data_Handler(self, ModelClass, requestData, type, extra={}):
 		try:
 			extra = self.loginStatus(self, requestData, extra)
-			self.PostContent = self.RequestHandler(self, requestData)
+			PostData = self.RequestHandler(self, requestData)
 			if type=='add':
-				return self.Create_Data_Handler(self, ModelClass, extra)
+				return self.Create_Data_Handler(self, ModelClass, PostData, extra)
 			if type=='update':
-				return self.Updata_Data_Handler(self, ModelClass, extra)
+				return self.Updata_Data_Handler(self, ModelClass, PostData, extra)
 			if type=='getsingle':
-				return self.Getsingle_Data_Handler(self, ModelClass, extra)
+				return self.Getsingle_Data_Handler(self, ModelClass, PostData, extra)
 			if type=='delete':	
-				return self.Delete_Data_Handler(self, ModelClass, extra)
+				return self.Delete_Data_Handler(self, ModelClass, PostData, extra)
 			if type=='getlist':
-				return self.GetList_Data_Handler(self, ModelClass, extra)
+				return self.GetList_Data_Handler(self, ModelClass, PostData, extra)
 			if type=='getpagelist':
-				return self.GetPageList_Data_Handler(self, ModelClass, extra)
+				return self.GetPageList_Data_Handler(self, ModelClass, PostData, extra)
 		except Exception as e:
 			print(e)
 

@@ -54,12 +54,15 @@ class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 	def Change_PassWord_Handler(self, ModelClass, request, extra={}):
 		try:
 			requestData = self.RequestHandler(self, request)
+			extra = self.loginStatus(self, request, extra)
 			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
 			if type(response).__name__ != 'dict':
 				return response
 			checkData = ModelClass.objects.filter(**response)
 			if not checkData:
-				return self.ResponseHandler(self, False, err={'err': '原密码不正确'})
+				return self.ResponseHandler(self, False, err={'err': '原密码不正确'}, extra=extra)
+			requestData['PassWord'] = requestData['NewPassWord']
+			return self.Updata_Data_Handler(self, ModelClass, requestData, extra)
 		except Exception as e:
 			print(e)
 			return self.ResponseHandler(self, False)
