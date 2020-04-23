@@ -12,4 +12,5 @@ urlpatterns = [
 	url(r'^User/Login/$', UserManagementViews.userLoginHandler, name='userLoginHandler'),
 	url(r'^UserImage/Upload/$', UserManagementViews.User_ImageUpload_Handler, name='User_ImageUpload_Handler'),
 	url(r'^User/CheckLoginStatus/$', UserManagementViews.UserCheckStatusHandler, name='UserCheckStatusHandler'),
+	url(r'^User/ChangePassword/$', UserManagementViews.changePasswordHandler, name='changePasswordHandler'),
 ]

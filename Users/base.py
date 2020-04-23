@@ -49,3 +49,17 @@ class UserSqlHandler(AuthTokenHandler, DataSqlHandler):
 		except Exception as e:
 			print(e)
 			return self.ResponseHandler(self, False)
+
+	#修改用户密码
+	def Change_PassWord_Handler(self, ModelClass, request, extra={}):
+		try:
+			requestData = self.RequestHandler(self, request)
+			response = self.mustFieldsCheck(self, ModelClass, requestData, extra)
+			if type(response).__name__ != 'dict':
+				return response
+			checkData = ModelClass.objects.filter(**response)
+			if not checkData:
+				return self.ResponseHandler(self, False, err={'err': '原密码不正确'})
+		except Exception as e:
+			print(e)
+			return self.ResponseHandler(self, False)

@@ -11,9 +11,11 @@ def createUserHandler(request):
 #用户更新
 @csrf_exempt
 def updateUserHandler(request):
-	return UserSqlHandler.User_Update_Handler(UserSqlHandler, Users, request, 'update', extra={
+	return UserSqlHandler.Data_Handler(UserSqlHandler, Users, request, 'update', extra={
 			'onlyUpdate': ['UserName', 'UserHeadImg'],
-			'needUserInfo': True
+			'needReturnData': True,
+			'ignoreFields': ['PassWord'],
+			'ReturnFields': 'UserInfo'
 		})
 
 #获取一个用户信息
@@ -52,3 +54,12 @@ def UserCheckStatusHandler(request):
 @csrf_exempt
 def User_ImageUpload_Handler(request):
 	return FilesHandler.Upload_Files_Handler(FilesHandler, IndexImage, request)
+
+#修改用户密码
+@csrf_exempt
+def changePasswordHandler(request):
+	return UserSqlHandler.Change_PassWord_Handler(UserSqlHandler, Users, request, extra={
+			'onlyUpdate': ['PassWord'],
+			'mustFields': ['UserName', 'PassWord', 'user_id'],
+			'err': '修改用户密码失败！！！'
+		})

@@ -109,6 +109,27 @@ class DataSqlHandler(object):
 		return self.ResponseHandler(self, False, err={
 				'err': self.Is_In_Dict(self, 'err', extra, '无匹配数据！！！')
 			}, extra=extra)
+
+	#对返回数据的处理
+	def Handle_Return_Data(self, ModelClass, prikey, value, extra):
+		try:
+			#是否需要返回更新后的数据
+			needReturnData = self.Is_In_Dict(self, 'needReturnData', extra, False)
+			#忽略返回的字段
+			ignoreList = self.Is_In_Dict(self, 'ignoreFields', extra, [])
+			_filter = {}
+			_filter[prikey] = value
+			#定义返回的数据
+			SingleData = None
+			if needReturnData:
+				SingleData = ModelClass.objects.filter(**_filter).values()[0]
+				for field in ignoreList:
+					del SingleData[field]
+			return SingleData
+		except Exception as e:
+			print(e)
+		
+
 	#添加数据
 	def Create_Data_Handler(self, ModelClass, extra):
 		try:
@@ -130,13 +151,21 @@ class DataSqlHandler(object):
 			requestData = self.PostContent
 			primary_key = self.return_primary_key(self, ModelClass)
 			UpdataData = get_object_or_404(ModelClass, pk=requestData[primary_key])
+			#只需要更新的字段集合
 			onlyUpdate = self.Is_In_Dict(self, 'onlyUpdate', extra, False)
+			#自定义在extraFields里返回的字段
+			ReturnFields = self.Is_In_Dict(self, 'ReturnFields', extra, False)
+			extra['extraFields'] = self.Is_In_Dict(self, 'extraFields', extra, {})
 			for field in requestData:
 				if onlyUpdate and field not in onlyUpdate:
 					continue
 				setattr(UpdataData, field, requestData[field])
 			UpdataData.save()
-			return self.ResponseHandler(self, True, extra=extra)
+			SingleData = self.Handle_Return_Data(self, ModelClass, primary_key, requestData[primary_key], extra)
+			if ReturnFields:
+				extra['extraFields'][ReturnFields] = SingleData
+				SingleData = None
+			return self.ResponseHandler(self, True, SingleData, extra=extra)
 		except Exception as e:
 			return self.ResponseHandler(self, False, extra=extra)
 

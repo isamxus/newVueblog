@@ -1,4 +1,5 @@
 import os
+import platform
 class InitBlog(object):
 	#参数列表
 	paramsList = [
@@ -91,9 +92,15 @@ class InitBlog(object):
 				print('中止初始化博客数据')
 				return
 			if confirmInit == 'yes':
-				os.system(r"sudo rm db.sqlite3")
-				os.system(r"python3 manage.py makemigrations")
-				os.system(r"python3 manage.py migrate")
+				sys = platform.system()
+				if sys == 'Windows':
+					os.system(r"del db.sqlite3")
+					os.system(r"python manage.py makemigrations")
+					os.system(r"python manage.py migrate")
+				if sys == 'Linux':
+					os.system(r"sudo rm db.sqlite3")
+					os.system(r"python3 manage.py makemigrations")
+					os.system(r"python3 manage.py migrate")
 				self.Init_Data(self.paramsList, ParamsSettings, '正在初始化博客参数', '博客参数初始化成功')
 				self.Init_Data(self.TabList, IndexTab, '正在初始化Tab页', '初始化Tab页成功')
 				confirm = True
@@ -112,5 +119,3 @@ if __name__ == '__main__':
 	exp = InitBlog()
 	exp.Init_Blog_Function()
 	exp.Create_SuperUser_Handler()
-	os.system(r"sudo service nginx stop")
-	os.system(r"sudo service nginx start")
