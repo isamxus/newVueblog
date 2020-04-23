@@ -7,8 +7,8 @@
   		<div class="user_setting_container" slot="content">
             <Row>
                 <div :style="{textAlign: 'right'}">
-                    <Button type="primary">修改密码</Button>
-                    <Button>返回主页</Button>
+                    <Button @click="popModal=true" type="primary">修改密码</Button>
+                    <Button @click="$router.push({name: 'Index'})">返回主页</Button>
                 </div>
             </Row>
             <Row>
@@ -50,6 +50,31 @@
                     <Button type="primary" @click="submitDataHandler" long>确认修改</Button>
                 </Col>
             </Row>
+            <Modal
+                v-model="popModal"
+                title="修改密码"
+                width=400
+                @on-visible-change="$refs.createForm.resetFields()">
+                <Form 
+                    ref="createForm"
+                    :label-width="150"
+                    :model="settingForm"
+                    :rules="settingFormRules">
+                    <FormItem  label="原密码：" prop="PassWord">
+                        <Input v-model="settingForm.PassWord" placeholder="请输入原密码" />
+                    </FormItem>
+                    <FormItem  label="新密码：" prop="NewPassWord">
+                        <Input v-model="settingForm.NewPassWord" placeholder="请输入新密码" />
+                    </FormItem>
+                    <FormItem  label="再次输入新密码：" prop="RetypePassWord">
+                        <Input v-model="settingForm.RetypePassWord" placeholder="请再次输入新密码" />
+                    </FormItem>
+                </Form>
+                <div slot="footer" >
+                    <Button type="primary" @click="changePasswordHandler">确定</Button>
+                    <Button @click="popModal=false">取消</Button>
+                </div>
+            </Modal>
   		</div>
 	</SubNavigationFrame>
 </template>
@@ -61,6 +86,9 @@ const dataFactory = params => Object.assign({
     user_id: '',
     UserName: '',
     UserHeadImg: '',
+    PassWord: '',
+    NewPassWord: '',
+    RetypePassWord: '',
     Edit: false,
     uploadStatus: null,
     uploadList: []
@@ -76,9 +104,12 @@ export default {
             ],
             settingForm: dataFactory(),
             settingFormRules: {
-
+                PassWord: [{required: true, message: '请输入原密码'}],
+                NewPassWord: [{required: true, message: '请输入新密码'}],
+                RetypePassWord: [{required: true, message: '请再次输入新密码'}],
             },
             imageUrl: '',
+            popModal: false,
             uploadUrl: REQUEST_URL.userImageUpload,
 		}
 	},
@@ -98,6 +129,7 @@ export default {
             this.imageUrl = userinfo.UserHeadImg ? `${REQUEST_URL.staticDownload}${userinfo.UserHeadImg}` : '';
             this.settingForm.UserName = userinfo.UserName;
             this.settingForm.user_id = userinfo.user_id;
+            this.settingForm.UserHeadImg = userinfo.UserHeadImg;
         },
         //图片上传前钩子
         handleBeforeUploadNum(com, file) {
@@ -157,11 +189,33 @@ export default {
                 }
             })
             .then(res => {
-                
+                this.$Message.success('成功修改信息')
             })
             .catch(err => {
                 this.$Message.error(err);
             })
+        },
+        //修改用户密码
+        changePasswordHandler(){
+            if (!this.settingForm.PassWord) return this.$Message.warning('请输入原密码');
+            if (!this.settingForm.NewPassWord) return this.$Message.warning('请输入新密码');
+            if (!this.settingForm.RetypePassWord) return this.$Message.warning('请再次输入新密码');
+            Action.userChangePassword({
+                PostContent: {
+                    user_id: this.settingForm.user_id,
+                    UserName: this.settingForm.UserName,
+                    PassWord: this.settingForm.PassWord,
+                    NewPassWord: this.settingForm.NewPassWord
+                }
+            })
+            .then(res => {
+                this.$Message.success('成功修改密码');
+                this.popModal = false;
+            })
+            .catch(err => {
+                this.$Message.error(err);
+            })
+
         }
 	}
 }

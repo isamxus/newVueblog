@@ -43,7 +43,7 @@ module.exports = {
         userCreate: `${Host.host}User/Create/`,
         userUpdate: `${Host.host}User/Update/`,
         userDelete: `${Host.host}User/Delete/`,
-
+        userChangePassword: `${Host.host}User/ChangePassword/`,
         userGetPageList: `${Host.host}User/GetPageList/`,
         userLogin: `${Host.host}User/Login/`,
         userCheckStatus: `${Host.host}User/CheckLoginStatus/`,
