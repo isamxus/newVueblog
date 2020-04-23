@@ -29,12 +29,12 @@
                             {{ userInfo ? userInfo.UserName : '游客' }}
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
-                        <DropdownMenu @on-click="userToolHandler" v-show="$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}">
+                        <DropdownMenu @on-click="userToolHandler" v-show="userInfo" slot="list" :style="{textAlign: 'center'}">
                             <DropdownItem  name="usersettings">个人信息</DropdownItem>
                             <DropdownItem  name="logout">退出登录</DropdownItem>
                         </DropdownMenu>
 
-                        <DropdownMenu v-show="!$store.state.IsLogin" slot="list" :style="{textAlign: 'center'}" @on-click="userToolHandler">
+                        <DropdownMenu v-show="!userInfo" slot="list" :style="{textAlign: 'center'}" @on-click="userToolHandler">
                             <DropdownItem name="userinfo">登录</DropdownItem>
                             <DropdownItem name="register">注册</DropdownItem>
                         </DropdownMenu>
@@ -60,7 +60,7 @@ export default {
         IsLogin(){return this.$store.state.IsLogin},
         userInfo(){ return this.$store.state.UserInfo},
         userHeadImg(){
-            return false;
+            return this.userInfo.UserHeadImg ? `${REQUEST_URL.staticDownload}${this.userInfo.UserHeadImg}` : '';
         },
         showMenu(){return this.$store.state.showMenu;},
     },
