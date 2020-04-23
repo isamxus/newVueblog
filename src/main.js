@@ -149,6 +149,11 @@ router.beforeEach((to, from, next) => {
         store.commit('showMenu', true);
     } else if (to.path.search('admin') != -1 || to.path.search('login') != -1 ||to.path.search('register') != -1) {
         store.commit('showMenu', false);
+    } else if (to.path.search('userSettings') != -1 && !localStorage.getItem('UserInfo')) {
+        return next({
+            path: '/',
+            query: {redirect: to.fullPath}
+        })
     } else {
         store.commit('showAdminMenu', false);
         store.commit('showMenu', true);

@@ -60,7 +60,7 @@ export default {
         IsLogin(){return this.$store.state.IsLogin},
         userInfo(){ return this.$store.state.UserInfo},
         userHeadImg(){
-            return this.userInfo.UserHeadImg ? `${REQUEST_URL.staticDownload}${this.userInfo.UserHeadImg}` : '';
+            return this.userInfo ? `${REQUEST_URL.staticDownload}${this.userInfo.UserHeadImg}` : '';
         },
         showMenu(){return this.$store.state.showMenu;},
     },
@@ -98,10 +98,17 @@ export default {
                         this.$Modal.remove();
                         localStorage.removeItem('Token');
                         this.$store.state.IsLogin = false;
+                        this.$store.state.UserInfo = null;
+                        localStorage.removeItem('UserInfo');
                         this.$Message.warning('你已退出登录！！！')
                         if (window.location.href.search('adminDetailPage') != -1) {
                             this.$router.push({
                                 name: 'blogAdmin'
+                            })
+                        }
+                        if (window.location.href.search('userSettings') != -1) {
+                            this.$router.push({
+                                name: 'Index'
                             })
                         }
                     }

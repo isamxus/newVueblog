@@ -126,6 +126,7 @@ export default {
         //设置用户信息
         setInfoHandler(){
             let userinfo = this.$store.state.UserInfo;
+            if (!userinfo) this.$router.push({name: 'Index'});
             this.imageUrl = userinfo.UserHeadImg ? `${REQUEST_URL.staticDownload}${userinfo.UserHeadImg}` : '';
             this.settingForm.UserName = userinfo.UserName;
             this.settingForm.user_id = userinfo.user_id;
@@ -200,6 +201,7 @@ export default {
             if (!this.settingForm.PassWord) return this.$Message.warning('请输入原密码');
             if (!this.settingForm.NewPassWord) return this.$Message.warning('请输入新密码');
             if (!this.settingForm.RetypePassWord) return this.$Message.warning('请再次输入新密码');
+            if (this.settingForm.RetypePassWord != this.settingForm.NewPassWord) return this.$Message.warning('两次输入密码不一致');
             Action.userChangePassword({
                 PostContent: {
                     user_id: this.settingForm.user_id,
