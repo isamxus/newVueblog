@@ -1,0 +1,15 @@
+asgiref==3.2.5
+Django==3.0.4
+django-cors-headers==3.2.1
+djangorestframework==3.11.0
+djangorestframework-jwt==1.11.0
+itsdangerous==1.1.0
+jieba==0.39
+Markdown==3.1.1
+Pillow==7.0.0
+PyJWT==1.7.1
+pythonds==1.0.1
+pytz==2019.2
+simplejson==3.17.0
+sqlparse==0.3.1
+virtualenv==16.7.2
