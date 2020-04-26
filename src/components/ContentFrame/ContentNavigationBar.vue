@@ -30,7 +30,7 @@
                             <Icon type="md-arrow-dropdown" size="24" />
                         </a>
                         <DropdownMenu @on-click="userToolHandler" v-show="userInfo" slot="list" :style="{textAlign: 'center'}">
-                            <DropdownItem  name="usersettings">个人信息</DropdownItem>
+                            <DropdownItem v-show="!$store.state.showAdminMenu"  name="usersettings">个人信息</DropdownItem>
                             <DropdownItem  name="logout">退出登录</DropdownItem>
                         </DropdownMenu>
 

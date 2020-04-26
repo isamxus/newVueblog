@@ -5,7 +5,7 @@ const Action = {
 	},
 	//更新用户
 	userUpdate (params) {
-        return axios.post(REQUEST_URL.userUpdate, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
+        return axios.post(REQUEST_URL.userUpdateAuth, REQUEST_URL.handleParams(params)).then(result => Promise.resolve(result.data.PostContent));
 	},
 	//删除用户数据
 	userDelete (params) {

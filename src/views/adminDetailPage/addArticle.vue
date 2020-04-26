@@ -63,6 +63,7 @@
                                 label-in-value
                                 v-model="createArticleForm.articleCagetoryID" 
                                 @on-change="e => {
+                                    if (!e) return;
                                     createArticleForm.articleCagetoryName = e.label
                                 }">
                                 <Option 
@@ -122,7 +123,7 @@ export default {
             ],
             createArticleForm: {
                 articleTitle: '',
-                articleAuthor: '',
+                articleAuthor: this.$store.state.UserInfo.UserName,
                 articleAbstract: '',
                 articleTagsID: [],
                 articleTagsName: [],

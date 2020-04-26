@@ -32,7 +32,7 @@
                 <div v-for="(item, index) in AuthList" :key="index">
                     <h4>{{ item.title }}</h4>
                     <div :style="{padding: '.7rem'}">
-                        <Checkbox  v-model="value.IsSelected"  v-for="(value, key) in item.children" :key="key" >{{ value.Name }}</Checkbox>
+                        <Checkbox  v-model="value.IsSelected" :style="{margin: '.5rem .2rem'}"  v-for="(value, key) in item.children" :key="key" >{{ value.Name }}</Checkbox>
                     </div>
                     
                 </div>
@@ -68,6 +68,7 @@ const dataFactory = () => {
                         { Name: '文章评论', Code: '0004', IsSelected: false},
                         { Name: '用户管理', Code: '0005', IsSelected: false},
                         { Name: '首页Tab页', Code: '0006', IsSelected: false},
+                        { Name: '首页轮播图设置', Code: '0007', IsSelected: false},
                     ]
                 }
             ]

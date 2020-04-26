@@ -1,6 +1,6 @@
 const Host = {
-    host: 'http://127.0.0.1:8000/',
-    //host: 'http://www.amxus.info/'
+    //host: 'http://127.0.0.1:8000/',
+    host: 'http://www.amxus.info/'
 };
 
 module.exports = {
@@ -42,6 +42,7 @@ module.exports = {
         //用户管理api
         userCreate: `${Host.host}User/Create/`,
         userUpdate: `${Host.host}User/Update/`,
+        userUpdateAuth: `${Host.host}User/UpdateAuth/`,
         userDelete: `${Host.host}User/Delete/`,
         userChangePassword: `${Host.host}User/ChangePassword/`,
         userGetPageList: `${Host.host}User/GetPageList/`,

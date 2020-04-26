@@ -27,6 +27,7 @@ import VueQuillEditor from 'vue-quill-editor';
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import ImageResize from 'quill-image-resize-module'; 
 
 Vue.use(VueQuillEditor, {
     modules: {
@@ -42,7 +43,15 @@ Vue.use(VueQuillEditor, {
             [{ 'align': [] }],
             ['clean'],
             ['image']
-        ]
+        ],
+        imageResize: {
+            displayStyles: {
+                backgroundColor: 'black',
+                border: 'none',
+                color: 'white'
+              },
+            modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
+        }
     },
     placeholder: '请输入内容...'
 });
@@ -173,7 +182,6 @@ axios.interceptors.response.use(response=>{
             store.state.UserInfo =  response.data.UserInfo;
             localStorage.setItem('UserInfo', JSON.stringify(response.data.UserInfo));
         }
-        /*console.log(JSON.parse(window.localStorage.getItem('Token')))*/
         if (window.location.href.search('adminDetailPage') != -1 && !store.state.IsLogin) {
             vm.$Modal.warning({
                 title: '安全警告'
