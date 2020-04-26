@@ -70,7 +70,8 @@
                 <div class="comment-container">
                     <Row class="comment-item" v-for="(item, index) in commentListData" :key="item.id">
                         <Col span="4">
-                            <Avatar icon="ios-person"  />
+                            <Avatar v-show="!item.commentHeadImg" icon="ios-person"  />
+                            <Avatar v-show="item.commentHeadImg" :src="item.commentHeadImg"  />
                         </Col>
                         <Col span="20">
                             <Row>{{ item.commentAuthor }}</Row>
@@ -151,7 +152,7 @@ export default {
                     parentArticleID: this.$route.query.id,
                     parentArticleTitle: this.articleDetailData.articleTitle,
                     commentContent: this.commentContent,
-                    commentHeadImg: '',
+                    commentHeadImg: this.$store.state.UserInfo.UserHeadImg,
                     commentAuthor: UserName
                 }
             })
@@ -180,6 +181,7 @@ export default {
             .then(res => {
                 this.commentListData = res.Items.map(item => {
                     item.CreateTime = new Date(item.CreateTime).Format('yyyy-MM-dd hh:mm');
+                    item.commentHeadImg = item.commentHeadImg ? `${REQUEST_URL.staticDownload}${item.commentHeadImg}` : '';
                     return item;
                 });
                 this.PageCount = res.TotalItems;

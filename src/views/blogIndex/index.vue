@@ -33,7 +33,7 @@
         		<TabPane v-if="recentArtShow" label="最新文章" name="RecentlyArticle" :style="{padding: '0 .2rem'}">
                     <Row v-for="(item, index) in articleListData" :key="item.article_id" class="recent-article-tab">
                         <Col span="18" class="title"><span  @click="linkToDetailHandler(item.article_id)">{{ item.articleTitle }}</span></Col>
-                        <Col span="6" :style="{fontSize: '.5rem', color: '#dcdee2'}">{{ item.CreateTime }}</Col>
+                        <Col span="6" :style="{fontSize: '.5rem', color: '#515a6e'}">{{ item.CreateTime }}</Col>
                     </Row>
                 </TabPane>
                 <TabPane v-for="(item, index) in CustomTabList" :label="item.IndexTabName" :name="item.IndexTabID" :key="item.IndexTabID" :style="{padding: '0 .2rem'}" class="html-style">

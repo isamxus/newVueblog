@@ -14,14 +14,14 @@
                 <Row>
                     <Col span="20" offset="2">
                         <FormItem prop="User">
-                            <Input v-model="loginForm.UserName" type="text" placeholder="请输入用户名称" size="large">
+                            <Input v-model="loginForm.UserName" type="text" @on-enter="submitFormHandler" placeholder="请输入用户名称" size="large">
                                 <Icon size="24" type="ios-person-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
                     </Col>
                     <Col span="20" offset="2">
                         <FormItem prop="Password">
-                            <Input v-model="loginForm.PassWord" type="text" placeholder="请输入登录密码" size="large">
+                            <Input v-model="loginForm.PassWord" @on-enter="submitFormHandler" type="text" placeholder="请输入登录密码" size="large">
                                 <Icon size="24" type="ios-lock-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>

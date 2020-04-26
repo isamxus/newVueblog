@@ -127,7 +127,7 @@ export default {
                         props:{type:'text'},
                         domProps:{innerText: '删除'},
                         on:{click: e => {
-                            this.deleteDetailHandler(params.row.detail_params_id)
+                            this.deleteDetailHandler(params.row.detail_params_id, params.row.detailParentParamCode)
                             e.stopPropagation();
                        }
                     }
@@ -183,7 +183,7 @@ export default {
             })
         },
         //删除参数详情
-        deleteDetailHandler(ID){
+        deleteDetailHandler(ID, Code){
             if (!ID) return this.$Message.warning('参数ID为空，无法删除！！！');
             const modal = this.$Modal.confirm({
                 title: '操作确认'
@@ -196,7 +196,8 @@ export default {
                     //发起删除参数请求
                     Action.paramsDetailDelete({
                         PostContent: {
-                            detail_params_id: ID
+                            detail_params_id: ID,
+                            detailParentParamCode: Code
                         }
                     }).then(result => {
                         this.$Message.success('成功删除参数！！！');
