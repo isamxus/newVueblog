@@ -144,10 +144,15 @@ export default {
     },
     async mounted () {
         this.$store.commit('showAdminMenu', true);
+        let batch = JSON.parse(localStorage.getItem('ArticleCache'));
+        if (batch) this.createArticleForm.articleContent = batch;
         this.getCategoryHandler();
         this.getTagsHandler();
         if (this.$route.query.id) this.getArticleDetailHandler();
         
+    },
+    beforeDestroy(){
+        localStorage.setItem('ArticleCache', JSON.stringify(this.createArticleForm.articleContent));
     },
     methods: {
         getCategoryHandler(){
