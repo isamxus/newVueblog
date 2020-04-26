@@ -206,7 +206,7 @@ export default {
             .then(res => {
                 res.articleTagsID = res.articleTagsID.split(',').map(item => parseInt(item));
                 res.articleTagsName = res.articleTagsName.split(',');
-                res.articleCagetoryID = parseInt(res.articleCagetoryID)
+                res.articleCagetoryID = res.articleCagetoryID;
                 this.createArticleForm = res;
             })
             .catch(err => {

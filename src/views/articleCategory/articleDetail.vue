@@ -17,7 +17,7 @@
                         <span><Icon type="md-time" />{{ articleDetailData.CreateTime }}</span>
                         <span><Icon type="md-eye" />浏览{{ articleDetailData.articleViews }}</span>
                     </div>
-                    <p v-html="articleDetailData.articleContent"></p>
+                    <div class="ql-editor" v-html="articleDetailData.articleContent"></div>
                 </div>
                 
                 <div class="titlebox" :style="{marginTop: '.7rem'}">

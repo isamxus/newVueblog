@@ -37,7 +37,7 @@
                     </Row>
                 </TabPane>
                 <TabPane v-for="(item, index) in CustomTabList" :label="item.IndexTabName" :name="item.IndexTabID" :key="item.IndexTabID" :style="{padding: '0 .2rem'}" class="html-style">
-                    <div v-html="item.IndexTabContent"></div>
+                    <div class="ql-editor" v-html="item.IndexTabContent"></div>
                 </TabPane>
     				</Tabs>
   				</Col>
