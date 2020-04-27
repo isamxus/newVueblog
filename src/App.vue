@@ -58,7 +58,8 @@ export default {
                     ,icon:'ios-apps'
                     ,name:'article_category'
                     ,children:[]
-                }
+                },
+                {title: '我的音乐',icon:'ios-musical-notes-outline',name:'Music',path:'/music'},
             ],
 
             //左侧菜单(博客管理页面)

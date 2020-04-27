@@ -7,6 +7,9 @@ const Index = () => import('../views/blogIndex/index');
 const articleCategory = () => import('../views/articleCategory/articleCategory');
 const articleDetail = () => import('../views/articleCategory/articleDetail');
 
+//音乐
+const music = () => import('../views/music/music');
+
 //用户设置页面
 const userSettings = () => import('../views/blogAdmin/userSettings');
 
@@ -38,6 +41,7 @@ Router.prototype.push = function push(location) {
 export default new Router({
   	routes: [
         {path:'/',name: 'Index',component: Index,meta:{title:'首页'}},
+        {path:'/music',name: 'music',component: music,meta:{title:'音乐'}},
         {path:'/login',name: 'login',component: blogAdmin,meta:{title:'用户登录'}},
       	{path:'/register',name: 'register',component: blogRegister,meta:{title:'用户注册'}},
         {path:'/admin',name: 'blogAdmin',component: blogAdmin,meta:{title:'博客后台管理系统'}},

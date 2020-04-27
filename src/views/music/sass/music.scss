@@ -1,0 +1,48 @@
+@charset 'utf-8';
+@import '../../../common/sass/base';
+
+.music-container {
+	min-width: 800px;
+    min-height: 500px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+	background: {
+        image: url(../../assets/image/musicBackground.jpg);
+        repeat: no-repeat;
+        position: top;
+        size: cover;
+        color: #000;
+    };
+    .backButton{
+    	margin: .7rem 1rem;
+    	color: #00a1eb;
+    	border-image: url(../../assets/image/border.png);
+    	background: {
+        	image: url(../../assets/image/musicBackground.jpg);
+        	repeat: no-repeat;
+        	position: top;
+        	size: cover;
+        	color: #000;
+    	};
+    }
+    .music-body-part {
+    	display: flex;
+    	flex: 1;
+    	.music-body-left-part{
+    		width: 12rem;
+    		min-height: 775px;
+    		height: 100%;
+    		border-right: .05rem dashed #075885;
+    		position: relative;
+    		display: flex;
+    	}
+    	.music-body-right-part{
+    		width: auto;
+    		display: flex;
+    		width: 10rem;
+    	}
+    }
+}
